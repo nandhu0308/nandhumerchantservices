@@ -1,21 +1,20 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 
-const ProductCategory = db.define('product_category', {
-    category_name : {
+const ProductSubcategory = db.define('product_subcategory', {
+    subcategory_name : {
         type : sequelize.STRING,
         allowNull : false
     },
-    category_description : {
+    subcategory_decription : {
         type : sequelize.TEXT
     },
-    seller_id : {
-            type : sequelize.INTEGER,
-            allowNull : false
+    category_id : {
+        type : sequelize.INTEGER,
+        allowNull : false
     },
-    category_image : {
+    subcategory_image : {
         type : sequelize.STRING(1000),
-        allowNull : false,
         defaultValue : ''
     },
     is_active : {
@@ -31,7 +30,7 @@ const ProductCategory = db.define('product_category', {
         type : sequelize.DATE,
         defaultValue : sequelize.NOW
     },
-    upadted_by : {
+    updated_by : {
         type : sequelize.STRING,
         defaultValue : ''
     },
@@ -44,4 +43,4 @@ const ProductCategory = db.define('product_category', {
     freezeTableName : true
 })
 
-module.exports = ProductCategory;
+module.exports = ProductSubcategory;
