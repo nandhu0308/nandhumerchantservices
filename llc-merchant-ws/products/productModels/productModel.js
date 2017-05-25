@@ -26,13 +26,7 @@ const Products = db.define('products' ,{
         defaultValue : 0
     },
     product_descripton : {
-        type : sequelize.TEXT,
-        defaultValue : ''
-    },
-    product_image : {
-        type : sequelize.STRING(1000),
-        defaultValue : '',
-        allowNull : false
+        type : sequelize.TEXT
     },
     product_size_text : {
         type : sequelize.STRING
@@ -44,56 +38,6 @@ const Products = db.define('products' ,{
     },
     product_color : {
         type : sequelize.STRING
-    },
-    image1 : {
-        type : sequelize.STRING(1000),
-        defaultValue : '',
-        allowNull : false
-    },
-    image2 : {
-        type : sequelize.STRING(1000),
-        defaultValue : '',
-        allowNull : false
-    },
-    image3 : {
-        type : sequelize.STRING(1000),
-        defaultValue : '',
-        allowNull : false
-    },
-    image4 : {
-        type : sequelize.STRING(1000),
-        defaultValue : '',
-        allowNull : false
-    },
-    image5 : {
-        type : sequelize.STRING(1000),
-        defaultValue : '',
-        allowNull : false
-    },
-    image6 : {
-        type : sequelize.STRING(1000),
-        defaultValue : '',
-        allowNull : false
-    },
-    image7 : {
-        type : sequelize.STRING(1000),
-        defaultValue : '',
-        allowNull : false
-    },
-    image8 : {
-        type : sequelize.STRING(1000),
-        defaultValue : '',
-        allowNull : false
-    },
-    image9 : {
-        type : sequelize.STRING(1000),
-        defaultValue : '',
-        allowNull : false
-    },
-    image10 : {
-        type : sequelize.STRING(1000),
-        defaultValue : '',
-        allowNull : false
     },
     is_removed : {
         type : sequelize.BOOLEAN,
