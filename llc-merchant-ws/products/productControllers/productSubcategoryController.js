@@ -22,6 +22,21 @@ var newProductSubcategory = function(req, res){
     });
 };
 
+var getProductSubcategories = function(req, res){
+    ProductSubcategory.findAll({
+        attributes : {
+            exclude : ['created_by', 'created_on', 'updated_by', 'updated_on']
+        }
+    }).then(function(productSubcategories){
+        res.status(200).json(productSubcategories);
+    }).catch(function(err){
+        res.status(404).json({
+            message : 'No product Subcategory found...'
+        });
+    });
+};
+
 module.exports = {
-    newProductSubcategory : newProductSubcategory
+    newProductSubcategory : newProductSubcategory,
+    getProductSubcategories : getProductSubcategories
 }
