@@ -39,7 +39,7 @@ var updateProductCategoryLive = function(req, res){
     ProductCategory.findById(reqObj.id).then(function(productCategory){
             if(productCategory){
                 productCategory.updateAttributes({
-                    is_active : reqObj.live
+                    is_active : reqObj.is_active
                 }).then(function(){
                     res.status(200).json({
                         id : productCategory.id,
