@@ -1,5 +1,6 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
+const ProductCategory = require('./productCategoryModel');
 
 const ProductSubcategory = db.define('product_subcategory', {
     subcategory_name : {
@@ -11,7 +12,11 @@ const ProductSubcategory = db.define('product_subcategory', {
     },
     category_id : {
         type : sequelize.INTEGER,
-        allowNull : false
+        allowNull : false,
+        reference: {
+            model: ProductCategory,
+            key: 'id'
+        }
     },
     subcategory_image : {
         type : sequelize.STRING(1000),

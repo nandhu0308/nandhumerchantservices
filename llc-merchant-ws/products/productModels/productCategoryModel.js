@@ -1,7 +1,16 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
+const Applications = require('./../../applications/applicationsModels/applicationsModel');
 
 const ProductCategory = db.define('product_category', {
+    application_id: {
+        type: sequelize.INTEGER,
+        references: {
+            model: Applications,
+            key: 'id'
+        },
+        allowNull: false
+    },
     category_name : {
         type : sequelize.STRING,
         allowNull : false
