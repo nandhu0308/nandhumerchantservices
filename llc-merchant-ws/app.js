@@ -16,7 +16,8 @@ app.listen(3000, function(){
         force : false
     }).then(function(){
         console.log('DB Synced...');
-    }).catch(function(){
+    }).catch(function(err){
+        console.log(err);
         console.log('DB Sync Failed...');
     });
 })
