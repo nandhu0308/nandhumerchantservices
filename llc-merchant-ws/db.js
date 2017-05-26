@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const connection = new Sequelize('llcwebdb', 'root', 'ramk', {
+const connection = new Sequelize('llcwebdb', 'root', 'limitless', {
     host: 'localhost',
     dialect: 'mysql'
 });
