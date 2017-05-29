@@ -6,19 +6,11 @@ const ProductSubcategory = require('./productsubcategoryModel');
 const Products = db.define('products' ,{
     category_id : {
         type : sequelize.INTEGER,
-        allowNull : false,
-        reference: {
-            model: ProductCategory,
-            key: 'id'
-        }
+        allowNull : false
     },
     subcategory_id : {
         type : sequelize.INTEGER,
-        allowNull : false,
-        reference: {
-            model: ProductSubcategory,
-            key: 'id'
-        }
+        allowNull : false
     },
     product_name : {
         type : sequelize.STRING,

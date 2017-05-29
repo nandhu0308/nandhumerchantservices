@@ -1,14 +1,9 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
-const Applications = require('./applicationsModel');
 
 const ApplicationModules = db.define('application_modules', {
     application_id: {
         type: sequelize.INTEGER,
-        references: {
-            model: Applications,
-            key: 'id'
-        },
         allowNull: false
     },
     module_name: {
@@ -25,7 +20,7 @@ const ApplicationModules = db.define('application_modules', {
         type: sequelize.STRING,
         allowNull: false
     },
-    module_date: {
+    module_data: {
         type: sequelize.STRING,
         allowNull: false
     },

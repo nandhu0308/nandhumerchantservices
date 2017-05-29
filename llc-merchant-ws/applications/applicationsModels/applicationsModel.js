@@ -28,9 +28,8 @@ const Applications = db.define('applications', {
         defaultValue: sequelize.NOW
     },
     last_updated_by: {
-        type: sequelize.DATE,
-        allowNull: false,
-        defaultValue: sequelize.NOW
+        type: sequelize.STRING,
+        allowNull: false
     },
     last_updated_on: {
         type: sequelize.DATE,

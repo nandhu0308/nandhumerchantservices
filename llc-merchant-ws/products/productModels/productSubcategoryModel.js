@@ -12,11 +12,7 @@ const ProductSubcategory = db.define('product_subcategory', {
     },
     category_id : {
         type : sequelize.INTEGER,
-        allowNull : false,
-        reference: {
-            model: ProductCategory,
-            key: 'id'
-        }
+        allowNull : false
     },
     subcategory_image : {
         type : sequelize.STRING(1000),
