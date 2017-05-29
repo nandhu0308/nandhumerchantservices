@@ -3,6 +3,7 @@ var ProductCategory = require('./../productModels/productCategoryModel');
 var newProductCategory = function (req, res) {
     reqObj = req.body;
     ProductCategory.create({
+        application_id: reqObj.application_id,
         category_name: reqObj.category_name,
         category_description: reqObj.category_description,
         seller_id: reqObj.seller_id,

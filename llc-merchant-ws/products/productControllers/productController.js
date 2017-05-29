@@ -1,5 +1,5 @@
 var Product = require('./../productModels/productModel');
-var ProductImages = require('./../productModels/productImagesModel')
+var ProductImages = require('./../productModels/productImagesModel');
 
 var newProduct = function (req, res) {
     reqObj = req.body;
@@ -43,8 +43,7 @@ var newProductImages = function (req, res) {
     reqObj.forEach(function (i) {
         ProductImages.create({
             product_id: productId,
-            image_url: i.image_url,
-            dimensions: i.dimensions
+            image_url: i.image_url
         }).then(productImages => {
             inserted += 1;
             console.log(inserted);

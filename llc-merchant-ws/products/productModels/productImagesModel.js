@@ -1,5 +1,6 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
+const Products = require('./productModel');
 
 const ProductImages = db.define('product_images', {
     product_id : {
@@ -9,9 +10,6 @@ const ProductImages = db.define('product_images', {
     image_url : {
         type : sequelize.STRING(1000),
         allowNull : false
-    },
-    dimensions : {
-        type : sequelize.STRING
     }
 }, {
     timestamps : false,
