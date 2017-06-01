@@ -8,12 +8,14 @@ var connection = require('./db');
 var ProductRouters = require('./products/productRouters/ProductRouter');
 var ApplicationsRouter = require('./applications/applicationsRouters/applicationsRouter');
 var UserRouter = require('./user/userRouters/userRouter');
+var authRouter = require('./util-services/servicesRouters/authRouter');
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/product', ProductRouters);
 app.use('/applications', ApplicationsRouter);
 app.use('/user', UserRouter);
+app.use('/auth', authRouter);
 
 app.listen(3000, function(){
     console.log('Running on Port 3000...');
