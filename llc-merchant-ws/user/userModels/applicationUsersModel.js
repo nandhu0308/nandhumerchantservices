@@ -1,50 +1,62 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 
-const ApplicationModules = db.define('application_modules', {
+const ApplicationUsers = db.define('application_users', {
     application_id: {
         type: sequelize.INTEGER,
         allowNull: false
     },
-    module_name: {
+    user_type: {
+        type: sequelize.ENUM,
+        values: ['eCommerce', 'Restaurant', 'Entertainment', 'User'],
+        allowNull: false
+    },
+    seller_id: {
+        type: sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
+    user_name: {
         type: sequelize.STRING,
         allowNull: false
     },
-    module_title: {
+    user_short_name: {
         type: sequelize.STRING
     },
-    module_path: {
+    country: {
         type: sequelize.STRING
     },
-    load_children: {
+    city: {
+        type: sequelize.STRING
+    },
+    zip: {
+        type: sequelize.STRING
+    },
+    country_iso_code: {
         type: sequelize.STRING,
         allowNull: false
     },
-    module_data: {
+    device_mac: {
         type: sequelize.STRING,
         allowNull: false
     },
-    data_icon: {
+    mobile: {
         type: sequelize.STRING,
         allowNull: false
     },
-    module_parentid: {
-        type: sequelize.INTEGER,
+    email_id: {
+        type: sequelize.STRING,
         allowNull: false
     },
-    disp_sequence: {
-        type: sequelize.INTEGER,
+    passwd: {
+        type: sequelize.STRING,
+        allowNull: false
+    },
+    is_anonymous: {
+        type: sequelize.BOOLEAN,
         allowNull: false
     },
     is_active: {
-        type: sequelize.BOOLEAN,
-        allowNull: false
-    },
-    is_read: {
-        type: sequelize.BOOLEAN,
-        allowNull: false
-    },
-    is_denied: {
         type: sequelize.BOOLEAN,
         allowNull: false
     },
@@ -58,9 +70,8 @@ const ApplicationModules = db.define('application_modules', {
         defaultValue: sequelize.NOW
     },
     last_updated_by: {
-        type: sequelize.DATE,
-        allowNull: false,
-        defaultValue: sequelize.NOW
+        type: sequelize.STRING,
+        allowNull: false
     },
     last_updated_on: {
         type: sequelize.DATE,
@@ -68,8 +79,8 @@ const ApplicationModules = db.define('application_modules', {
         defaultValue: sequelize.NOW
     }
 }, {
-        timestamps: false,
-        freezeTableName: true
+    timestamps: false,
+    freezeTableName: true
 });
 
-module.exports = ApplicationModules;
+module.exports = ApplicationUsers;

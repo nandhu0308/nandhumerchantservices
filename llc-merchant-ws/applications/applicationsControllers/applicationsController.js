@@ -1,4 +1,4 @@
-var Applications = require('./../applicationsModels/applcationsModel');
+var Applications = require('./../applicationsModels/applicationsModel');
 
 var newAplication = function(req, res){
     reqObj = req.body;

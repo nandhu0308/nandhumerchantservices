@@ -1,14 +1,9 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
-const Applications = require('./applicationsModel');
 
 const ApplicationRoleModules = db.define('application_role_module', {
     application_id: {
         type: sequelize.INTEGER,
-        references: {
-            model: Applications,
-            key: 'id'
-        },
         allowNull: false
     },
     role_id: {
