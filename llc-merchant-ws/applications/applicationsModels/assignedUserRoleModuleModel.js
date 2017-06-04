@@ -1,17 +1,13 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 
-const ApplicationRoleModules = db.define('application_role_module', {
-    application_id: {
+const AssignedUserRoleModules = db.define('assigned_user_rolemodule', {
+    user_id: {
         type: sequelize.INTEGER,
         allowNull: false
     },
-    module_id: {
+    role_module_id: {
         type: sequelize.INTEGER,
-        allowNull: false
-    },
-    role_module_name: {
-        type: sequelize.STRING,
         allowNull: false
     },
     is_active: {
@@ -41,4 +37,4 @@ const ApplicationRoleModules = db.define('application_role_module', {
     freezeTableName: true
 });
 
-module.exports = ApplicationRoleModules;
+module.exports = AssignedUserRoleModules;
