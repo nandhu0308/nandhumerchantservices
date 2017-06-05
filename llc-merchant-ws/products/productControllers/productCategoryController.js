@@ -5,112 +5,183 @@ var TokenValidator = require('./../../user/services/tokenValidator');
 
 var newProductCategory = function (req, res) {
     authToken = req.headers.authorization;
-    reqObj = req.body;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
     var todayDate = new Date();
     var expireDate = new Date(userAuthObj.expire_date);
-    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken);
-    if (tokenOK) {
-        if (expireDate >= todayDate) {
-            ProductCategory.create({
-                application_id: reqObj.application_id,
-                category_name: reqObj.category_name,
-                category_description: reqObj.category_description,
-                seller_id: reqObj.seller_id,
-                category_image: reqObj.category_image,
-                is_active: reqObj.is_active,
-                created_by: reqObj.created_by,
-                updated_by: reqObj.updated_by
-            }).then(function (productCategory) {
-                res.status(200).json({
-                    id: productCategory.id,
-                    message: 'success'
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                reqObj = req.body;
+                ProductCategory.create({
+                    application_id: reqObj.application_id,
+                    category_name: reqObj.category_name,
+                    category_description: reqObj.category_description,
+                    seller_id: reqObj.seller_id,
+                    category_image: reqObj.category_image,
+                    is_active: reqObj.is_active,
+                    created_by: reqObj.created_by,
+                    updated_by: reqObj.updated_by
+                }).then(function (productCategory) {
+                    res.status(200).json({
+                        id: productCategory.id,
+                        message: 'success'
+                    });
+                }).catch(function (err) {
+                    res.status(500).json({
+                        message: 'creating new product category failed...'
+                    });
                 });
-            }).catch(function (err) {
-                res.status(500).json({
-                    message: 'creating new product category failed...'
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
                 });
-            });
+            }
         } else {
             res.status(401).json({
-                message: 'Not Authorized...'
+                message: 'Token Expired...'
             });
         }
-    } else {
+    }).catch(function (err) {
         res.status(401).json({
             message: 'Token Expired...'
         });
-    }
+    });
 };
 
 var getProductCategories = function (req, res) {
-    ProductCategory.findAll({
-        attributes: {
-            exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
-        },
-        where: {
-            is_active: true
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                ProductCategory.findAll({
+                    attributes: {
+                        exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
+                    },
+                    where: {
+                        is_active: true
+                    }
+                }).then(function (productCategoryAll) {
+                    res.status(200).json(productCategoryAll);
+                }).catch(function (err) {
+                    res.status(404).json({
+                        message: 'No Product Categories found...'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
         }
-    }).then(function (productCategoryAll) {
-        res.status(200).json(productCategoryAll);
     }).catch(function (err) {
-        res.status(404).json({
-            message: 'No Product Categories found...'
+        res.status(401).json({
+            message: 'Token Expired...'
         });
     });
 };
 
 var updateProductCategoryLive = function (req, res) {
-    reqObj = req.body;
-    ProductCategory.findById(reqObj.id).then(function (productCategory) {
-        if (productCategory) {
-            productCategory.updateAttributes({
-                is_active: reqObj.is_active
-            }).then(function () {
-                res.status(200).json({
-                    id: productCategory.id,
-                    newLiveStatus: productCategory.is_active
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                reqObj = req.body;
+                ProductCategory.findById(reqObj.id).then(function (productCategory) {
+                    if (productCategory) {
+                        productCategory.updateAttributes({
+                            is_active: reqObj.is_active
+                        }).then(function () {
+                            res.status(200).json({
+                                id: productCategory.id,
+                                newLiveStatus: productCategory.is_active
+                            });
+                        }).catch(function (err) {
+                            console.log(err)
+                            res.status(500).json({
+                                message: 'category update failed...'
+                            });
+                        });
+                    } else {
+                        res.status(404).json({
+                            message: 'category not found...'
+                        });
+                    }
+                }).catch(function (err) {
+                    res.status(500).json({
+                        message: 'something went wrong...'
+                    });
                 });
-            }).catch(function (err) {
-                console.log(err)
-                res.status(500).json({
-                    message: 'category update failed...'
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
                 });
-            });
+            }
         } else {
-            res.status(404).json({
-                message: 'category not found...'
+            res.status(401).json({
+                message: 'Token Expired...'
             });
         }
     }).catch(function (err) {
-        res.status(500).json({
-            message: 'something went wrong...'
+        res.status(401).json({
+            message: 'Token Expired...'
         });
     });
 };
 
 var getProductCategoriesBySellerId = function (req, res) {
-    sellerId = req.params.id;
-    ProductCategory.findAll({
-        attributes: {
-            exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
-        },
-        where: {
-            seller_id: sellerId,
-            is_active: true
-        }
-    }).then(sellerProductCategories => {
-        if (sellerProductCategories.length > 0) {
-            res.status(200).json(sellerProductCategories);
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                sellerId = req.params.id;
+                ProductCategory.findAll({
+                    attributes: {
+                        exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
+                    },
+                    where: {
+                        seller_id: sellerId,
+                        is_active: true
+                    }
+                }).then(sellerProductCategories => {
+                    if (sellerProductCategories.length > 0) {
+                        res.status(200).json(sellerProductCategories);
+                    } else {
+                        res.status(404).json({
+                            message: 'No category found for seller...'
+                        });
+                    }
+                }).catch(function (err) {
+                    res.status(500).json({
+                        message: 'No category found for seller...'
+                    })
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
         } else {
-            res.status(404).json({
-                message: 'No category found for seller...'
+            res.status(401).json({
+                message: 'Token Expired...'
             });
         }
     }).catch(function (err) {
-        res.status(500).json({
-            message: 'No category found for seller...'
-        })
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
     });
 }
 
@@ -119,37 +190,42 @@ var getProductCategoryById = function (req, res) {
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
     var todayDate = new Date();
     var expireDate = new Date(userAuthObj.expire_date);
-    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken);
-    if (tokenOK) {
-        if (expireDate >= todayDate) {
-            categoryId = req.params.id;
-            ProductCategory.findById(categoryId, {
-                attributes: {
-                    exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
-                }
-            }).then(productCategory => {
-                if (productCategory === null) {
-                    res.status(404).json({
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                categoryId = req.params.id;
+                ProductCategory.findById(categoryId, {
+                    attributes: {
+                        exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
+                    }
+                }).then(productCategory => {
+                    if (productCategory === null) {
+                        res.status(404).json({
+                            message: 'No category found...'
+                        });
+                    } else {
+                        res.status(200).json(productCategory);
+                    }
+                }).catch(function (err) {
+                    res.status(500).json({
                         message: 'No category found...'
-                    });
-                } else {
-                    res.status(200).json(productCategory);
-                }
-            }).catch(function (err) {
-                res.status(500).json({
-                    message: 'No category found...'
-                })
-            });
+                    })
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
         } else {
             res.status(401).json({
-                message: 'Not Authorized...'
+                message: 'Token Expired...'
             });
         }
-    } else {
+    }).catch(function (err) {
         res.status(401).json({
             message: 'Token Expired...'
         });
-    }
+    });
 };
 
 module.exports = {
