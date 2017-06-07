@@ -11,11 +11,6 @@ const ApplicationUsers = db.define('application_users', {
         values: ['eCommerce', 'Restaurant', 'Entertainment', 'User'],
         allowNull: false
     },
-    seller_id: {
-        type: sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 0
-    },
     user_name: {
         type: sequelize.STRING,
         allowNull: false
