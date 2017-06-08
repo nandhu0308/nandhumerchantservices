@@ -8,7 +8,6 @@ var newUserRegistration = function (req, res) {
     ApplicationUsers.create({
         application_id: reqObj.application_id,
         user_type: reqObj.user_type,
-        seller_id: reqObj.seller_id,
         user_name: reqObj.user_name,
         user_short_name: reqObj.user_short_name,
         country: reqObj.country,
@@ -169,8 +168,15 @@ var userLogout = function (req, res) {
     }
 };
 
+var getVersion = function(req, res){
+    res.status(200).json({
+        version: 1.0
+    });
+};
+
 module.exports = {
     newUserRegistration: newUserRegistration,
     userLogin: userLogin,
-    userLogout: userLogout
+    userLogout: userLogout,
+    getVersion: getVersion
 }
