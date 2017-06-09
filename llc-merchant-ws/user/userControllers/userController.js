@@ -2,6 +2,7 @@ var dateformat = require('dateformat');
 var ApplicationUsers = require('./../userModels/applicationUsersModel');
 var UserSessions = require('./../userModels/userSessionModel');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
+var Broadcaster = require('./../../entertainment/entertainmentModels/broadcasterModel');
 
 var newUserRegistration = function (req, res) {
     reqObj = req.body;
@@ -95,27 +96,48 @@ var userLogin = function (req, res) {
                     is_active: true,
                     expire_date: expireDate
                 }).then(usession => {
-                    res.status(200).json({
-                        user_id: user.id,
-                        user_app_id: user.application_id,
-                        user_type: user.user_type,
-                        user_name: user.user_name,
-                        user_short_name: user.user_short_name,
-                        user_emialid: user.email_id,
-                        user_mobile: user.mobile,
-                        user_country_code: user.country_iso_code,
-                        user_country: user.country,
-                        user_city: user.city,
-                        user_session_id: usession.id,
-                        user_auth_token: authToken
-                    });
+                    if (user.user_type === 'Enetertainment') {
+                        Broadcaster.findAll({
+                            where: {
+                                user_id: user.id,
+                                is_active: true
+                            },
+                            attributes: {
+                                exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
+                            }
+                        }).then(function (broadcaster) {
+                            res.status(200).json({
+                                user_id: user.id,
+                                user_app_id: user.application_id,
+                                user_type: user.user_type,
+                                user_name: user.user_name,
+                                user_short_name: user.user_short_name,
+                                user_emialid: user.email_id,
+                                user_mobile: user.mobile,
+                                user_country_code: user.country_iso_code,
+                                user_country: user.country,
+                                user_city: user.city,
+                                user_session_id: usession.id,
+                                user_auth_token: authToken
+                            });
+                        }).catch(function (err) {
+                            res.status(404).json({
+                                errMessage: err,
+                                message: 'user not found...'
+                            });
+                        });
+                    } else if(user.user_type === 'eCommerce'){
+                        
+                    }
                 }).catch(function (err) {
-                    console.log(err);
+                    res.status(404).json({
+                        errMessage: err,
+                        message: 'user not found...'
+                    });
                 });
             }
         }
     }).catch(function (err) {
-        console.log(err);
         res.status(404).json({
             errMessage: err,
             message: 'user not found...'
@@ -168,7 +190,7 @@ var userLogout = function (req, res) {
     }
 };
 
-var getVersion = function(req, res){
+var getVersion = function (req, res) {
     res.status(200).json({
         version: 1.0
     });
