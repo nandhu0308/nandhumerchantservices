@@ -11,8 +11,9 @@ var UserRouter = require('./user/userRouters/userRouter');
 var authRouter = require('./util-services/servicesRouters/authRouter');
 var BroadcasterRouter = require('./entertainment/entertainmentRouters/entertainmentRouter')
 
-app.use(cors());
+app.use(cors({origin:true, credentials:true}));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 app.use('/product', ProductRouters);
 app.use('/applications', ApplicationsRouter);
 app.use('/user', UserRouter);

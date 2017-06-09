@@ -232,7 +232,7 @@ var getProductCategoryById = function (req, res) {
 //multers disk storage settings
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './../../uploadTemp/');
+        cb(null, './uploadTemp/');
     },
     filename: function (req, file, cb) {
         var datetimestamp = Date.now();
@@ -254,7 +254,7 @@ var imageUpload = function (req, res) {
         }
         res.json({ error_code: 0, err_desc: null });
     });
-}
+};
 
 module.exports = {
     newProductCategory: newProductCategory,
