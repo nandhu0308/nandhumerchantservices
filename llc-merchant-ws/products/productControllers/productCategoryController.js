@@ -235,11 +235,11 @@ var getProductCategoryById = function (req, res) {
 //multers disk storage settings
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './../../uploadTemp/');
+        cb(null, './uploadTemp/');
     },
     filename: function (req, file, cb) {
         var datetimestamp = Date.now();
-        cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
+        cb(null, file.originalname.split('.')[file.originalname.split('.').length-2] + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
     }
 });
 
@@ -248,7 +248,7 @@ var upload = multer({
     storage: storage
 }).single('file');
 
-var imageUpload = function (req, res) {
+var imageUploadForCategory = function (req, res) {
     upload(req, res, function (err) {
         console.log(req.file);
         if (err) {
@@ -257,7 +257,7 @@ var imageUpload = function (req, res) {
         }
         res.json({ error_code: 0, err_desc: null });
     });
-}
+};
 
 module.exports = {
     newProductCategory: newProductCategory,
@@ -265,5 +265,5 @@ module.exports = {
     updateProductCategoryLive: updateProductCategoryLive,
     getProductCategoriesBySellerId: getProductCategoriesBySellerId,
     getProductCategoryById: getProductCategoryById,
-    imageUpload: imageUpload
+    imageUploadForCategory: imageUploadForCategory
 }
