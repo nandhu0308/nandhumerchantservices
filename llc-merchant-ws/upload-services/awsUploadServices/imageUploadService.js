@@ -1,4 +1,5 @@
 var AWS = require('aws-sdk');
+var ProductCategory = require('./../../products/productModels/productCategoryModel');
 
 var displayBucket = function (req, res) {
     // Load the SDK for JavaScript
@@ -19,8 +20,8 @@ var displayBucket = function (req, res) {
     });
 };
 
-var uploadImages = function (filepath) {
-    var userFolder = 'limitlesscircle-images' + '/' + '369';
+var uploadImages = function (filepath, sellerId, categoryId) {
+    var userFolder = 'limitlesscircle-images' + '/' + sellerId;
     // Create S3 service object
     AWS.config.loadFromPath('./config.json');
     s3 = new AWS.S3();
@@ -41,17 +42,34 @@ var uploadImages = function (filepath) {
 
     // call S3 to retrieve upload file to specified bucket
     s3.upload(uploadParams, function (err, data) {
-        console.log(uploadParams);
         if (err) {
             console.log("Error", err);
         } if (data) {
-            console.log(data);
-            console.log("Upload Success", data.Location);
+            updateCategoryImageUrl(data.Location, sellerId, categoryId);
         }
     });
 };
 
+var updateCategoryImageUrl = function (imageUrl, sellerId, categoryId) {
+    if (imageUrl) {
+        if (imageUrl != '' || imageUrl != ' ') {
+            ProductCategory.findById(categoryId).then(function (productCategory) {
+                productCategory.updateAttributes({
+                    category_image: imageUrl
+                }).then(function () {
+                    console.log("success");
+                }).catch(function (err) {
+                    console.log(err);
+                });
+            }).catch(function (err) {
+                console.log(err);
+            });
+        }
+    }
+};
+
 module.exports= {
     displayBucket: displayBucket,
-    uploadImages: uploadImages
+    uploadImages: uploadImages,
+    updateCategoryImageUrl: updateCategoryImageUrl
 }

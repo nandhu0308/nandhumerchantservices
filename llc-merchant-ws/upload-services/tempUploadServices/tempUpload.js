@@ -5,14 +5,15 @@ var awsImageUploadService = require('./../awsUploadServices/imageUploadService')
 
 //multer settings
 
-var fileUpload = function (req, res, id) {
+var fileUpload = function (req, res, sellerId, categoryId) {
+    var imageUrl="";
     var storage = multer.diskStorage({
         destination: function (req, file, cb) {
             cb(null, './uploadTemp/');
         },
         filename: function (req, file, cb) {
             var datetimestamp = Date.now();
-            cb(null, id + '-' +file.originalname.split('.')[file.originalname.split('.').length - 2] + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
+            cb(null, sellerId + '-' +file.originalname.split('.')[file.originalname.split('.').length - 2] + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
         }
     });
 
@@ -26,7 +27,7 @@ var fileUpload = function (req, res, id) {
             res.json({ error_code: 1, err_desc: err });
             return;
         }
-        awsImageUploadService.uploadImages(req.file.path);
+        imageUrl = awsImageUploadService.uploadImages(req.file.path, sellerId, categoryId);
         res.json({ error_code: 0, err_desc: null });
     });
 };

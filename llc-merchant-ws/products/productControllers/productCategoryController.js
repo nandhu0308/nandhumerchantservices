@@ -229,9 +229,10 @@ var getProductCategoryById = function (req, res) {
     });
 };
 
-var imageUploadForCategory = function(req, res){
-    categoryId = req.params.id;
-    uploadServices.fileUpload(req, res, categoryId);
+var imageUploadForCategory = function (req, res) {
+    sellerId = req.params.sellerId;
+    categoryId = req.params.categoryId;
+    uploadServices.fileUpload(req, res, sellerId, categoryId);
 };
 
 module.exports = {
@@ -241,4 +242,4 @@ module.exports = {
     getProductCategoriesBySellerId: getProductCategoriesBySellerId,
     getProductCategoryById: getProductCategoryById,
     imageUploadForCategory: imageUploadForCategory
-}
+};
