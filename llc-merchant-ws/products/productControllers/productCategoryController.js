@@ -1,8 +1,8 @@
-var multer = require('multer');
 var dateformat = require('dateformat');
 var ProductCategory = require('./../productModels/productCategoryModel');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
+var uploadServices = require('./../../upload-services/tempUploadServices/tempUpload');
 
 var newProductCategory = function (req, res) {
     authToken = req.headers.authorization;
@@ -18,7 +18,6 @@ var newProductCategory = function (req, res) {
                     category_name: reqObj.category_name,
                     category_description: reqObj.category_description,
                     seller_id: reqObj.seller_id,
-                    category_image: reqObj.category_image,
                     is_active: reqObj.is_active,
                     created_by: reqObj.created_by,
                     updated_by: reqObj.updated_by
@@ -29,6 +28,7 @@ var newProductCategory = function (req, res) {
                     });
                 }).catch(function (err) {
                     res.status(500).json({
+                        errMessage: err,
                         message: 'creating new product category failed...'
                     });
                 });
@@ -232,31 +232,10 @@ var getProductCategoryById = function (req, res) {
     });
 };
 
-//multers disk storage settings
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './uploadTemp/');
-    },
-    filename: function (req, file, cb) {
-        var datetimestamp = Date.now();
-        cb(null, file.originalname.split('.')[file.originalname.split('.').length-2] + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
-    }
-});
-
-//multer settings
-var upload = multer({
-    storage: storage
-}).single('file');
-
 var imageUploadForCategory = function (req, res) {
-    upload(req, res, function (err) {
-        console.log(req.file);
-        if (err) {
-            res.json({ error_code: 1, err_desc: err });
-            return;
-        }
-        res.json({ error_code: 0, err_desc: null });
-    });
+    sellerId = req.params.sellerId;
+    categoryId = req.params.categoryId;
+    uploadServices.fileUpload(req, res, sellerId, categoryId);
 };
 
 module.exports = {
@@ -266,4 +245,4 @@ module.exports = {
     getProductCategoriesBySellerId: getProductCategoriesBySellerId,
     getProductCategoryById: getProductCategoryById,
     imageUploadForCategory: imageUploadForCategory
-}
+};
