@@ -21,5 +21,7 @@ productRouter.route('/subcategory/live').patch(productSubcategoryController.upda
 //Product Routes
 productRouter.route('/new').post(productController.newProduct);
 productRouter.route('/images/:id').post(productController.newProductImages);
+productRouter.route('/get/:id').get(productController.getProductById);
+productRouter.route('/all').get(productController.getProducts);
 
 module.exports = productRouter;
