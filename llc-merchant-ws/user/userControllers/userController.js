@@ -3,6 +3,7 @@ var ApplicationUsers = require('./../userModels/applicationUsersModel');
 var UserSessions = require('./../userModels/userSessionModel');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var Broadcaster = require('./../../entertainment/entertainmentModels/broadcasterModel');
+var Seller = require('./../userModels/sellersModel');
 
 var newUserRegistration = function (req, res) {
     reqObj = req.body;
@@ -96,7 +97,7 @@ var userLogin = function (req, res) {
                     is_active: true,
                     expire_date: expireDate
                 }).then(usession => {
-                    if (user.user_type === 'Enetertainment') {
+                    if (user.user_type === 'Entertainment') {
                         Broadcaster.findAll({
                             where: {
                                 user_id: user.id,
@@ -117,6 +118,9 @@ var userLogin = function (req, res) {
                                 user_country_code: user.country_iso_code,
                                 user_country: user.country,
                                 user_city: user.city,
+                                broadcaster_name: broadcaster.braodcaster_name,
+                                broadcaster_thumbnail: broadcaster.broadcaster_thumbnail,
+                                broadcaster_banner: broadcaster.broadcaster_banner,
                                 user_session_id: usession.id,
                                 user_auth_token: authToken
                             });
@@ -126,8 +130,38 @@ var userLogin = function (req, res) {
                                 message: 'user not found...'
                             });
                         });
-                    } else if(user.user_type === 'eCommerce'){
-                        
+                    } else if (user.user_type === 'eCommerce') {
+                        Seller.findAll({
+                            where: {
+                                user_id: user.user_id,
+                                is_deleted: true
+                            },
+                            attributes: {
+                                exclude: ['created_by', 'created_time', 'updated_by', 'updated_time']
+                            }
+                        }).then(function (seller) {
+                            res.status(200).json({
+                                user_id: user.id,
+                                user_app_id: user.application_id,
+                                user_type: user.user_type,
+                                user_name: user.user_name,
+                                user_short_name: user.user_short_name,
+                                user_emialid: user.email_id,
+                                user_mobile: user.mobile,
+                                user_country_code: user.country_iso_code,
+                                user_country: user.country,
+                                user_city: user.city,
+                                shop_name: seller.seller_shop_name,
+                                shop_code: seller.shop_code,
+                                user_session_id: usession.id,
+                                user_auth_token: authToken
+                            });
+                        }).catch(function (err) {
+                            res.status(404).json({
+                                errMessage: err,
+                                message: 'user not found...'
+                            });
+                        });
                     }
                 }).catch(function (err) {
                     res.status(404).json({
