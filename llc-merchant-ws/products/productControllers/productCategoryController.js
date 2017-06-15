@@ -51,13 +51,16 @@ var newProductCategory = function (req, res) {
 };
 
 var getProductCategories = function (req, res) {
+    
     authToken = req.headers.authorization;
+    
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
     var todayDate = new Date();
     var expireDate = new Date(userAuthObj.expire_date);
     tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
+               
                 ProductCategory.findAll({
                     attributes: {
                         exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']

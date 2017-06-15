@@ -4,6 +4,95 @@ var dateformat = require('dateformat');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
 
+
+var getProducts = function (req, res) {
+    
+    authToken = req.headers.authorization;
+    
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+               
+                Product.findAll({
+                    attributes: {
+                        exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
+                    },
+                    where: {
+                        is_removed: true
+                    }
+                }).then(function (productsAll) {
+                    res.status(200).json(productsAll);
+                }).catch(function (err) {
+                    res.status(404).json({
+                        message: 'No Products  found...'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
+
+var getProductById = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                productId = req.params.id;
+                Product.findById(productId, {
+                    attributes: {
+                        exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
+                    }
+                }).then(product => {
+                    if (product === null) {
+                        res.status(404).json({
+                            message: 'No Product found...'
+                        });
+                    } else {
+                        res.status(200).json(product);
+                    }
+                }).catch(function (err) {
+                    res.status(500).json({
+                        message: 'No Product found...'
+                    })
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
+
+
 var newProduct = function (req, res) {
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
@@ -58,6 +147,9 @@ var newProduct = function (req, res) {
         });
     });
 };
+
+
+
 
 var newProductImages = function (req, res) {
     authToken = req.headers.authorization;
@@ -114,5 +206,7 @@ var newProductImages = function (req, res) {
 
 module.exports = {
     newProduct: newProduct,
+    getProducts:getProducts,
+    getProductById:getProductById,
     newProductImages: newProductImages
 }
