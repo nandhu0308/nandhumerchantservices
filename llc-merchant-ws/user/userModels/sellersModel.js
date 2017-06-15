@@ -1,7 +1,7 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 
-const ApplicationSellers = db.define('applocation_seller', {
+const ApplicationSellers = db.define('application_seller', {
     application_id: {
         type: sequelize.INTEGER,
         allowNull: false
@@ -25,7 +25,7 @@ const ApplicationSellers = db.define('applocation_seller', {
         type: sequelize.DECIMAL(10,6),
         defaultValue: 0.000000
     },
-    seller_location_longitud: {
+    seller_location_longitude: {
         type: sequelize.DECIMAL(10,6),
         defaultValue: 0.000000
     },
