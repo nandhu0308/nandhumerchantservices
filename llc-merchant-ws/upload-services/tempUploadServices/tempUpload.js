@@ -27,8 +27,8 @@ var fileUpload = function (req, res, sellerId, categoryId) {
             res.json({ error_code: 1, err_desc: err });
             return;
         }
-        imageUrl = awsImageUploadService.uploadImages(req.file.path, sellerId, categoryId);
-        res.json({ error_code: 0, err_desc: null });
+        imageUrl = awsImageUploadService.uploadImages(req.file.path, res, sellerId, categoryId);
+        //res.json({ error_code: 0, err_desc: null });
     });
 };
 

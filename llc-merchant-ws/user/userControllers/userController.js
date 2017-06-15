@@ -26,7 +26,7 @@ var newUserRegistration = function (req, res) {
         last_updated_by: reqObj.last_updated_by
     }).then(newUser => {
         res.status(200).json({
-            user_id: newUser.id,
+            id: newUser.id,
             message: 'success'
         });
     }).catch(function (err) {

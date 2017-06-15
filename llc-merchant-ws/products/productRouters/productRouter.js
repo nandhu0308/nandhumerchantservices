@@ -12,6 +12,7 @@ productRouter.route('/category/all').get(productCategoryController.getProductCat
 productRouter.route('/category/seller/:id').get(productCategoryController.getProductCategoriesBySellerId);
 productRouter.route('/category/live').patch(productCategoryController.updateProductCategoryLive);
 productRouter.route('/category/image/:sellerId/:categoryId').post(productCategoryController.imageUploadForCategory);
+productRouter.route('/category/update').put(productCategoryController.updateProductCategory);
 
 //Subcategory Routes
 productRouter.route('/subcategory/new').post(productSubcategoryController.newProductSubcategory);

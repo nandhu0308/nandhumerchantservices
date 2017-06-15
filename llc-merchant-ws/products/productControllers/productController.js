@@ -33,7 +33,7 @@ var newProduct = function (req, res) {
                         });
                     } else {
                         res.status(200).json({
-                            productId: product.id,
+                            id: product.id,
                             message: 'success'
                         });
                     }

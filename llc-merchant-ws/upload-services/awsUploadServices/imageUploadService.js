@@ -20,7 +20,7 @@ var displayBucket = function (req, res) {
     });
 };
 
-var uploadImages = function (filepath, sellerId, categoryId) {
+var uploadImages = function (filepath, res, sellerId, categoryId) {
     var userFolder = 'limitlesscircle-images' + '/' + sellerId;
     // Create S3 service object
     AWS.config.loadFromPath('./config.json');
@@ -45,26 +45,24 @@ var uploadImages = function (filepath, sellerId, categoryId) {
         if (err) {
             console.log("Error", err);
         } if (data) {
-            updateCategoryImageUrl(data.Location, sellerId, categoryId);
+            updateCategoryImageUrl(data.Location, res, sellerId, categoryId);
         }
     });
 };
 
-var updateCategoryImageUrl = function (imageUrl, sellerId, categoryId) {
+var updateCategoryImageUrl = function (imageUrl, res, sellerId, categoryId) {
     if (imageUrl) {
         if (imageUrl != '' || imageUrl != ' ') {
-            ProductCategory.findById(categoryId).then(function (productCategory) {
-                productCategory.updateAttributes({
-                    category_image: imageUrl
-                }).then(function () {
-                    console.log("success");
-                }).catch(function (err) {
-                    console.log(err);
-                });
-            }).catch(function (err) {
-                console.log(err);
+            res.status(200).send(imageUrl);
+        } else {
+            res.status(500).json({
+                message: 'image upload not success'
             });
         }
+    } else {
+        res.status(500).json({
+            message: 'image upload not success'
+        });
     }
 };
 

@@ -17,6 +17,7 @@ var newProductCategory = function (req, res) {
                     application_id: reqObj.application_id,
                     category_name: reqObj.category_name,
                     category_description: reqObj.category_description,
+                    category_image: reqObj.category_image,
                     seller_id: reqObj.seller_id,
                     is_active: reqObj.is_active,
                     created_by: reqObj.created_by,
@@ -235,11 +236,63 @@ var imageUploadForCategory = function (req, res) {
     uploadServices.fileUpload(req, res, sellerId, categoryId);
 };
 
+var updateProductCategory = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                reqObj = req.body;
+                ProductCategory.findById(reqObj.id, {
+                    attributes: {
+                        exclude: ['created_by', 'created_on']
+                    }
+                }).then(function (productCategory) {
+                    productCategory.updateAttributes({
+                        category_name: reqObj.category_name,
+                        category_description: reqObj.category_description
+                    }).then(function () {
+                        res.status(200).json({
+                            id: reqObj.id,
+                            category_name: productCategory.category_name,
+                            category_description: productCategory.category_description
+                        });
+                    }).catch(function (err) {
+                        console.log(err);
+                        res.status(500).json({
+                            message: 'Update Failed...'
+                        });
+                    });
+                }).catch(function (err) {
+                    res.status(404).json({
+                        message: 'No category found...'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+}
+
 module.exports = {
     newProductCategory: newProductCategory,
     getProductCategories: getProductCategories,
     updateProductCategoryLive: updateProductCategoryLive,
     getProductCategoriesBySellerId: getProductCategoriesBySellerId,
     getProductCategoryById: getProductCategoryById,
-    imageUploadForCategory: imageUploadForCategory
+    imageUploadForCategory: imageUploadForCategory,
+    updateProductCategory: updateProductCategory
 };
