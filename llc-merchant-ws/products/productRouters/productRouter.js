@@ -16,7 +16,7 @@ productRouter.route('/category/update').put(productCategoryController.updateProd
 
 //Subcategory Routes
 productRouter.route('/subcategory/new').post(productSubcategoryController.newProductSubcategory);
-productRouter.route('/subcategory/all').get(productSubcategoryController.getProductSubcategories);
+productRouter.route('/subcategory/all/:categoryId').get(productSubcategoryController.getProductSubcategories);
 productRouter.route('/subcategory/live').patch(productSubcategoryController.updateProductSubcategoryLive);
 
 //Product Routes
