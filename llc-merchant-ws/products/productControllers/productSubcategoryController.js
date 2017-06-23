@@ -55,11 +55,13 @@ var getProductSubcategories = function (req, res) {
     tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
+                categoryId=req.params.categoryId;
                 ProductSubcategory.findAll({
                     attributes: {
                         exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
                     },
                     where: {
+                        category_id:categoryId,
                         is_active: true
                     }
                 }).then(function (productSubcategories) {
@@ -85,6 +87,8 @@ var getProductSubcategories = function (req, res) {
         });
     });
 };
+
+
 
 var updateProductSubcategoryLive = function (req, res) {
     authToken = req.headers.authorization;
