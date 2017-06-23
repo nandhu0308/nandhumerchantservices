@@ -255,12 +255,16 @@ var updateProductCategory = function (req, res) {
                 }).then(function (productCategory) {
                     productCategory.updateAttributes({
                         category_name: reqObj.category_name,
-                        category_description: reqObj.category_description
+                        category_description: reqObj.category_description,
+                        category_image: reqObj.category_image,
+                        is_active: reqObj.is_active
                     }).then(function () {
                         res.status(200).json({
                             id: reqObj.id,
                             category_name: productCategory.category_name,
-                            category_description: productCategory.category_description
+                            category_description: productCategory.category_description,
+                            category_image: productCategory.category_image,
+                            is_active: productCategory.is_active
                         });
                     }).catch(function (err) {
                         console.log(err);

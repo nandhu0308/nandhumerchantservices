@@ -20,8 +20,9 @@ var displayBucket = function (req, res) {
     });
 };
 
-var uploadImages = function (filepath, res, sellerId, categoryId) {
-    var userFolder = 'limitlesscircle-images' + '/' + sellerId;
+var uploadImages = function (filepath, res, uploadApp, uploadTo, userId) {
+    var userFolder = 'limitlesscircle-images' + '/' + uploadApp + '/' + uploadTo + '/' + userId;
+    console.log(userFolder);
     // Create S3 service object
     AWS.config.loadFromPath('./config.json');
     s3 = new AWS.S3();
@@ -45,12 +46,12 @@ var uploadImages = function (filepath, res, sellerId, categoryId) {
         if (err) {
             console.log("Error", err);
         } if (data) {
-            updateCategoryImageUrl(data.Location, res, sellerId, categoryId);
+            updateCategoryImageUrl(data.Location, res);
         }
     });
 };
 
-var updateCategoryImageUrl = function (imageUrl, res, sellerId, categoryId) {
+var updateCategoryImageUrl = function (imageUrl, res) {
     if (imageUrl) {
         if (imageUrl != '' || imageUrl != ' ') {
             res.status(200).send(imageUrl);

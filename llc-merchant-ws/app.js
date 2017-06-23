@@ -9,7 +9,8 @@ var ProductRouters = require('./products/productRouters/ProductRouter');
 var ApplicationsRouter = require('./applications/applicationsRouters/applicationsRouter');
 var UserRouter = require('./user/userRouters/userRouter');
 var authRouter = require('./util-services/servicesRouters/authRouter');
-var BroadcasterRouter = require('./entertainment/entertainmentRouters/entertainmentRouter')
+var BroadcasterRouter = require('./entertainment/entertainmentRouters/entertainmentRouter');
+var UploadRouter = require('./upload-services/uploadRouters/uploadRouter');
 
 app.use(cors({origin:true, credentials:true}));
 app.use(bodyParser.json());
@@ -19,6 +20,7 @@ app.use('/applications', ApplicationsRouter);
 app.use('/user', UserRouter);
 app.use('/auth', authRouter);
 app.use('/entertainment', BroadcasterRouter);
+app.use('/upload', UploadRouter);
 
 app.listen(3000, function(){
     console.log('Running on Port 3000...');

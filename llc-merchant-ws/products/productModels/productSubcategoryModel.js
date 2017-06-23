@@ -7,7 +7,7 @@ const ProductSubcategory = db.define('product_subcategory', {
         type : sequelize.STRING,
         allowNull : false
     },
-    subcategory_decription : {
+    subcategory_description : {
         type : sequelize.TEXT
     },
     category_id : {
