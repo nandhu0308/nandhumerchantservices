@@ -18,6 +18,8 @@ productRouter.route('/category/update').put(productCategoryController.updateProd
 productRouter.route('/subcategory/new').post(productSubcategoryController.newProductSubcategory);
 productRouter.route('/subcategory/all/:categoryId').get(productSubcategoryController.getProductSubcategories);
 productRouter.route('/subcategory/live').patch(productSubcategoryController.updateProductSubcategoryLive);
+productRouter.route('/subcategory/get/:id').get(productSubcategoryController.getSubcategoryById);
+productRouter.route('/subcategory/update').put(productSubcategoryController.editProductSubcategory);
 
 //Product Routes
 productRouter.route('/new').post(productController.newProduct);

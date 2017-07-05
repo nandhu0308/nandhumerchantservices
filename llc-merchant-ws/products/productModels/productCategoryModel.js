@@ -22,6 +22,10 @@ const ProductCategory = db.define('product_category', {
         allowNull : false,
         defaultValue : ''
     },
+    image_file_name : {
+        type : sequelize.STRING(500),
+        allowNull: false
+    },
     is_active : {
         type : sequelize.BOOLEAN,
         allowNull : false,

@@ -55,13 +55,13 @@ var getProductSubcategories = function (req, res) {
     tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
-                categoryId=req.params.categoryId;
+                categoryId = req.params.categoryId;
                 ProductSubcategory.findAll({
                     attributes: {
                         exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
                     },
                     where: {
-                        category_id:categoryId,
+                        category_id: categoryId,
                         is_active: true
                     }
                 }).then(function (productSubcategories) {
@@ -140,8 +140,141 @@ var updateProductSubcategoryLive = function (req, res) {
     });
 }
 
+var getSubcategoryById = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                subcategoryId = req.params.id;
+                ProductSubcategory.findById(subcategoryId).then(function (productSubcategory) {
+                    if (productSubcategory === null) {
+                        res.status(404).json({
+                            message: 'product subcategory not found...'
+                        })
+                    } else {
+                        res.status(200).json(productSubcategory);
+                    }
+                }).catch(function (err) {
+                    res.status(500).json({
+                        message: 'something went wrong...'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
+var getProductSubcategoryByCategoryId = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                categoryId = req.params.id;
+                ProductSubcategory.findAll({
+                    where: {
+                        category_id: categoryId
+                    },
+                    attributes: {
+                        exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
+                    },
+                }).then(productSubcategories => {
+                    res.status(200).json(productSubcategories);
+                }).catch(function (err) {
+                    res.status(500).json({
+                        message: 'something went wrong...'
+                    });
+                })
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
+var editProductSubcategory = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                reqObj = req.body;
+                ProductSubcategory.findById(reqObj.id).then(function (productSubcategory) {
+                    if (productSubcategory === null) {
+                        res.status(404).json({
+                            message: 'product subcategory not found...'
+                        });
+                    } else {
+                        productSubcategory.updateAttributes({
+                            subcategory_name: reqObj.subcategory_name,
+                            subcategory_description: reqObj.subcategory_description,
+                            is_active: reqObj.is_active
+                        }).then(function () {
+                            res.status(200).json(productSubcategory);
+                        }).catch(function (err) {
+                            res.status(500).json({
+                                error: err,
+                                message: 'something went wrong...'
+                            });
+                        });
+                    }
+                }).catch(function (err) {
+                    res.status(500).json({
+                        error: err,
+                        message: 'something went wrong...'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
 module.exports = {
     newProductSubcategory: newProductSubcategory,
     getProductSubcategories: getProductSubcategories,
-    updateProductSubcategoryLive: updateProductSubcategoryLive
+    updateProductSubcategoryLive: updateProductSubcategoryLive,
+    getProductSubcategoryByCategoryId: getProductSubcategoryByCategoryId,
+    getSubcategoryById: getSubcategoryById,
+    editProductSubcategory: editProductSubcategory
 }

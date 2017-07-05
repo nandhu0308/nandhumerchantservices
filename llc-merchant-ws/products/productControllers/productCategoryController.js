@@ -18,6 +18,7 @@ var newProductCategory = function (req, res) {
                     category_name: reqObj.category_name,
                     category_description: reqObj.category_description,
                     category_image: reqObj.category_image,
+                    image_file_name: reqObj.image_file_name,
                     seller_id: reqObj.seller_id,
                     is_active: reqObj.is_active,
                     created_by: reqObj.created_by,
@@ -257,6 +258,7 @@ var updateProductCategory = function (req, res) {
                         category_name: reqObj.category_name,
                         category_description: reqObj.category_description,
                         category_image: reqObj.category_image,
+                        image_file_name: reqObj.image_file_name,
                         is_active: reqObj.is_active
                     }).then(function () {
                         res.status(200).json({
@@ -264,6 +266,7 @@ var updateProductCategory = function (req, res) {
                             category_name: productCategory.category_name,
                             category_description: productCategory.category_description,
                             category_image: productCategory.category_image,
+                            image_file_name: productCategory.image_file_name,
                             is_active: productCategory.is_active
                         });
                     }).catch(function (err) {

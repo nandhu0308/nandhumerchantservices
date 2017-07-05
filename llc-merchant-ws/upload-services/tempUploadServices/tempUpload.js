@@ -13,7 +13,7 @@ var fileUpload = function (req, res, uploadApp, uploadTo, userId) {
         },
         filename: function (req, file, cb) {
             var datetimestamp = Date.now();
-            cb(null, userId + '-' +file.originalname.split('.')[file.originalname.split('.').length - 2] + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
+            cb(null, userId + '-' +file.originalname.split('.')[file.originalname.split('.').length - 2] + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
         }
     });
 
@@ -27,7 +27,10 @@ var fileUpload = function (req, res, uploadApp, uploadTo, userId) {
             res.json({ error_code: 1, err_desc: err });
             return;
         }
-        imageUrl = awsImageUploadService.uploadImages(req.file.path, res, uploadApp, uploadTo, userId);
+        var filePathStr = req.file.path;
+        var splitter = filePathStr.toString().split('\\');
+        var fileName = splitter[1];
+        imageUrl = awsImageUploadService.uploadImages(req.file.path, res, uploadApp, uploadTo, userId, fileName);
         //res.json({ error_code: 0, err_desc: null });
     });
 };

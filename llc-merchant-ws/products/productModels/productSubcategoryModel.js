@@ -18,6 +18,10 @@ const ProductSubcategory = db.define('product_subcategory', {
         type : sequelize.STRING(1000),
         defaultValue : ''
     },
+    image_file_name : {
+        type : sequelize.STRING(500),
+        allowNull: false
+    },
     is_active : {
         type : sequelize.BOOLEAN,
         allowNull : false,

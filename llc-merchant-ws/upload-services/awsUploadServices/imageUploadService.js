@@ -20,7 +20,7 @@ var displayBucket = function (req, res) {
     });
 };
 
-var uploadImages = function (filepath, res, uploadApp, uploadTo, userId) {
+var uploadImages = function (filepath, res, uploadApp, uploadTo, userId, fileName) {
     var userFolder = 'limitlesscircle-images' + '/' + uploadApp + '/' + uploadTo + '/' + userId;
     console.log(userFolder);
     // Create S3 service object
@@ -46,15 +46,39 @@ var uploadImages = function (filepath, res, uploadApp, uploadTo, userId) {
         if (err) {
             console.log("Error", err);
         } if (data) {
-            updateCategoryImageUrl(data.Location, res);
+            updateCategoryImageUrl(data.Location, fileName, res);
         }
     });
 };
 
-var updateCategoryImageUrl = function (imageUrl, res) {
+var deleteImage = function(req, res){
+    reqObj = req.body;
+    deleteApp = reqObj.deleteApp;
+    deleteFrom = reqObj.deleteFrom;
+    userId = reqObj.userId;
+    fileName = reqObj.fileName;
+    var userFolder = 'limitlesscircle-images' + '/' + deleteApp + '/' + deleteFrom + '/' + userId;
+    AWS.config.loadFromPath('./config.json');
+    s3 = new AWS.S3();
+    var deleteParams = {
+        Bucket: userFolder,
+        Key: fileName
+    };
+    s3.deleteObject(deleteParams, function(err, data){
+        if(err){
+            console.log("Error", err);
+        } else if(data){
+            res.status(200).json({
+                message: 'image deleted successfully...'
+            });
+        }
+    });
+};
+
+var updateCategoryImageUrl = function (imageUrl, fileName, res) {
     if (imageUrl) {
         if (imageUrl != '' || imageUrl != ' ') {
-            res.status(200).send(imageUrl);
+            res.status(200).send(imageUrl + '|' + fileName);
         } else {
             res.status(500).json({
                 message: 'image upload not success'
@@ -70,5 +94,6 @@ var updateCategoryImageUrl = function (imageUrl, res) {
 module.exports= {
     displayBucket: displayBucket,
     uploadImages: uploadImages,
-    updateCategoryImageUrl: updateCategoryImageUrl
+    updateCategoryImageUrl: updateCategoryImageUrl,
+    deleteImage: deleteImage
 }
