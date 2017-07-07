@@ -29,6 +29,7 @@ var newProductCategory = function (req, res) {
                         message: 'success'
                     });
                 }).catch(function (err) {
+                    console.log(err);
                     res.status(500).json({
                         errMessage: err,
                         message: 'creating new product category failed...'

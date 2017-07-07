@@ -17,6 +17,7 @@ var newProductSubcategory = function (req, res) {
                     subcategory_description: reqObj.subcategory_description,
                     category_id: reqObj.category_id,
                     subcategory_image: reqObj.subcategory_image,
+                    image_file_name: reqObj.image_file_name,
                     is_active: reqObj.is_active,
                     created_by: reqObj.created_by,
                     updated_by: reqObj.updated_by
@@ -26,6 +27,7 @@ var newProductSubcategory = function (req, res) {
                         message: 'success'
                     });
                 }).catch(function (err) {
+                    console.log(err);
                     res.status(500).json({
                         message: 'creating new product subcategory failed...'
                     });

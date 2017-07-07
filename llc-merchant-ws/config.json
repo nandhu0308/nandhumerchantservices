@@ -2,5 +2,5 @@
     "region": "us-west-2",
     "accessKeyId": "AKIAIUVLDIG7TTS4QVRQ",
     "secretAccessKey": "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",
-    "signatureVersion": "v2"
+    "signatureVersion": "v4"
 }
