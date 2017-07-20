@@ -9,8 +9,9 @@ var ProductRouters = require('./products/productRouters/ProductRouter');
 var ApplicationsRouter = require('./applications/applicationsRouters/applicationsRouter');
 var UserRouter = require('./user/userRouters/userRouter');
 var authRouter = require('./util-services/servicesRouters/authRouter');
-var BroadcasterRouter = require('./entertainment/entertainmentRouters/entertainmentRouter');
+var EntertainmentRouter = require('./entertainment/entertainmentRouters/entertainmentRouter');
 var UploadRouter = require('./upload-services/uploadRouters/uploadRouter');
+var BroadcasterRouter = require('./broadcasters/broadcasterRouters/broadcasterRouter');
 
 app.use(cors({origin:true, credentials:true}));
 app.use(bodyParser.json());
@@ -19,7 +20,8 @@ app.use('/product', ProductRouters);
 app.use('/applications', ApplicationsRouter);
 app.use('/user', UserRouter);
 app.use('/auth', authRouter);
-app.use('/entertainment', BroadcasterRouter);
+app.use('/entertainment', EntertainmentRouter);
+app.use('/broadcaster', BroadcasterRouter);
 app.use('/upload', UploadRouter);
 
 app.listen(3000, function(){

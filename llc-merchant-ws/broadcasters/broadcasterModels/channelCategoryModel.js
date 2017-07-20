@@ -1,13 +1,19 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
-
-const BroadcasterChannelCategory = db.define('broadcast_channel_category', {
+const Broadcaster = require('./../broadcasterModels/broadcastersModel');
+const BroadcasterChannelCategory = db.define('broadcast_channel_category' , {
+    
     application_id: {
         type: sequelize.INTEGER,
         allowNull: false
     },
     broadcaster_id: {
         type: sequelize.INTEGER,
+
+        references:{
+            model:Broadcaster,
+            key:"id"
+        },
         allowNull: false
     },
    

@@ -1,11 +1,14 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 
-const Broadcasters = db.define('broadcasters', {
-    broadcasters_id: {
+const Broadcasters = db.define('broadcasters',  {
+   
+   id:{
         type: sequelize.INTEGER,
+        primaryKey:true,
         allowNull: false
-    },
+   },
+   
     seller_id: {
         type: sequelize.INTEGER,
         allowNull: false
@@ -60,7 +63,7 @@ const Broadcasters = db.define('broadcasters', {
         allowNull : false,
         defaultValue : true
     },
-    createdby : {
+    created_by : {
         type : sequelize.STRING,
         defaultValue : ''
     },
@@ -69,7 +72,7 @@ const Broadcasters = db.define('broadcasters', {
         defaultValue : sequelize.NOW
     },
 
-    updatedby : {
+    updated_by : {
         type : sequelize.STRING,
         defaultValue : ''
     },

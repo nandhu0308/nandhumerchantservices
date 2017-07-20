@@ -1,9 +1,13 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
-
+const ChannelCategory = require('./../broadcasterModels/channelCategoryModel');
 const BroadcasterVideos = db.define('broadcaster_videos', {
     broadcaster_channel_id: {
         type: sequelize.INTEGER,
+         references:{
+            model:ChannelCategory,
+            key:"id"
+        },
         allowNull: false
     },  
    
@@ -22,21 +26,20 @@ const BroadcasterVideos = db.define('broadcaster_videos', {
     },
    
     video_description : {
-        type : sequelize.TEXT,
-        allowNull : false,
-        defaultValue : ''
+        type : sequelize.TEXT
+       
     },
     video_url : {
         type : sequelize.STRING(1000),
         allowNull: false
     },
     
-    isactive : {
+    is_active : {
         type : sequelize.BOOLEAN,
         allowNull : false,
         defaultValue : true
     },
-    islive : {
+    is_live : {
         type : sequelize.BOOLEAN,
         allowNull : false,
         defaultValue : true
