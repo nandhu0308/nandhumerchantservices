@@ -86,10 +86,10 @@ var getBroadcastersEGLAll = function (req, res) {
                      attributes: {
                         exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
                      }
-                    //,
-                    // where: {
-                    //     is_active: true
-                    // }
+                    ,
+                    where: {
+                        is_active: true
+                    }
                     ,
                         include: [{
                             attributes: {

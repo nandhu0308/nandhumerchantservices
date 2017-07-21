@@ -8,6 +8,6 @@ var broadcasterVideoController = require('./../broadcasterControllers/broadcaste
 //Broadcaster Routes
 
 broadcasterRouter.route('/broadcaster/get/:id').get(broadcastersController.getBroadcastersEGLById);
-broadcasterRouter.route('/broadcaster/get/all').get(broadcastersController.getBroadcastersEGLAll);
+broadcasterRouter.route('/broadcaster/all').get(broadcastersController.getBroadcastersEGLAll);
 
 module.exports=broadcasterRouter;
