@@ -24,7 +24,6 @@ app.use('/entertainment', EntertainmentRouter);
 app.use('/broadcaster', BroadcasterRouter);
 app.use('/upload', UploadRouter);
 
-
 app.listen(3000, function(){
     console.log('Running on Port 3000...');
     connection.sync({
@@ -36,4 +35,7 @@ app.listen(3000, function(){
         console.log('DB Sync Failed...');
     });
 });
+
+
+
 
