@@ -1,9 +1,14 @@
 var dateformat = require('dateformat');
 var ApplicationUsers = require('./../userModels/applicationUsersModel');
+var ApplicationsModules = require('./../../applications/applicationsModels/applicationsModulesModel');
+var ApplicationsRoleModules = require('./../../applications/applicationsModels/applicationRoleModulesModel');
+var ApplicationsRoleModel = require('./../../applications/applicationsModels/applicationsRolesModel');
+var AssignedUserRoleModules = require('./../../applications/applicationsModels/assignedUserRoleModuleModel');
 var UserSessions = require('./../userModels/userSessionModel');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var Broadcaster = require('./../../entertainment/entertainmentModels/broadcasterModel');
 var Seller = require('./../userModels/sellersModel');
+var TokenValidator = require('./../services/tokenValidator');
 
 var newUserRegistration = function (req, res) {
     reqObj = req.body;
@@ -134,7 +139,7 @@ var userLogin = function (req, res) {
                         Seller.findAll({
                             where: {
                                 user_id: user.user_id,
-                                is_deleted: true
+                                is_deleted: false
                             },
                             attributes: {
                                 exclude: ['created_by', 'created_time', 'updated_by', 'updated_time']
@@ -188,7 +193,56 @@ var getUserAssignedModules = function (req, res) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
                 userId = req.params.userId;
-                
+                AssignedUserRoleModules.findAll({
+                    where: {
+                        user_id: userId,
+                        is_active: true
+                    },
+                    attributes: {
+                        exclude: ['created_by', 'created_on', 'last_updated_by', 'last_updated_on']
+                    }
+                }).then(assignedRoles => {
+                    //res.status(200).json(assignedRoles);
+                    if (assignedRoles.length > 0) {
+                        var modulesArray = [];
+                        for (i = 0; i < assignedRoles.length; i++) {
+                            ApplicationsRoleModules.findById(assignedRoles[i].role_module_id).then(roleModule => {
+                                //res.status(200).json(roleModule);
+                                ApplicationsModules.findById(roleModule.module_id,
+                                {
+                                    attributes: {
+                                        exclude: ['created_by', 'created_on', 'last_updated_by', 'last_updated_on']
+                                    }
+                                }).then(modules => {
+                                    modulesArray.push(modules.dataValues);
+                                    moduleList(res, assignedRoles.length, modulesArray);
+                                }).catch(function (err) {
+                                    console.log(err);
+                                    res.status(500).json({
+                                        error: err,
+                                        message: 'something went wrong...'
+                                    });
+                                });
+                            }).catch(function (err) {
+                                console.log(err);
+                                res.status(500).json({
+                                    error: err,
+                                    message: 'something went wrong...'
+                                });
+                            })
+                        }
+                    } else {
+                        res.status(404).json({
+                            message: 'no roles found...'
+                        });
+                    }
+                }).catch(function (err) {
+                    console.log(err);
+                    res.status(500).json({
+                        error: err,
+                        message: 'something went wrong...'
+                    });
+                });
             } else {
                 res.status(401).json({
                     message: 'Not Authorized...'
@@ -200,11 +254,18 @@ var getUserAssignedModules = function (req, res) {
             });
         }
     }).catch(function (err) {
+        console.log(err);
         res.status(401).json({
             message: 'Token Expired...'
         });
     });
 };
+
+var moduleList = function(res,len, modules){
+    if(len === modules.length){
+        res.status(200).json(modules);
+    }
+}
 
 var userLogout = function (req, res) {
     authToken = req.headers.authorization;
@@ -257,9 +318,14 @@ var getVersion = function (req, res) {
     });
 };
 
+var userNewAddress = function (req, res) {
+
+};
+
 module.exports = {
     newUserRegistration: newUserRegistration,
     userLogin: userLogin,
     userLogout: userLogout,
-    getVersion: getVersion
+    getVersion: getVersion,
+    getUserAssignedModules: getUserAssignedModules
 }

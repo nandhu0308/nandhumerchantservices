@@ -8,5 +8,6 @@ userRouter.route('/').get(userController.getVersion);
 userRouter.route('/register').post(userController.newUserRegistration);
 userRouter.route('/login').post(userController.userLogin);
 userRouter.route('/logout').patch(userController.userLogout);
+userRouter.route('/roles/:userId').get(userController.getUserAssignedModules);
 
 module.exports = userRouter;

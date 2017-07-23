@@ -10,8 +10,8 @@ const ApplicationRoleModules = db.define('application_role_module', {
         type: sequelize.INTEGER,
         allowNull: false
     },
-    role_module_name: {
-        type: sequelize.STRING,
+    role_id: {
+        type: sequelize.INTEGER,
         allowNull: false
     },
     is_active: {
