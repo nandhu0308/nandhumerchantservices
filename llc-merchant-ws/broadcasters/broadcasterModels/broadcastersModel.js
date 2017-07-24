@@ -92,7 +92,13 @@ const Broadcasters = db.define('broadcasters',  {
     mapped_domain_name:{
         type:sequelize.STRING,
         defaultValue:''
-    }
+    },
+
+    w_application_name:{
+        type:sequelize.STRING(100),
+        defaultValue:''
+    },
+
 }, {
     timestamps : false,
     freezeTableName : true
