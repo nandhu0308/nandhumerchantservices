@@ -80,6 +80,18 @@ const Broadcasters = db.define('broadcasters',  {
     broadcaster_updated_time : {
         type : sequelize.DATE,
         defaultValue : sequelize.NOW
+    },
+    server_pu_dns_name:{
+        type:sequelize.STRING,
+        defaultValue:''
+    },
+    server_pr_dns_name:{
+        type:sequelize.STRING,
+        defaultValue:''
+    },
+    mapped_domain_name:{
+        type:sequelize.STRING,
+        defaultValue:''
     }
 }, {
     timestamps : false,
