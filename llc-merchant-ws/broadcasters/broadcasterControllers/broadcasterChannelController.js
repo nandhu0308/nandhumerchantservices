@@ -1,4 +1,4 @@
-var ChannelCategory = require('./../broadcasterModels/channelCategoryModel');
+var BroadcasterChannel = require('./../broadcasterModels/broadcasterChannelModel');
 var dateformat = require('dateformat');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
@@ -12,7 +12,7 @@ var getChannelCategory = function (req, res) {
     tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
-                ChannelCategory.findAll({
+                BroadcasterChannel.findAll({
                     attributes: {
                         exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
                     },
@@ -53,7 +53,7 @@ var getChannelCategoryById = function (req, res) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
                 channelCategoryId = req.params.id;
-                ChannelCategory.findById(channelCategoryId, {
+                BroadcasterChannel.findById(channelCategoryId, {
                     attributes: {
                         exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
                     }
