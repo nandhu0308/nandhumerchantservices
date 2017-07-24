@@ -1,11 +1,11 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
-const ChannelCategory = require('./../broadcasterModels/channelCategoryModel');
+const BroadcasterChannel = require('./../broadcasterModels/broadcasterChannelModel');
 const BroadcasterVideos = db.define('broadcaster_videos', {
     broadcaster_channel_id: {
         type: sequelize.INTEGER,
          references:{
-            model:ChannelCategory,
+            model:BroadcasterChannel,
             key:"id"
         },
         allowNull: false
