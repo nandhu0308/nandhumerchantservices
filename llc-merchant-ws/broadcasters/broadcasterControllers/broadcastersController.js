@@ -1,16 +1,16 @@
 var Broadcaster = require('./../broadcasterModels/broadcastersModel');
 var BroadcasterVideos = require('./../broadcasterModels/broadcasterVideosModel');
-var ChannelCategory = require('./../broadcasterModels/channelCategoryModel');
+var BroadcasterChannel = require('./../broadcasterModels/broadcasterChannelModel');
 
 var dateformat = require('dateformat');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
 
-Broadcaster.hasMany(ChannelCategory,{foreignKey: 'broadcaster_id' })
-ChannelCategory.belongsTo(Broadcaster,{foreignKey: 'broadcaster_id' })
+Broadcaster.hasMany(BroadcasterChannel,{foreignKey: 'broadcaster_id' })
+BroadcasterChannel.belongsTo(Broadcaster,{foreignKey: 'broadcaster_id' })
 
-ChannelCategory.hasMany(BroadcasterVideos,{foreignKey: 'broadcaster_channel_id' })
-BroadcasterVideos.belongsTo(ChannelCategory,{foreignKey: 'broadcaster_channel_id' })
+BroadcasterChannel.hasMany(BroadcasterVideos,{foreignKey: 'broadcaster_channel_id' })
+BroadcasterVideos.belongsTo(BroadcasterChannel,{foreignKey: 'broadcaster_channel_id' })
 
 
 
@@ -38,7 +38,7 @@ var getBroadcastersEGLById = function (req, res) {
                             attributes: {
                             exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
                             },
-                            model: ChannelCategory ,
+                            model: BroadcasterChannel ,
 
                             include: [{
                                 attributes: {
@@ -98,7 +98,7 @@ var getBroadcastersEGLByCategoryId = function (req, res) {
                             attributes: {
                             exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
                             },
-                            model: ChannelCategory ,
+                            model: BroadcasterChannel ,
                             
                     where: {
                         id: channelCategory_id
@@ -160,7 +160,7 @@ var getBroadcastersEGLAll = function (req, res) {
                             attributes: {
                             exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
                             },
-                            model: ChannelCategory ,
+                            model: BroadcasterChannel ,
                             include: [{
                                 attributes: {
                                     exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']

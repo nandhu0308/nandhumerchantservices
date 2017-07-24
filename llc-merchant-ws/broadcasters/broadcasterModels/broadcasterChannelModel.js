@@ -1,6 +1,7 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 const Broadcaster = require('./../broadcasterModels/broadcastersModel');
+const BroadcasterChannelCategory = require('./../broadcasterModels/broadcasterChannelCategoryModel');
 const BroadcasterChannel = db.define('broadcast_channel' , {
     
     application_id: {
@@ -21,7 +22,7 @@ const BroadcasterChannel = db.define('broadcast_channel' , {
         type: sequelize.INTEGER,
 
         references:{
-            model:Broadcaster,
+            model:BroadcasterChannelCategory,
             key:"id"
         },
         allowNull: false
