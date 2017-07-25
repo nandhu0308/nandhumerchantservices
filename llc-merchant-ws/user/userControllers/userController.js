@@ -104,8 +104,7 @@ var userLogin = function (req, res) {
                 }).then(usession => {
                     if (user.user_type === 'Entertainment') {
                         Broadcaster.findAll({
-                            where: {
-                                user_id: user.id,
+                            where: {                                
                                 is_active: true
                             },
                             attributes: {
@@ -127,7 +126,10 @@ var userLogin = function (req, res) {
                                 broadcaster_thumbnail: broadcaster.broadcaster_thumbnail,
                                 broadcaster_banner: broadcaster.broadcaster_banner,
                                 user_session_id: usession.id,
-                                user_auth_token: authToken
+                                user_auth_token: authToken,
+                                client_id:number=1049,
+                                w_appname:string="dev",
+                                primary_channel:int=2
                             });
                         }).catch(function (err) {
                             res.status(404).json({
@@ -159,7 +161,10 @@ var userLogin = function (req, res) {
                                 shop_name: seller.seller_shop_name,
                                 shop_code: seller.shop_code,
                                 user_session_id: usession.id,
-                                user_auth_token: authToken
+                                user_auth_token: authToken,
+                                client_id:number=1049,
+                                w_appname:string="nil",
+                                primary_channel:int=0
                             });
                         }).catch(function (err) {
                             res.status(404).json({

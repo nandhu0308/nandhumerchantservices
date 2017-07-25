@@ -1,15 +1,12 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 
-const ApplicationSellers = db.define('application_seller', {
+const ApplicationSellers = db.define('application_shop', {
     application_id: {
         type: sequelize.INTEGER,
         allowNull: false
     },
-    user_id: {
-        type: sequelize.INTEGER,
-        allowNull: false
-    },
+    
     seller_shop_name: {
         type: sequelize.STRING,
         allowNull: false

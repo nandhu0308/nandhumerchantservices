@@ -96,6 +96,11 @@ const Broadcasters = db.define('broadcasters',  {
         defaultValue:''
     },
 
+     primary_channel_id: {
+        type: sequelize.INTEGER,
+        allowNull: false
+    },
+
 }, {
     timestamps : false,
     freezeTableName : true
