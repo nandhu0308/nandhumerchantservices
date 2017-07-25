@@ -47,6 +47,11 @@ const ApplicationUsers = db.define('application_users', {
         type: sequelize.STRING,
         allowNull: false
     },
+    client_id: {
+        type: sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
     is_anonymous: {
         type: sequelize.BOOLEAN,
         allowNull: false
