@@ -1,7 +1,7 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 const Broadcaster = require('./../broadcasterModels/broadcastersModel');
-const BroadcasterChannelCategory = db.define('broadcast_channel_category' , {
+const BroadcasterChannelCategory = db.define('broadcaster_channel_category' , {
      id:{
         type: sequelize.INTEGER,
         primaryKey:true,
@@ -13,7 +13,7 @@ const BroadcasterChannelCategory = db.define('broadcast_channel_category' , {
 
     },
     description:{
-        type:sequelize.Text,
+        type:sequelize.STRING(100),
          allowNull: false
     },
     is_active:{
