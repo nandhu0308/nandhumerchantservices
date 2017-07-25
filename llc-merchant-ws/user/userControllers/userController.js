@@ -6,8 +6,8 @@ var ApplicationsRoleModel = require('./../../applications/applicationsModels/app
 var AssignedUserRoleModules = require('./../../applications/applicationsModels/assignedUserRoleModuleModel');
 var UserSessions = require('./../userModels/userSessionModel');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
-var Broadcaster = require('./../../entertainment/entertainmentModels/broadcasterModel');
-var Seller = require('./../userModels/sellersModel');
+var Broadcaster = require('./../../broadcasters/broadcasterModels/broadcastersModel');
+var Shop = require('./../userModels/shopsModel');
 var TokenValidator = require('./../services/tokenValidator');
 
 var newUserRegistration = function (req, res) {
@@ -103,8 +103,9 @@ var userLogin = function (req, res) {
                     expire_date: expireDate
                 }).then(usession => {
                     if (user.user_type === 'Entertainment') {
-                        Broadcaster.findAll({
-                            where: {                                
+                        Broadcaster.findOne({
+                            where: {
+                                id: user.client_id,
                                 is_active: true
                             },
                             attributes: {
@@ -123,13 +124,10 @@ var userLogin = function (req, res) {
                                 user_country: user.country,
                                 user_city: user.city,
                                 broadcaster_name: broadcaster.braodcaster_name,
-                                broadcaster_thumbnail: broadcaster.broadcaster_thumbnail,
-                                broadcaster_banner: broadcaster.broadcaster_banner,
+                                w_appname: broadcaster.w_application_name,
+                                primary_channel_id: broadcaster.primary_channel_id,
                                 user_session_id: usession.id,
-                                user_auth_token: authToken,
-                                client_id:number=1049,
-                                w_appname:string="dev",
-                                primary_channel:int=2
+                                user_auth_token: authToken
                             });
                         }).catch(function (err) {
                             res.status(404).json({
@@ -138,15 +136,15 @@ var userLogin = function (req, res) {
                             });
                         });
                     } else if (user.user_type === 'eCommerce') {
-                        Seller.findAll({
+                        Shop.findOne({
                             where: {
-                                user_id: user.user_id,
+                                id : user.client_id,
                                 is_deleted: false
                             },
                             attributes: {
                                 exclude: ['created_by', 'created_time', 'updated_by', 'updated_time']
                             }
-                        }).then(function (seller) {
+                        }).then(function (shop) {
                             res.status(200).json({
                                 user_id: user.id,
                                 user_app_id: user.application_id,
@@ -158,13 +156,10 @@ var userLogin = function (req, res) {
                                 user_country_code: user.country_iso_code,
                                 user_country: user.country,
                                 user_city: user.city,
-                                shop_name: seller.seller_shop_name,
-                                shop_code: seller.shop_code,
+                                shop_name: shop.seller_shop_name,
+                                shop_code: shop.shop_code,
                                 user_session_id: usession.id,
-                                user_auth_token: authToken,
-                                client_id:number=1049,
-                                w_appname:string="nil",
-                                primary_channel:int=0
+                                user_auth_token: authToken
                             });
                         }).catch(function (err) {
                             res.status(404).json({

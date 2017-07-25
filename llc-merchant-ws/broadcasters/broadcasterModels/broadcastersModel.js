@@ -95,12 +95,10 @@ const Broadcasters = db.define('broadcasters',  {
         type:sequelize.STRING(100),
         defaultValue:''
     },
-
-     primary_channel_id: {
+    primary_channel_id: {
         type: sequelize.INTEGER,
-        allowNull: false
-    },
-
+        defaultValue: 0
+    }
 }, {
     timestamps : false,
     freezeTableName : true
