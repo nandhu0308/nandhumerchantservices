@@ -1,6 +1,7 @@
 var Broadcaster = require('./../broadcasterModels/broadcastersModel');
 var BroadcasterVideos = require('./../broadcasterModels/broadcasterVideosModel');
 var BroadcasterChannel = require('./../broadcasterModels/broadcasterChannelModel');
+var BroadcasterChannelCategory = require('./../broadcasterModels/broadcasterChannelCategoryModel');
 
 var dateformat = require('dateformat');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
@@ -8,6 +9,9 @@ var TokenValidator = require('./../../user/services/tokenValidator');
 
 Broadcaster.hasMany(BroadcasterChannel,{foreignKey: 'broadcaster_id' })
 BroadcasterChannel.belongsTo(Broadcaster,{foreignKey: 'broadcaster_id' })
+
+
+
 
 BroadcasterChannel.hasMany(BroadcasterVideos,{foreignKey: 'broadcaster_channel_id' })
 BroadcasterVideos.belongsTo(BroadcasterChannel,{foreignKey: 'broadcaster_channel_id' })
@@ -39,6 +43,8 @@ var getBroadcastersEGLById = function (req, res) {
                             exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
                             },
                             model: BroadcasterChannel ,
+
+                            
 
                             include: [{
                                 attributes: {

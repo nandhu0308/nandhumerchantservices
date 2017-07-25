@@ -2,7 +2,7 @@ const sequelize = require('sequelize');
 const db = require('./../../db');
 const Broadcaster = require('./../broadcasterModels/broadcastersModel');
 const BroadcasterChannelCategory = require('./../broadcasterModels/broadcasterChannelCategoryModel');
-const BroadcasterChannel = db.define('broadcast_channel' , {
+const BroadcasterChannel = db.define('broadcaster_channel' , {
     
     application_id: {
         type: sequelize.INTEGER,

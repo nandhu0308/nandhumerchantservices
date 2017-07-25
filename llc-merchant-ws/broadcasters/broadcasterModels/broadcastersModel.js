@@ -24,10 +24,7 @@ const Broadcasters = db.define('broadcasters',  {
     broadcaster_channel_name : {
         type : sequelize.TEXT
     },
-    category_id : {
-            type : sequelize.INTEGER,
-            allowNull : false
-    },
+    
     broadcaster_email : {
         type : sequelize.STRING(500),
         allowNull : false,
