@@ -10,7 +10,9 @@ var broadcasterVideoController = require('./../broadcasterControllers/broadcaste
 broadcasterRouter.route('/get/:id').get(broadcastersController.getBroadcastersEGLById);
 broadcasterRouter.route('/get/:id/:ccategoryId').get(broadcastersController.getBroadcastersEGLByCategoryId);
 broadcasterRouter.route('/all').get(broadcastersController.getBroadcastersEGLAll);
-broadcasterRouter.route('/broadcasterVideo/update').put(broadcastersController.updateBroadcasterVideoStreamKey);
+broadcasterRouter.route('/broadcasterytVideo/update').put(broadcastersController.updateBroadcasterVideoYTStreamKey);
+broadcasterRouter.route('/broadcasterfbVideo/update').put(broadcastersController.updateBroadcasterVideoFBStreamKey);
+broadcasterRouter.route('/broadcasterhaVideo/update').put(broadcastersController.updateBroadcasterVideoHAStreamKey);
 
 //Broadcaster Destination
 broadcasterRouter.route('/destination/all').get(broadcastersController.getBroadcasterDestination);
