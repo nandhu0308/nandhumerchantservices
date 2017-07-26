@@ -2,6 +2,7 @@ var Broadcaster = require('./../broadcasterModels/broadcastersModel');
 var BroadcasterVideos = require('./../broadcasterModels/broadcasterVideosModel');
 var BroadcasterChannel = require('./../broadcasterModels/broadcasterChannelModel');
 var BroadcasterChannelCategory = require('./../broadcasterModels/broadcasterChannelCategoryModel');
+var BroadcasterChannelDestination = require('./../broadcasterModels/broadcasterDestinationModel');
 
 var dateformat = require('dateformat');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
@@ -9,13 +10,50 @@ var TokenValidator = require('./../../user/services/tokenValidator');
 
 Broadcaster.hasMany(BroadcasterChannel,{foreignKey: 'broadcaster_id' })
 BroadcasterChannel.belongsTo(Broadcaster,{foreignKey: 'broadcaster_id' })
-
-
-
-
 BroadcasterChannel.hasMany(BroadcasterVideos,{foreignKey: 'broadcaster_channel_id' })
 BroadcasterVideos.belongsTo(BroadcasterChannel,{foreignKey: 'broadcaster_channel_id' })
 
+var getBroadcasterDestination = function (req, res) {
+    
+    authToken = req.headers.authorization;
+    
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+               
+                BroadcasterChannelDestination.findAll({
+                    where: {
+                        is_active: true
+                    }
+                    
+                     }
+                
+                ).then(function (broadcastersDestination) {
+                    res.status(200).json(broadcastersDestination);
+                }).catch(function (err) {
+                    res.status(404).json({
+                        message: 'No broadcasters Destination  found...'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
 
 
 var getBroadcastersEGLById = function (req, res) {
@@ -261,6 +299,7 @@ module.exports = {
     getBroadcastersEGLById:getBroadcastersEGLById,
     getBroadcastersEGLAll:getBroadcastersEGLAll,
     getBroadcastersEGLByCategoryId:getBroadcastersEGLByCategoryId,
-    updateBroadcasterVideoStreamKey:updateBroadcasterVideoStreamKey
+    updateBroadcasterVideoStreamKey:updateBroadcasterVideoStreamKey,
+    getBroadcasterDestination:getBroadcasterDestination
    
 }

@@ -12,5 +12,7 @@ broadcasterRouter.route('/get/:id/:ccategoryId').get(broadcastersController.getB
 broadcasterRouter.route('/all').get(broadcastersController.getBroadcastersEGLAll);
 broadcasterRouter.route('/broadcasterVideo/update').put(broadcastersController.updateBroadcasterVideoStreamKey);
 
+//Broadcaster Destination
+broadcasterRouter.route('/destination/all').get(broadcastersController.getBroadcasterDestination);
 
 module.exports=broadcasterRouter;
