@@ -89,7 +89,8 @@ var userLogin = function (req, res) {
                         user_country: user.country,
                         user_city: user.city,
                         user_session_id: usession.id,
-                        user_auth_token: authToken
+                        user_auth_token: authToken,
+                        auth_token_expire: expireDate
                     });
                 }).catch(function (err) {
                     console.log(err);
@@ -128,7 +129,8 @@ var userLogin = function (req, res) {
                                 w_appname: broadcaster.w_application_name,
                                 primary_channel_id: broadcaster.primary_channel_id,
                                 user_session_id: usession.id,
-                                user_auth_token: authToken
+                                user_auth_token: authToken,
+                                auth_token_expire: expireDate
                             });
                         }).catch(function (err) {
                             res.status(404).json({
@@ -139,7 +141,7 @@ var userLogin = function (req, res) {
                     } else if (user.user_type === 'eCommerce') {
                         Shop.findOne({
                             where: {
-                                id : user.client_id,
+                                id: user.client_id,
                                 is_deleted: false
                             },
                             attributes: {
@@ -161,7 +163,8 @@ var userLogin = function (req, res) {
                                 shop_name: shop.seller_shop_name,
                                 shop_code: shop.shop_code,
                                 user_session_id: usession.id,
-                                user_auth_token: authToken
+                                user_auth_token: authToken,
+                                auth_token_expire: expireDate
                             });
                         }).catch(function (err) {
                             res.status(404).json({
@@ -211,20 +214,20 @@ var getUserAssignedModules = function (req, res) {
                             ApplicationsRoleModules.findById(assignedRoles[i].role_module_id).then(roleModule => {
                                 //res.status(200).json(roleModule);
                                 ApplicationsModules.findById(roleModule.module_id,
-                                {
-                                    attributes: {
-                                        exclude: ['created_by', 'created_on', 'last_updated_by', 'last_updated_on']
-                                    }
-                                }).then(modules => {
-                                    modulesArray.push(modules.dataValues);
-                                    moduleList(res, assignedRoles.length, modulesArray);
-                                }).catch(function (err) {
-                                    console.log(err);
-                                    res.status(500).json({
-                                        error: err,
-                                        message: 'something went wrong...'
+                                    {
+                                        attributes: {
+                                            exclude: ['created_by', 'created_on', 'last_updated_by', 'last_updated_on']
+                                        }
+                                    }).then(modules => {
+                                        modulesArray.push(modules.dataValues);
+                                        moduleList(res, assignedRoles.length, modulesArray);
+                                    }).catch(function (err) {
+                                        console.log(err);
+                                        res.status(500).json({
+                                            error: err,
+                                            message: 'something went wrong...'
+                                        });
                                     });
-                                });
                             }).catch(function (err) {
                                 console.log(err);
                                 res.status(500).json({
@@ -263,8 +266,8 @@ var getUserAssignedModules = function (req, res) {
     });
 };
 
-var moduleList = function(res,len, modules){
-    if(len === modules.length){
+var moduleList = function (res, len, modules) {
+    if (len === modules.length) {
         res.status(200).json(modules);
     }
 }
