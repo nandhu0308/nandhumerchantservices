@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\llc-merchant-ws",
+    "\\llc-merchant-ws\\applications",
+    "\\llc-merchant-ws\\applications\\applicationsControllers",
+    "\\llc-merchant-ws\\smtp",
+    "\\llc-merchant-ws\\smtp\\smtpModels"
+  ],
+  "SelectedNode": "\\llc-merchant-ws\\applications\\applicationsControllers\\applicationsRoleModulesController.js",
+  "PreviewInSolutionExplorer": false
+}
