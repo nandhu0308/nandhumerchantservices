@@ -9,7 +9,7 @@ const UserSessions = db.define('user_sessions', {
     },
     user_type: {
         type: sequelize.ENUM,
-        values: ['Seller', 'User'],
+        values: ['Seller', 'User', 'SA'],
         allowNull: false
     },
     session_key: {

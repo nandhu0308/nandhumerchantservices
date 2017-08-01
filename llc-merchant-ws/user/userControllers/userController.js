@@ -94,6 +94,10 @@ var userLogin = function (req, res) {
                     });
                 }).catch(function (err) {
                     console.log(err);
+                    res.status(500).json({
+                        errMessage: err,
+                        message: 'something went wrong...'
+                    })
                 });
             } else if (user.user_type === 'eCommerce' || user.user_type === 'Entertainment') {
                 UserSessions.create({
@@ -177,6 +181,35 @@ var userLogin = function (req, res) {
                     res.status(404).json({
                         errMessage: err,
                         message: 'user not found...'
+                    });
+                });
+            } else if(user.user_type === 'Super Admin'){
+                UserSessions.create({
+                    user_id: user.id,
+                    user_type: 'SA',
+                    session_key: authToken,
+                    is_active: true,
+                    expire_date: expireDate
+                }).then(usession => {
+                    res.status(200).json({
+                        user_id: user.id,
+                        user_app_id: user.application_id,
+                        user_type: user.user_type,
+                        user_name: user.user_name,
+                        user_short_name: user.user_short_name,
+                        user_emialid: user.email_id,
+                        user_mobile: user.mobile,
+                        user_country_code: user.country_iso_code,
+                        user_country: user.country,
+                        user_city: user.city,
+                        user_session_id: usession.id,
+                        user_auth_token: authToken,
+                        auth_token_expire: expireDate
+                    });
+                }).catch(function(err){
+                    res.status(404).json({
+                        errMessage: err,
+                        message: 'something went wrong...'
                     });
                 });
             }

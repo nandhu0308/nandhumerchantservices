@@ -12,7 +12,7 @@ var authRouter = require('./util-services/servicesRouters/authRouter');
 var EntertainmentRouter = require('./entertainment/entertainmentRouters/entertainmentRouter');
 var UploadRouter = require('./upload-services/uploadRouters/uploadRouter');
 var BroadcasterRouter = require('./broadcasters/broadcasterRouters/broadcasterRouter');
-var smtpRouter = require('./smtp/smtpRouters/smtpRouter');
+var SmtpRouter = require('./smtp/smtpRouters/smtpRouter');
 
 app.use(cors({origin:true, credentials:true}));
 app.use(bodyParser.json());
