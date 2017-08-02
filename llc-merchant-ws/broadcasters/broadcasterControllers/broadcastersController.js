@@ -397,6 +397,57 @@ var updateBroadcasterVideoHAStreamKey = function (req, res) {
 };
 
 
+//Create a broadcaster with channels automatically
+
+var createBroadcasterwithChannel = function (req, res) {
+    userAuthObj = JSON.parse(UserAuthServices.validateAuthentication(req));
+    if (userAuthObj.authorize) {
+        reqObj = req.body;
+        return sequelize.transaction().then(function (t) {
+            return Broadcaster.create({
+                    rank: reqObj.rank,
+                    broadcaster_name: reqObj.broadcaster_name,
+                    broadcaster_channel_name: reqObj.broadcaster_channel_name,
+                    broadcaster_email: reqObj.broadcaster_email,
+                    broadcaster_description: reqObj.broadcaster_description,
+                    broadcaster_website: reqObj.broadcaster_website,
+                    broadcaster_image: reqObj.broadcaster_image,
+                    broadcaster_tags: reqObj.broadcaster_tags,
+                    broadcaster_total_videos: reqObj.broadcaster_total_videos,
+                    server_pu_dns_name: reqObj.server_pu_dns_name,
+                    server_pr_dns_name: reqObj.server_pr_dns_name,
+                    mapped_domain_name: reqObj.mapped_domain_name,
+                    w_application_name: reqObj.w_application_name,
+                    primary_channel_id: reqObj.primary_channel_id,
+                    is_active: reqObj.is_active,
+                    created_by: reqObj.created_by,
+                    updated_by: reqObj.updated_by
+            }, { transaction: t }).then(function (broadcasterResults) {
+                reqObjChannel=reqObj.broadcasterChannel;
+                return BroadcasterChannel.create({
+                    broadcaster_id: broadcasterResults.broadcaster_id,
+                    category_id: reqObjChannel.category_id,
+                    channel_name: reqObjChannel.channel_name,
+                    yt_streamtarget_name: reqObjChannel.yt_streamtarget_name,
+                    fb_streamtarget_name: reqObjChannel.fb_streamtarget_name,
+                    ha_streamtarget_name: reqObjChannel.ha_streamtarget_name,
+                    channel_image: reqObjChannel.channel_image,
+                    image_file_name: reqObjChannel.image_file_name,
+                    rank: reqObjChannel.rank,
+                    is_active: reqObjChannel.is_active,
+                    created_by: reqObjChannel.created_by,
+                    updated_by: reqObjChannel.updated_by
+                }, { transaction: t });
+            }).then(function () {
+                return t.commit();
+            }).catch(function (err) {
+                return t.rollback();
+            });
+        });
+    }
+};
+
+
 
 
 module.exports = {
@@ -406,6 +457,7 @@ module.exports = {
     updateBroadcasterVideoYTStreamKey:updateBroadcasterVideoYTStreamKey,
     updateBroadcasterVideoFBStreamKey:updateBroadcasterVideoFBStreamKey,
     updateBroadcasterVideoHAStreamKey:updateBroadcasterVideoHAStreamKey,
-    getBroadcasterDestination:getBroadcasterDestination
+    getBroadcasterDestination:getBroadcasterDestination,
+    createBroadcasterwithChannel:createBroadcasterwithChannel
    
 }
