@@ -8,11 +8,7 @@ const Broadcasters = db.define('broadcasters',  {
         primaryKey:true,
         allowNull: false
    },
-   
-    seller_id: {
-        type: sequelize.INTEGER,
-        allowNull: false
-    },
+    
     rank: {
         type: sequelize.INTEGER,
         allowNull: false

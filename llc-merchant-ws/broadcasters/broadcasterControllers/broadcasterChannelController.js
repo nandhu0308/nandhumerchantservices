@@ -87,8 +87,39 @@ var getChannelCategoryById = function (req, res) {
     });
 };
 
+//Create a broadcaster channels .
+
+var createBroadcasterChannel = function (req, res) {
+    userAuthObj = JSON.parse(UserAuthServices.validateAuthentication(req));
+    if (userAuthObj.authorize) {
+        reqObj = req.body;
+        return sequelize.transaction().then(function (t) {
+                return BroadcasterChannel.create({
+                    broadcaster_id: broadcasterResults.broadcaster_id,
+                    category_id: reqObjChannel.category_id,
+                    channel_name: reqObjChannel.channel_name,
+                    yt_streamtarget_name: reqObjChannel.yt_streamtarget_name,
+                    fb_streamtarget_name: reqObjChannel.fb_streamtarget_name,
+                    ha_streamtarget_name: reqObjChannel.ha_streamtarget_name,
+                    channel_image: reqObjChannel.channel_image,
+                    image_file_name: reqObjChannel.image_file_name,
+                    rank: reqObjChannel.rank,
+                    is_active: reqObjChannel.is_active,
+                    created_by: reqObjChannel.created_by,
+                    updated_by: reqObjChannel.updated_by
+                }, { transaction: t });
+            }).then(function () {
+                return t.commit();
+            }).catch(function (err) {
+                return t.rollback();
+            });
+    }
+};
+
+
 
 module.exports = {
    getChannelCategory:getChannelCategory,
-   getChannelCategoryById:getChannelCategoryById
+   getChannelCategoryById:getChannelCategoryById,
+    createBroadcasterChannel:createBroadcasterChannel
 }

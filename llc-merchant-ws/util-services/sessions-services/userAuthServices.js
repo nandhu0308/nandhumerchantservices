@@ -3,7 +3,7 @@ var utf8 = require('utf8');
 var dateformat = require('dateformat');
 var encrypt = require('./../aes-services/encrypt');
 var decrypt = require('./../aes-services/decrypt');
-
+var TokenValidator = require('./../../user/services/tokenValidator');
 var userAuthTokenGenerator = function(user){
     var encryptedToken = encrypt.encryptData(user);
     var tokenBytes = utf8.encode(encryptedToken);
@@ -36,8 +36,53 @@ var userAuthTokenValidator = function(token){
     return decryptedToken;
 };
 
+var validateAuthentication=function(req)
+{
+  
+    var authRes= {
+        message: "",
+        authorize: false
+    };
+   authToken = req.headers.authorization;
+   userAuthObj = JSON.parse(userAuthTokenValidator(authToken));
+   var todayDate = new Date();
+   var expireDate = new Date(userAuthObj.expire_date);
+   tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+         if (userSessions.length === 1) {
+              if (expireDate >= todayDate) {
+                 authRes={
+                     message: 'Success',
+                     authorize:true
+                 };
+              }
+              else {
+                authRes={
+                    message: 'Not Authorized...',
+                    authorize:false
+                };
+            }
+            return authRes;
+         }
+         else {
+            authRes={
+                message: 'Token Expired...',
+                authorize:false
+            };
+         }
+         return authRes;
+   }).catch(function (err) {
+        authRes={
+            message: 'Token Expired...',
+            authorize:false
+        };
+    });
+
+    
+};
+
 module.exports = {
     userAuthTokenGenerator: userAuthTokenGenerator,
     guestAuthTokenGenerator: guestAuthTokenGenerator,
-    userAuthTokenValidator: userAuthTokenValidator
+    userAuthTokenValidator: userAuthTokenValidator,
+    validateAuthentication:validateAuthentication
 }
