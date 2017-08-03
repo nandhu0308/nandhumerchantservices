@@ -24,7 +24,7 @@ app.use('/auth', authRouter);
 app.use('/entertainment', EntertainmentRouter);
 app.use('/broadcaster', BroadcasterRouter);
 app.use('/upload', UploadRouter);
-app.use('/smtp',smtpRouter);
+app.use('/smtp',SmtpRouter);
 
 app.listen(3000, function(){
     console.log('Running on Port 3000...');
