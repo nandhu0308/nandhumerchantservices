@@ -14,7 +14,7 @@ broadcasterRouter.route('/broadcasterytVideo/update').put(broadcastersController
 broadcasterRouter.route('/broadcasterfbVideo/update').put(broadcastersController.updateBroadcasterVideoFBStreamKey);
 broadcasterRouter.route('/broadcasterhaVideo/update').put(broadcastersController.updateBroadcasterVideoHAStreamKey);
 broadcasterRouter.route('/broadcasterwithchannel/new').post(broadcastersController.createBroadcasterwithChannel);
-
+broadcasterRouter.route('/broadcasterwithchannel/create').post(broadcastersController.newBroadcasterwithChannel);
 
 //Broadcaster Destination
 broadcasterRouter.route('/destination/all').get(broadcastersController.getBroadcasterDestination);
@@ -22,5 +22,6 @@ broadcasterRouter.route('/destination/all').get(broadcastersController.getBroadc
 //Broadcaster Channel
 
 broadcasterRouter.route('/broadcasterchannel/new').post(broadcasterChannelController.createBroadcasterChannel);
+
 
 module.exports=broadcasterRouter;

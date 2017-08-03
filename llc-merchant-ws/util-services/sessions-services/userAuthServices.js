@@ -36,47 +36,31 @@ var userAuthTokenValidator = function(token){
     return decryptedToken;
 };
 
-var validateAuthentication=function(req)
+var validateAuthentication=function(authValue)
 {
-  
-    var authRes= {
-        message: "",
-        authorize: false
-    };
-   authToken = req.headers.authorization;
+    var authorize=false;
+    
+   authToken = authValue.headers.authorization;
    userAuthObj = JSON.parse(userAuthTokenValidator(authToken));
    var todayDate = new Date();
    var expireDate = new Date(userAuthObj.expire_date);
    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
          if (userSessions.length === 1) {
               if (expireDate >= todayDate) {
-                 authRes={
-                     message: 'Success',
-                     authorize:true
-                 };
+                authorize=true;
               }
               else {
-                authRes={
-                    message: 'Not Authorized...',
-                    authorize:false
-                };
+               authorize=false;
             }
-            return authRes;
+           
+           
          }
          else {
-            authRes={
-                message: 'Token Expired...',
-                authorize:false
-            };
+            authorize=false;
          }
-         return authRes;
-   }).catch(function (err) {
-        authRes={
-            message: 'Token Expired...',
-            authorize:false
-        };
-    });
-
+         return authorize;
+   });
+    
     
 };
 
