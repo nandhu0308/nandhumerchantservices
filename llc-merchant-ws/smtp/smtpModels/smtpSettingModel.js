@@ -1,7 +1,7 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 
-const SmtpSetting = db.define('smtpSetting',{
+const SmtpSetting = db.define('smtp_setting',{
     smtp_host:{
         type:sequelize.STRING(500),
         allownull:false
@@ -46,3 +46,4 @@ const SmtpSetting = db.define('smtpSetting',{
     timestamps:false,
     freezeTableName:true
 })
+module.exports=SmtpSetting;
