@@ -16,6 +16,47 @@ BroadcasterChannel.belongsTo(Broadcaster, { foreignKey: 'broadcaster_id' })
 BroadcasterChannel.hasMany(BroadcasterVideos, { foreignKey: 'broadcaster_channel_id' })
 BroadcasterVideos.belongsTo(BroadcasterChannel, { foreignKey: 'broadcaster_channel_id' })
 
+var getBroadcasterCategory = function (req, res) {
+
+    authToken = req.headers.authorization;
+
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                BroadcasterChannelCategory.findAll({
+                    where: {
+                        is_active: true
+                    }
+                }
+                ).then(function (broadcasterChannelCategory) {
+                    res.status(200).json(broadcasterChannelCategory);
+                }).catch(function (err) {
+                    res.status(404).json({
+                        message: 'No broadcasters category  found...'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
+
+
 var getBroadcasterDestination = function (req, res) {
 
     authToken = req.headers.authorization;
@@ -498,9 +539,7 @@ var newBroadcasterwithChannel = function (req, res) {
                         reqObjChannel = reqObj[0].broadcaster_channels[0];
                         broadcasterVideos = reqObj[0].broadcaster_videos[0];
                     }
-
                     Broadcaster.create({
-
                         rank: reqBroadcasterObj.rank,
                         broadcaster_name: reqBroadcasterObj.broadcaster_name,
                         broadcaster_channel_name: reqBroadcasterObj.broadcaster_channel_name,
@@ -602,11 +641,6 @@ var newBroadcasterwithChannel = function (req, res) {
     });
 };
 
-
-
-
-
-
 module.exports = {
     getBroadcastersEGLById: getBroadcastersEGLById,
     getBroadcastersEGLAll: getBroadcastersEGLAll,
@@ -616,6 +650,7 @@ module.exports = {
     updateBroadcasterVideoHAStreamKey: updateBroadcasterVideoHAStreamKey,
     getBroadcasterDestination: getBroadcasterDestination,
     createBroadcasterwithChannel: createBroadcasterwithChannel,
-    newBroadcasterwithChannel: newBroadcasterwithChannel
+    newBroadcasterwithChannel: newBroadcasterwithChannel,
+    getBroadcasterCategory:getBroadcasterCategory
 
 }
