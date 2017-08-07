@@ -2,17 +2,7 @@ const sequelize = require('sequelize');
 const db = require('./../../db');
 
 const Broadcasters = db.define('broadcasters',  {
-   
-   id:{
-        type: sequelize.INTEGER,
-        primaryKey:true,
-        allowNull: false
-   },
-   
-    seller_id: {
-        type: sequelize.INTEGER,
-        allowNull: false
-    },
+      
     rank: {
         type: sequelize.INTEGER,
         allowNull: false
@@ -50,11 +40,31 @@ const Broadcasters = db.define('broadcasters',  {
         allowNull: false
     },
 
+    broadcast_loc_lattitude:{
+        type:sequelize.FLOAT(3,6),
+        allowNull:false,
+        defaultValue:0.000000
+    },
+
+    broadcast_loc_longtitude:{
+        type:sequelize.FLOAT(3,6),
+        allowNull:false,
+        defaultValue:0.000000
+    },
+
      broadcaster_total_videos: {
         type: sequelize.INTEGER,
         allowNull: false
     },
 
+    broadcast_kyc_doc_type:{
+        type:sequelize.STRING,
+        allowNull:true
+    },
+ broadcast_kyc_doc_value:{
+        type:sequelize.STRING,
+        allowNull:true
+    },
     is_active : {
         type : sequelize.BOOLEAN,
         allowNull : false,

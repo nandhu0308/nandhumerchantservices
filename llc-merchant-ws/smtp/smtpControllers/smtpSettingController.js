@@ -1,121 +1,81 @@
 var dateformat = require('dateformat');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
-var smtpSetting = require('./../../smtp/smtpModels/smtpSettingModel');
-var nodemailer = require("nodemailer");
-var debug = require('debug')('expressdebug:server');
+var SmtpSetting = require('./../smtpModels/smtpSettingModel');
+var nodemailer = require('nodemailer');
 
-    var getSmtpSetting = function (req,res) {
+
+   var getSmtpSetting = function (req, res) {
+    
     authToken = req.headers.authorization;
+    
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
     var todayDate = new Date();
-    var expireDate = new Date(userAuthObj.expireDate);
-    tokenOk = TokenValidator.validateToken(userAuthObj.user_id,authToken).then(function (userSessions) {
-        if(userSessions.length === 1){
-            if(expire >= todayDate){
-                reqObj = req.body;
-                smtpSetting.findAll({
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+               
+                SmtpSetting.findAll({
                     attributes: {
                         exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
                     },
                     where: {
                         is_active: true
                     }
-                }).then(function (smtpSetting){
-                    res.status(200).json({
-                        message : 'success'
-                    });
-                }).catch(function (err){
-                    console.log(err);
-                    res.status(500).json({
-                        errMessage:err,
-                        message : 'something went wrong...'
+                }).then(function (SmtpSettingAll) {
+                    res.status(200).json(SmtpSettingAll);
+                }).catch(function (err) {
+                    res.status(404).json({
+                        message: 'Not found...'
                     });
                 });
             } else {
                 res.status(401).json({
-                    message : 'Not Authorized...'
+                    message: 'Not Authorized...'
                 });
             }
         } else {
             res.status(401).json({
-                message : 'Token Expired...'
+                message: 'Token Expired...'
             });
         }
-    }).catch( function (err){
+    }).catch(function (err) {
         res.status(401).json({
-            message : 'Token Expired...'
+            message: 'Token Expired...'
         });
     });
-
 };
  var sendSmtpMail = function (req,res) {
-    authToken = req.headers.authorization;
-    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
-    var todayDate = new Date();
-    var expireDate = new Date(userAuthObj.expireDate);
-    tokenOk = TokenValidator.validateToken(userAuthObj.user_id,authToken).then(function (userSessions) {
-        if(userSessions.length === 1){
-            if(expire >= todayDate){
-                reqObj = req.body;
-                app.post('/send', function(req, res){
-                    if(req.body.email == "" || req.body.subject == "") {
-                        res.send("Error: Email & Subject should not blank");
-                            return false;
-                                    }
-                    res.send("Email has been sent successfully");
-    var smtpTransport = nodemailer.createTransport("SMTP",{
-    service:gmail,
-    host: "smtp.gmail.com", 
-    secureConnection: false, 
-    port : 25,
-     auth: {
-                 user: "transactions@limitlesscircle.com",
-                 pass: "['Engage@12E']"
-            }
-        });
-    var mailOptions = {
-            from: "Node Emailer ? <no-reply@limitlesscircle.in>", 
-            to:'umaraja1124@gmail.com', 
-            subject: req.body.subject+" ?", 
-            text: "Hello world ?",  
-        }
-    smtpTransport.sendMail(mailOptions, function(error, response){
-        if(error){
-             res.send("Email could not sent due to error: "+error);
-             console.log('Error');
-        }else{
-             res.send("Email has been sent successfully");
-             console.log('mail sent');
-        } 
-    }); 
-    }).then(function (smtpSetting){
-        res.status(200).json({
-            message : 'success'
-            });
-    }).catch(function (err){
-                    console.log(err);
-                    res.status(500).json({
-                        errMessage:err,
-                        message : 'something went wrong...'
-                    });
-                });
-            } else {
-                res.status(401).json({
-                    message : 'Not Authorized...'
-                });
-            }
-        } else {
-            res.status(401).json({
-                message : 'Token Expired...'
-            });
-        }
-    }).catch( function (err){
-        res.status(401).json({
-            message : 'Token Expired...'
-        });
-    });
+     
+const nodemailer = require('nodemailer');
 
+let transporter = nodemailer.createTransport({
+    host: 'smtp.zoho.com',
+    port: 465,
+     auth: true,
+    active: true,
+    secure: true,
+    requireTLS: true,
+    auth: {
+        user: 'transactions@limitlesscircle.com',
+        pass: 'Engage@12E'
+    }
+});
+
+let mailOptions = {
+    from: 'transactions@limitlesscircle.com',
+    to: 'senthil.kumar@limitlesscircle.com',
+    subject: 'mail notification Test',
+    text: 'Hello !!!!!!!!!everything works fine'
+};
+
+transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+        return console.log("mail not sent" +error.message);
+    }
+    console.log('success');
+});
 };
 module.exports = {
     getSmtpSetting : getSmtpSetting,
