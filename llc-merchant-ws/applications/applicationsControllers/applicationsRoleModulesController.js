@@ -3,6 +3,7 @@ var UserAuthServices = require('./../../util-services/sessions-services/userAuth
 var TokenValidator = require('./../../user/services/tokenValidator');
 var ApplicationsRoleModules = require('./../applicationsModels/applicationRoleModulesModel');
 var AssignedUserRoleModules = require('./../applicationsModels/assignedUserRoleModuleModel');
+var ApplicationRoles = require('./../applicationsModels/applicationsRolesModel');
 
 var newApplicationsRoleModule = function (req, res) {
     authToken = req.headers.authorization;
@@ -103,7 +104,46 @@ var assigningUserRoleModules = function (req, res) {
     });
 };
 
+var getAllRoles = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                ApplicationRoles.findAll({
+                    where: {
+                        is_active: true
+                    }
+                }).then( applicationRoles => {
+                    res.status(200).json(applicationRoles);
+                }).catch(function(err){
+                    console.log(err);
+                    res.status(500).json({
+                        error: err,
+                        message: 'something went wrong...'
+                    })
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
 module.exports = {
     newApplicationsRoleModule: newApplicationsRoleModule,
-    assigningUserRoleModules: assigningUserRoleModules
+    assigningUserRoleModules: assigningUserRoleModules,
+    getAllRoles: getAllRoles
 }

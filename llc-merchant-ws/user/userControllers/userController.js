@@ -9,6 +9,7 @@ var UserAuthServices = require('./../../util-services/sessions-services/userAuth
 var Broadcaster = require('./../../broadcasters/broadcasterModels/broadcastersModel');
 var Shop = require('./../userModels/shopsModel');
 var TokenValidator = require('./../services/tokenValidator');
+var sequelize = require('sequelize');
 
 var newUserRegistration = function (req, res) {
     reqObj = req.body;
@@ -183,7 +184,7 @@ var userLogin = function (req, res) {
                         message: 'user not found...'
                     });
                 });
-            } else if(user.user_type === 'Super Admin'){
+            } else if (user.user_type === 'Super Admin') {
                 UserSessions.create({
                     user_id: user.id,
                     user_type: 'SA',
@@ -206,7 +207,7 @@ var userLogin = function (req, res) {
                         user_auth_token: authToken,
                         auth_token_expire: expireDate
                     });
-                }).catch(function(err){
+                }).catch(function (err) {
                     res.status(404).json({
                         errMessage: err,
                         message: 'something went wrong...'
@@ -360,10 +361,50 @@ var userNewAddress = function (req, res) {
 
 };
 
+var getUserById = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                userId = req.params.userId;
+                ApplicationUsers.findById(userId, {
+                    attributes: {
+                        exclude: ['created_on', 'last_updated_on']
+                    }
+                }).then(user=>{
+                    res.status(200).json(user);
+                }).catch(function(err){
+                    res.status(500).json({
+                        error: err,
+                        message: 'something went wrong!'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        console.log(err);
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
 module.exports = {
     newUserRegistration: newUserRegistration,
     userLogin: userLogin,
     userLogout: userLogout,
     getVersion: getVersion,
-    getUserAssignedModules: getUserAssignedModules
+    getUserAssignedModules: getUserAssignedModules,
+    getUserById: getUserById
 }
