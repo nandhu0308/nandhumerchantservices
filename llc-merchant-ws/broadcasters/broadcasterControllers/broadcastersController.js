@@ -562,7 +562,6 @@ var newBroadcasterwithChannel = function (req, res) {
                         created_by: reqBroadcasterObj.created_by,
                         updated_by: reqBroadcasterObj.updated_by
                     }).then(function (broadcasterResults) {
-                        debugger;
                         BroadcasterChannel.create({
                             application_id: reqObjChannel.application_id,
                             broadcaster_id: broadcasterResults.id,
@@ -578,8 +577,6 @@ var newBroadcasterwithChannel = function (req, res) {
                             created_by: reqObjChannel.created_by,
                             updated_by: reqObjChannel.updated_by
                         }).then(function (broadcasterChannelResults) {
-                            debugger;
-
                             BroadcasterVideos.create({
                                 broadcaster_channel_id: broadcasterChannelResults.id,
                                 video_name: broadcasterVideos.video_name,
@@ -596,7 +593,22 @@ var newBroadcasterwithChannel = function (req, res) {
                                 created_by: broadcasterVideos.created_by,
                                 updated_by: broadcasterVideos.updated_by
                             }).then(function (broadcasterVideoResults) {
-                                debugger;
+
+                                //update broadcaster with primary channel ID
+
+                                Broadcaster.updateAttributes({
+                                    primary_channel_id: broadcasterVideoResults.broadcaster_channel_id
+                                }).then(function (broadcastersUpdate) {
+                                    res.status(200).json(broadcastersUpdate);
+                                }).catch(function (err) {
+                                    console.log(err);
+                                    res.status(500).json({
+                                        errMessage: err,
+                                        message: 'updating new broadcast primary channel failed...'
+                                    });
+                                });
+
+
                             }).catch(function (err) {
                                 console.log(err);
                                 res.status(500).json({
@@ -651,6 +663,6 @@ module.exports = {
     getBroadcasterDestination: getBroadcasterDestination,
     createBroadcasterwithChannel: createBroadcasterwithChannel,
     newBroadcasterwithChannel: newBroadcasterwithChannel,
-    getBroadcasterCategory:getBroadcasterCategory
+    getBroadcasterCategory: getBroadcasterCategory
 
 }
