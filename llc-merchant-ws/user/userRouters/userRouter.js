@@ -14,5 +14,6 @@ userRouter.route('/get/:userId').get(userController.getUserById);
 
 //shop routes
 userRouter.route('/shop/new').post(shopController.newShop);
+userRouter.route('/shop/get/:shopId').get(shopController.getShopById);
 
 module.exports = userRouter;
