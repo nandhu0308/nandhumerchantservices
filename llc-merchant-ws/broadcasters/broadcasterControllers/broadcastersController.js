@@ -16,6 +16,44 @@ BroadcasterChannel.belongsTo(Broadcaster, { foreignKey: 'broadcaster_id' })
 BroadcasterChannel.hasMany(BroadcasterVideos, { foreignKey: 'broadcaster_channel_id' })
 BroadcasterVideos.belongsTo(BroadcasterChannel, { foreignKey: 'broadcaster_channel_id' })
 
+var getBroadcasterCategory = function (req, res) {
+
+    authToken = req.headers.authorization;
+
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                BroadcasterChannelCategory.findAll({
+                    where: {
+                        is_active: true
+                    }
+                }
+                ).then(function (broadcasterChannelCategory) {
+                    res.status(200).json(broadcasterChannelCategory);
+                }).catch(function (err) {
+                    res.status(404).json({
+                        message: 'No broadcasters category  found...'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
 var getBroadcasterDestination = function (req, res) {
 
     authToken = req.headers.authorization;
@@ -57,7 +95,6 @@ var getBroadcasterDestination = function (req, res) {
         });
     });
 };
-
 
 var getBroadcastersEGLById = function (req, res) {
 
@@ -119,8 +156,6 @@ var getBroadcastersEGLById = function (req, res) {
         });
     });
 };
-
-
 var getBroadcastersEGLByCategoryId = function (req, res) {
 
     authToken = req.headers.authorization;
@@ -182,7 +217,6 @@ var getBroadcastersEGLByCategoryId = function (req, res) {
         });
     });
 };
-
 var getBroadcastersEGLAll = function (req, res) {
 
     authToken = req.headers.authorization;
@@ -240,8 +274,6 @@ var getBroadcastersEGLAll = function (req, res) {
         });
     });
 };
-
-
 var updateBroadcasterVideoYTStreamKey = function (req, res) {
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
@@ -293,8 +325,6 @@ var updateBroadcasterVideoYTStreamKey = function (req, res) {
         });
     });
 };
-
-
 var updateBroadcasterVideoFBStreamKey = function (req, res) {
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
@@ -346,7 +376,6 @@ var updateBroadcasterVideoFBStreamKey = function (req, res) {
         });
     });
 };
-
 var updateBroadcasterVideoHAStreamKey = function (req, res) {
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
@@ -399,9 +428,7 @@ var updateBroadcasterVideoHAStreamKey = function (req, res) {
     });
 };
 
-
 //Create a broadcaster with channels automatically
-
 var createBroadcasterwithChannel = function (req, res) {
 
     //authorize = UserAuthServices.validateAuthentication(req);
@@ -482,7 +509,6 @@ var createBroadcasterwithChannel = function (req, res) {
     });
 
 };
-
 var newBroadcasterwithChannel = function (req, res) {
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
@@ -492,15 +518,13 @@ var newBroadcasterwithChannel = function (req, res) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
                 reqObj = req.body;
-                if (reqObj.length > 0) {
-                    reqBroadcasterObj = reqObj[0];
-                    if (reqObj[0].broadcaster_channels.length > 0) {
-                        reqObjChannel = reqObj[0].broadcaster_channels[0];
-                        broadcasterVideos = reqObj[0].broadcaster_videos[0];
+                if (reqObj) {
+                    reqBroadcasterObj = reqObj;
+                    if (reqObj.broadcaster_channels) {
+                        reqObjChannel = reqObj.broadcaster_channels;
+                        broadcasterVideos = reqObj.broadcaster_videos;
                     }
-
                     Broadcaster.create({
-
                         rank: reqBroadcasterObj.rank,
                         broadcaster_name: reqBroadcasterObj.broadcaster_name,
                         broadcaster_channel_name: reqBroadcasterObj.broadcaster_channel_name,
@@ -509,7 +533,7 @@ var newBroadcasterwithChannel = function (req, res) {
                         broadcaster_website: reqBroadcasterObj.broadcaster_website,
                         broadcaster_image: reqBroadcasterObj.broadcaster_image,
                         broadcaster_tags: reqBroadcasterObj.broadcaster_tags,
-                        broadcaster_total_videos: reqBroadcasterObj.broadcaster_total_videos,
+                        broadcaster_total_videos: 0,
                         broadcast_loc_lattitude: reqBroadcasterObj.broadcast_loc_lattitude,
                         broadcast_loc_lattitude: reqBroadcasterObj.broadcast_loc_lattitude,
                         broadcast_kyc_doc_type: reqBroadcasterObj.broadcast_kyc_doc_type,
@@ -523,7 +547,6 @@ var newBroadcasterwithChannel = function (req, res) {
                         created_by: reqBroadcasterObj.created_by,
                         updated_by: reqBroadcasterObj.updated_by
                     }).then(function (broadcasterResults) {
-                        debugger;
                         BroadcasterChannel.create({
                             application_id: reqObjChannel.application_id,
                             broadcaster_id: broadcasterResults.id,
@@ -539,8 +562,6 @@ var newBroadcasterwithChannel = function (req, res) {
                             created_by: reqObjChannel.created_by,
                             updated_by: reqObjChannel.updated_by
                         }).then(function (broadcasterChannelResults) {
-                            debugger;
-
                             BroadcasterVideos.create({
                                 broadcaster_channel_id: broadcasterChannelResults.id,
                                 video_name: broadcasterVideos.video_name,
@@ -558,6 +579,37 @@ var newBroadcasterwithChannel = function (req, res) {
                                 updated_by: broadcasterVideos.updated_by
                             }).then(function (broadcasterVideoResults) {
                                 debugger;
+
+                                //update broadcaster with primary channel ID
+
+                                Broadcaster.findById(broadcasterResults.id).then(function (Broadcaster) {
+                                    debugger;
+                                    if (Broadcaster) {
+                                        Broadcaster.updateAttributes({
+                                            primary_channel_id: broadcasterVideoResults.broadcaster_channel_id,
+                                        }).then(function () {
+                                            res.status(200).json({
+                                                id: broadcasterVideoResults.id,
+                                                video_url: broadcasterVideoResults.video_url
+                                            });
+                                        }).catch(function (err) {
+                                            console.log(err)
+                                            res.status(500).json({
+                                                message: 'Broadcaster update failed...'
+                                            });
+                                        });
+                                    } else {
+                                        res.status(404).json({
+                                            message: 'Broadcaster not found...'
+                                        });
+                                    }
+                                }).catch(function (err) {
+                                    res.status(500).json({
+                                        message: 'something went wrong...'
+                                    });
+                                });
+
+
                             }).catch(function (err) {
                                 console.log(err);
                                 res.status(500).json({
@@ -601,12 +653,6 @@ var newBroadcasterwithChannel = function (req, res) {
         });
     });
 };
-
-
-
-
-
-
 module.exports = {
     getBroadcastersEGLById: getBroadcastersEGLById,
     getBroadcastersEGLAll: getBroadcastersEGLAll,
@@ -616,6 +662,7 @@ module.exports = {
     updateBroadcasterVideoHAStreamKey: updateBroadcasterVideoHAStreamKey,
     getBroadcasterDestination: getBroadcasterDestination,
     createBroadcasterwithChannel: createBroadcasterwithChannel,
-    newBroadcasterwithChannel: newBroadcasterwithChannel
+    newBroadcasterwithChannel: newBroadcasterwithChannel,
+    getBroadcasterCategory: getBroadcasterCategory
 
 }

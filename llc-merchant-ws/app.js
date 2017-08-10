@@ -13,6 +13,8 @@ var EntertainmentRouter = require('./entertainment/entertainmentRouters/entertai
 var UploadRouter = require('./upload-services/uploadRouters/uploadRouter');
 var BroadcasterRouter = require('./broadcasters/broadcasterRouters/broadcasterRouter');
 var SmtpRouter = require('./smtp/smtpRouters/smtpRouter');
+var DocumentRouter = require('./document/documentRouter/documentRouter');
+var CommonRouter = require('./common/commonRouter/commonRouter');
 
 app.use(cors({origin:true, credentials:true}));
 app.use(bodyParser.json());
@@ -25,6 +27,8 @@ app.use('/entertainment', EntertainmentRouter);
 app.use('/broadcaster', BroadcasterRouter);
 app.use('/upload', UploadRouter);
 app.use('/smtp',SmtpRouter);
+app.use('/document',DocumentRouter);
+app.use('/common',CommonRouter);
 
 app.listen(3000, function(){
     console.log('Running on Port 3000...');
