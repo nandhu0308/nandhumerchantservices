@@ -29,7 +29,7 @@ app.use('/upload', UploadRouter);
 app.use('/smtp',SmtpRouter);
 app.use('/document',DocumentRouter);
 app.use('/common',CommonRouter);
-
+app.use('/oauth2callback',UploadRouter);
 app.listen(3000, function(){
     console.log('Running on Port 3000...');
     connection.sync({
