@@ -92,7 +92,6 @@ return tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).th
 StreamingTemplateId = req.params.id;
 return TemplateController.findById(StreamingTemplateId).then(function(streamingTemplate) {
     res.json(streamingTemplate);
-    console.log(streamingTemplate);
     // var response = streamingTemplate.template_name.toString().toLowerCase();
     var result =
     "<table border='1'border-collapse='collapse'cellpadding='20'cellspacing='0'>"+
