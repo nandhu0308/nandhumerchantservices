@@ -51,7 +51,7 @@ var fs = require('fs');
 
 
 var uploadVideoInYoutube = function (req, res) {
-    debugger;
+    
 
     
     // var authClient = new googleapis.auth.JWT(
@@ -78,7 +78,7 @@ var uploadVideoInYoutube = function (req, res) {
     //        console.log(progress);
     //   });
       resumableUpload.initUpload(function(result) {
-          debugger;
+          
            console.log(result);
            return;
       });
