@@ -10,7 +10,10 @@ const BroadcasterVideos = db.define('broadcaster_videos', {
         },
         allowNull: false
     },  
-   
+    album_id: {
+        type: sequelize.INTEGER,
+        allowNull: false
+    },
     video_name : {
         type : sequelize.STRING,
         allowNull : false

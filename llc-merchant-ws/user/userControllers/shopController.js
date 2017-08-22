@@ -9,7 +9,9 @@ var UserAuthServices = require('./../../util-services/sessions-services/userAuth
 var Broadcaster = require('./../../broadcasters/broadcasterModels/broadcastersModel');
 var Shop = require('./../userModels/shopsModel');
 var TokenValidator = require('./../services/tokenValidator');
-var sequelize = require('sequelize');
+var Products = require('./../../products/productModels/productModel');
+var ProductCategory = require('./../../products/productModels/productCategoryModel');
+var ProductSubcategory = require('./../../products/productModels/productSubcategoryModel');
 
 var newShop = function (req, res) {
     authToken = req.headers.authorization;
@@ -20,9 +22,9 @@ var newShop = function (req, res) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
                 reqObj = req.body;
-                reqUser = reqObj.user;
-                console.log(reqObj);
-                console.log(reqUser);
+                requestCategory = reqObj.category;
+                requestSubcategory = reqObj.sub_category;
+                requestProduct = reqObj.product;
                 Shop.create({
                     application_id: reqObj.application_id,
                     seller_shop_name: reqObj.seller_shop_name,
@@ -36,72 +38,57 @@ var newShop = function (req, res) {
                     created_by: reqObj.created_by,
                     updated_by: reqObj.updated_by
                 }).then(shop => {
-                    ApplicationUsers.create({
-                        application_id: reqUser.application_id,
-                        user_type: reqUser.user_type,
-                        user_name: reqUser.user_name,
-                        user_short_name: reqUser.user_short_name,
-                        country: reqUser.country,
-                        city: reqUser.city,
-                        zip: reqUser.zip,
-                        country_iso_code: reqUser.country_iso_code,
-                        device_mac: reqUser.device_mac,
-                        mobile: reqUser.mobile,
-                        email_id: reqUser.email_id,
-                        passwd: reqUser.passwd,
-                        client_id: shop.id,
-                        is_anonymous: reqUser.is_anonymous,
-                        is_active: reqUser.is_active,
-                        created_by: reqUser.created_by,
-                        last_updated_by: reqUser.last_updated_by
-                    }).then(user => {
-                        roleId = reqUser.roleId;
-                        ApplicationsRoleModel.findById(roleId).then(appRole => {
-                            if (appRole === null) {
-                                res.status(404).json({
-                                    message: 'roles not found!'
+                    console.log("shop created");
+                    ProductCategory.create({
+                        application_id: requestCategory.application_id,
+                        category_name: requestCategory.category_name,
+                        category_description: requestCategory.category_description,
+                        seller_id: shop.id,
+                        category_image: requestCategory.category_image,
+                        image_file_name: requestCategory.image_file_name,
+                        is_active: requestCategory.is_active,
+                        created_by: requestCategory.created_by,
+                        updated_by: requestCategory.updated_by
+                    }).then(category => {
+                        console.log("category created");
+                        ProductSubcategory.create({
+                            subcategory_name: requestSubcategory.subcategory_name,
+                            subcategory_description: requestSubcategory.subcategory_description,
+                            category_id: category.id,
+                            subcategory_image: requestSubcategory.subcategory_image,
+                            image_file_name: requestSubcategory.image_file_name,
+                            is_active: requestSubcategory.is_active,
+                            created_by: requestSubcategory.created_by,
+                            updated_by: requestSubcategory.updated_by
+                        }).then(subcategory => {
+                            console.log("subcategory created");
+                            Products.create({
+                                category_id: category.id,
+                                subcategory_id: subcategory.id,
+                                product_name: requestProduct.product_name,
+                                product_price: requestProduct.product_price,
+                                discount_rate: requestProduct.discount_rate,
+                                product_description: requestProduct.product_description,
+                                product_size_text: requestProduct.product_size_text,
+                                product_size_number: requestProduct.product_size_number,
+                                product_color: requestProduct.product_color,
+                                is_removed: requestProduct.is_removed,
+                                pod: requestProduct.pod,
+                                add_to_cart: requestProduct.add_to_cart,
+                                product_image: requestProduct.product_image
+                            }).then(product => {
+                                console.log("product created");
+                                res.status(200).json({
+                                    id: shop.id,
+                                    message: "shop created successfully!"
                                 })
-                            } else {
-                                ApplicationsRoleModules.findAll({
-                                    where: {
-                                        role_id: roleId,
-                                        is_active: true
-                                    }
-                                }).then(rolesModules => {
-                                    if (rolesModules.length > 0) {
-                                        for (var i = 0; i < rolesModules.length; i++) {
-                                            AssignedUserRoleModules.create({
-                                                user_id: user.id,
-                                                role_module_id: rolesModules[i].id,
-                                                is_active: true,
-                                                created_by: reqUser.created_by,
-                                                last_updated_by: reqUser.last_updated_by
-                                            }).then(assignedRoles => {
-                                                console.log('roles assigned');
-                                            }).catch(function(err){
-                                                console.log(err);
-                                            });
-                                        }
-                                    }
-                                }).catch(function (err) {
-                                    console.log(err);
-                                    res.status(500).json({
-                                        error: err,
-                                        message: 'somehing went wrong!'
-                                    });
+                            }).catch(function (err) {
+                                console.log(err);
+                                res.status(500).json({
+                                    error: err,
+                                    message: 'somehing went wrong!'
                                 });
-                            }
-                        }).catch(function (err) {
-                            console.log(err);
-                            res.status(500).json({
-                                error: err,
-                                message: 'somehing went wrong!'
                             });
-                        });
-                        res.status(200).json({
-                            user_id: user.id,
-                            shop_id: shop.id,
-                            message: 'success'
                         });
                     }).catch(function (err) {
                         console.log(err);
@@ -117,6 +104,7 @@ var newShop = function (req, res) {
                         message: 'somehing went wrong!'
                     });
                 });
+
             } else {
                 res.status(401).json({
                     message: 'Not Authorized...'
