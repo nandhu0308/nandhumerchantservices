@@ -1,7 +1,7 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 
-const State = db.define('state-info' , {
+const State = db.define('state_info' , {
      id:{
         type: sequelize.INTEGER,
         primaryKey:true,
