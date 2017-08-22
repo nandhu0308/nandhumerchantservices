@@ -218,7 +218,7 @@ var getBroadcastersEGLByCategoryId = function (req, res) {
     });
 };
 var getBroadcastersEGLAll = function (req, res) {
-    debugger;
+    
     authToken = req.headers.authorization;
 
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
@@ -578,12 +578,12 @@ var newBroadcasterwithChannel = function (req, res) {
                                 created_by: broadcasterVideos.created_by,
                                 updated_by: broadcasterVideos.updated_by
                             }).then(function (broadcasterVideoResults) {
-                                debugger;
+                                
 
                                 //update broadcaster with primary channel ID
 
                                 Broadcaster.findById(broadcasterResults.id).then(function (Broadcaster) {
-                                    debugger;
+                                    
                                     if (Broadcaster) {
                                         Broadcaster.updateAttributes({
                                             primary_channel_id: broadcasterVideoResults.broadcaster_channel_id,
