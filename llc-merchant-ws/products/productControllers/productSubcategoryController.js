@@ -159,7 +159,7 @@ var getSubcategoryById = function (req, res) {
                     } else {
                         res.status(200).json(productSubcategory);
                     }
-                }).catch(function (err) {
+                }).catch(function (err) {                   
                     res.status(500).json({
                         message: 'something went wrong...'
                     });

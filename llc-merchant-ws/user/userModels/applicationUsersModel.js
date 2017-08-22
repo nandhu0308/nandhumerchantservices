@@ -31,7 +31,7 @@ const ApplicationUsers = db.define('application_users', {
         type: sequelize.STRING,
         allowNull: false
     },
-    device_mac: {
+    device_id: {
         type: sequelize.STRING,
         allowNull: false
     },
@@ -77,6 +77,24 @@ const ApplicationUsers = db.define('application_users', {
         type: sequelize.DATE,
         allowNull: false,
         defaultValue: sequelize.NOW
+    },
+    utm_source: {
+        type: sequelize.STRING
+    },
+    utm_medium: {
+        type: sequelize.STRING
+    },
+    utm_campign: {
+        type: sequelize.STRING
+    },
+    utm_term: {
+        type: sequelize.STRING
+    },
+    utm_content: {
+        type: sequelize.STRING
+    },
+    app_version: {
+        type: sequelize.STRING
     }
 }, {
     timestamps: false,

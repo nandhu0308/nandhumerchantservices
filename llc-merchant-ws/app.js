@@ -14,6 +14,8 @@ var UploadRouter = require('./upload-services/uploadRouters/uploadRouter');
 var BroadcasterRouter = require('./broadcasters/broadcasterRouters/broadcasterRouter');
 var SmtpRouter = require('./smtp/smtpRouters/smtpRouter');
 var TemplateRouter =  require('./smtp/notificationTemplate/templateRouters/templateRouter');
+var DocumentRouter = require('./document/documentRouter/documentRouter');
+var CommonRouter = require('./common/commonRouter/commonRouter');
 
 app.use(cors({origin:true, credentials:true}));
 app.use(bodyParser.json());
@@ -28,6 +30,8 @@ app.use('/upload', UploadRouter);
 app.use('/smtp',SmtpRouter);
 app.use('/notificationtemplate',TemplateRouter);
 
+app.use('/document',DocumentRouter);
+app.use('/common',CommonRouter);
 
 app.listen(3000, function(){
     console.log('Running on Port 3000...');

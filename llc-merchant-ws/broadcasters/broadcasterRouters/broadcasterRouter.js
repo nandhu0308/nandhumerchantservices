@@ -22,6 +22,8 @@ broadcasterRouter.route('/destination/all').get(broadcastersController.getBroadc
 //Broadcaster Channel
 
 broadcasterRouter.route('/broadcasterchannel/new').post(broadcasterChannelController.createBroadcasterChannel);
+broadcasterRouter.route('/broadcasterchannel/all').get(broadcasterChannelController.getChannelCategory);
+broadcasterRouter.route('/broadcastercategory/all').get(broadcastersController.getBroadcasterCategory);
 
 
 module.exports=broadcasterRouter;

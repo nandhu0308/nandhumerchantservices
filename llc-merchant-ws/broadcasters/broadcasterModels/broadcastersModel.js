@@ -108,6 +108,18 @@ const Broadcasters = db.define('broadcasters',  {
     primary_channel_id: {
         type: sequelize.INTEGER,
         defaultValue: 0
+    },
+    country_code:{
+        type:sequelize.STRING(3),
+        defaultValue:'IND'
+    },
+    state_code:{
+        type:sequelize.STRING(3),
+        defaultValue:'KA'
+    },
+    city_code:{
+        type:sequelize.STRING(3),
+        defaultValue:'BLR'
     }
 }, {
     timestamps : false,
