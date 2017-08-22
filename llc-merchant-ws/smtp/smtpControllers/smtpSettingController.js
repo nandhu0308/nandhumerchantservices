@@ -65,7 +65,7 @@ let transporter = nodemailer.createTransport({
 
 let mailOptions = {
     from: 'transactions@limitlesscircle.com',
-    to: 'senthil.kumar@limitlesscircle.com',
+    to: 'uma.raja@limitlesscircle.com',
     subject: 'mail notification Test',
     text: 'Hello !!!!!!!!!everything works fine'
 };

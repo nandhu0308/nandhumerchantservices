@@ -112,12 +112,12 @@ return TemplateController.findById(StreamingTemplateId).then(function(streamingT
         secure: true,
         requireTLS: true,
         auth: {
-            user: 'uma.raja@limitlesscircle.com',
-            pass: 'umaraja24'
+            user: 'transactions@limitlesscircle.com',
+            pass: 'Engage@12E'
             }
         });
         let mailOptions = {
-        from: 'uma.raja@limitlesscircle.com',
+        from: 'transactions@limitlesscircle.com',
         to: 'uma.raja@limitlesscircle.com',
         subject: 'mail notification Test',
         html:result
