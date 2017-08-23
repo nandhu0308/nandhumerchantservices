@@ -14,6 +14,16 @@ const Broadcasters = db.define('broadcasters',  {
     broadcaster_channel_name : {
         type : sequelize.TEXT
     },
+
+    category_id: {
+        type: sequelize.INTEGER,
+        defaultValue: 0
+    },
+
+    seller_id: {
+        type: sequelize.INTEGER,
+        defaultValue: 0
+    },
     
     broadcaster_email : {
         type : sequelize.STRING(500),
