@@ -164,7 +164,55 @@ var getShopById = function (req, res) {
     });
 };
 
+var getAllShops = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                Shop.findAll({
+                    where: {
+                        is_deleted: false
+                    },
+                    attributes: {
+                        exclude: ['created_by', 'created_time', 'updated_by', 'updated_time']
+                    }
+                }).then(shops => {
+                    if(shops.length >= 0){
+                        res.status(200).json(shops);
+                    } else {
+                        res.status(404).json({
+                            message: 'No Shops Found...'
+                        })
+                    }
+                }).catch(function (err) {
+                    res.status(500).json({
+                        error: err,
+                        message: 'something went wrong...'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        console.log(err);
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
 module.exports = {
     newShop: newShop,
-    getShopById: getShopById
+    getShopById: getShopById,
+    getAllShops: getAllShops
 };
