@@ -1,7 +1,7 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 
-const Rank = db.define('display-rank' , {
+const Rank = db.define('display_rank' , {
      id:{
         type: sequelize.INTEGER,
         primaryKey:true,

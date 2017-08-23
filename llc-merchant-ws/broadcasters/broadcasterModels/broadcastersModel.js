@@ -40,13 +40,13 @@ const Broadcasters = db.define('broadcasters',  {
         allowNull: false
     },
 
-    broadcast_loc_lattitude:{
+    broadcaster_loc_latitude:{
         type:sequelize.FLOAT(3,6),
         allowNull:false,
         defaultValue:0.000000
     },
 
-    broadcast_loc_longtitude:{
+    broadcaster_loc_longitude:{
         type:sequelize.FLOAT(3,6),
         allowNull:false,
         defaultValue:0.000000
@@ -57,11 +57,11 @@ const Broadcasters = db.define('broadcasters',  {
         allowNull: false
     },
 
-    broadcast_kyc_doc_type:{
+    broadcaster_kyc_doc_type:{
         type:sequelize.STRING,
         allowNull:true
     },
- broadcast_kyc_doc_value:{
+ broadcaster_kyc_doc_value:{
         type:sequelize.STRING,
         allowNull:true
     },

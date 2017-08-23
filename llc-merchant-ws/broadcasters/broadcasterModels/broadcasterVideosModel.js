@@ -9,10 +9,6 @@ const BroadcasterVideos = db.define('broadcaster_videos', {
             key:"id"
         },
         allowNull: false
-    },  
-    album_id: {
-        type: sequelize.INTEGER,
-        allowNull: false
     },
     video_name : {
         type : sequelize.STRING,
@@ -32,8 +28,13 @@ const BroadcasterVideos = db.define('broadcaster_videos', {
         type : sequelize.TEXT
        
     },
-    video_url : {
+    url : {
         type : sequelize.STRING(1000),
+        allowNull: false
+    },
+
+    duration: {
+        type: sequelize.INTEGER,
         allowNull: false
     },
     
@@ -54,6 +55,45 @@ const BroadcasterVideos = db.define('broadcaster_videos', {
         defaultValue : true
     },
 
+    live_ads : {
+        type : sequelize.BOOLEAN,
+        allowNull : false,
+        defaultValue : true
+    },
+
+    p160 : {
+        type : sequelize.BOOLEAN,
+        allowNull : false,
+        defaultValue : true
+    },
+
+    p360 : {
+        type : sequelize.BOOLEAN,
+        allowNull : false,
+        defaultValue : true
+    },
+    p720 : {
+        type : sequelize.BOOLEAN,
+        allowNull : false,
+        defaultValue : true
+    },
+    p1080 : {
+        type : sequelize.BOOLEAN,
+        allowNull : false,
+        defaultValue : true
+    },
+    p_uhd : {
+        type : sequelize.BOOLEAN,
+        allowNull : false,
+        defaultValue : true
+    },
+
+     video_type : {
+        type : sequelize.STRING(10),
+        defaultValue : ''
+    },
+
+
     yt_streamkey : {
         type : sequelize.STRING(100),
         defaultValue : ''
@@ -73,7 +113,7 @@ const BroadcasterVideos = db.define('broadcaster_videos', {
         type : sequelize.STRING,
         defaultValue : ''
     },
-    created_on : {
+    video_created_time : {
         type : sequelize.DATE,
         defaultValue : sequelize.NOW
     },
@@ -81,7 +121,7 @@ const BroadcasterVideos = db.define('broadcaster_videos', {
         type : sequelize.STRING,
         defaultValue : ''
     },
-    updated_on : {
+    video_updated_time : {
         type : sequelize.DATE,
         defaultValue : sequelize.NOW
     }

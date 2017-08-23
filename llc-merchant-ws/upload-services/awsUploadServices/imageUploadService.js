@@ -82,6 +82,8 @@ var deleteImage = function(req, res){
 var updateCategoryImageUrl = function (imageUrl, fileName, res) {
     if (imageUrl) {
         if (imageUrl != '' || imageUrl != ' ') {
+            
+
             res.status(200).send(imageUrl + '|' + fileName);
         } else {
             res.status(500).json({

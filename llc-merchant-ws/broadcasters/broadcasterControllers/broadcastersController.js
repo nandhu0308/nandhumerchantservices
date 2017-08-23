@@ -218,7 +218,7 @@ var getBroadcastersEGLByCategoryId = function (req, res) {
     });
 };
 var getBroadcastersEGLAll = function (req, res) {
-
+    
     authToken = req.headers.authorization;
 
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
@@ -578,12 +578,12 @@ var newBroadcasterwithChannel = function (req, res) {
                                 created_by: broadcasterVideos.created_by,
                                 updated_by: broadcasterVideos.updated_by
                             }).then(function (broadcasterVideoResults) {
-                                debugger;
+                                
 
                                 //update broadcaster with primary channel ID
 
                                 Broadcaster.findById(broadcasterResults.id).then(function (Broadcaster) {
-                                    debugger;
+                                    
                                     if (Broadcaster) {
                                         Broadcaster.updateAttributes({
                                             primary_channel_id: broadcasterVideoResults.broadcaster_channel_id,
@@ -637,6 +637,45 @@ var newBroadcasterwithChannel = function (req, res) {
 
                 }
 
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
+
+var getBroadcasterOnBoardGrid=function(req,res){
+    authToken = req.headers.authorization;
+
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                Broadcaster.findAll({
+                    where: {
+                        is_active: true
+                    }
+                }
+                ).then(function (broadcasterAll) {
+                    
+                }).catch(function (err) {
+                    res.status(404).json({
+                        message: 'No broadcasters  found...'
+                    });
+                });
             } else {
                 res.status(401).json({
                     message: 'Not Authorized...'

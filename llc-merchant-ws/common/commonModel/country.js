@@ -1,7 +1,7 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 
-const Country = db.define('country-info' , {
+const Country = db.define('country_info' , {
      id:{
         type: sequelize.INTEGER,
         primaryKey:true,
