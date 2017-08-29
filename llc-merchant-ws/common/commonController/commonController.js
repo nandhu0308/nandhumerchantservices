@@ -165,6 +165,7 @@ var getDisplayRank = function (req, res) {
 
 
 var getLanguage = function (req, res) {
+    
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
     var todayDate = new Date();

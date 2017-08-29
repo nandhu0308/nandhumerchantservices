@@ -20,10 +20,12 @@ broadcasterRouter.route('/broadcasterwithchannel/create').post(broadcastersContr
 broadcasterRouter.route('/destination/all').get(broadcastersController.getBroadcasterDestination);
 
 //Broadcaster Channel
-
 broadcasterRouter.route('/broadcasterchannel/new').post(broadcasterChannelController.createBroadcasterChannel);
 broadcasterRouter.route('/broadcasterchannel/all').get(broadcasterChannelController.getChannelCategory);
 broadcasterRouter.route('/broadcastercategory/all').get(broadcastersController.getBroadcasterCategory);
+broadcasterRouter.route('/broadcasterchannel/broadcaster/:broadcasterId').get(broadcasterChannelController.getBroadcasterChannelByBroadcasterId);
 
+//Broadcaster videos routes
+broadcasterRouter.route('/broadcasterVideo/new').post(broadcasterVideoController.newVideo);
 
 module.exports=broadcasterRouter;
