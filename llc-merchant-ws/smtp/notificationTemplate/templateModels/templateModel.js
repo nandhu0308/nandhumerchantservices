@@ -1,6 +1,6 @@
 const sequelize = require('sequelize');
 const db = require('./../../../db');
-const TemplateController = db.define('notification_template',{
+const TemplateController = db.define('notification_template', {
     template_name:{
         type:sequelize.STRING(50),
         allowNull:false
@@ -16,7 +16,7 @@ const TemplateController = db.define('notification_template',{
     is_active:{
         type:sequelize.BOOLEAN,
         allowNull:true
-    }
+    }                       
 },{
     timestamps:false,
     freezeTableName:true
