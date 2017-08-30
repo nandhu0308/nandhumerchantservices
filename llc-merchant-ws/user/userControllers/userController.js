@@ -13,34 +13,95 @@ var sequelize = require('sequelize');
 
 var newUserRegistration = function (req, res) {
     reqObj = req.body;
-    ApplicationUsers.create({
-        application_id: reqObj.application_id,
-        user_type: reqObj.user_type,
-        user_name: reqObj.user_name,
-        user_short_name: reqObj.user_short_name,
-        country: reqObj.country,
-        city: reqObj.city,
-        zip: reqObj.zip,
-        country_iso_code: reqObj.country_iso_code,
-        device_mac: reqObj.device_mac,
-        mobile: reqObj.mobile,
-        email_id: reqObj.email_id,
-        passwd: reqObj.passwd,
-        is_anonymous: reqObj.is_anonymous,
-        is_active: reqObj.is_active,
-        created_by: reqObj.created_by,
-        last_updated_by: reqObj.last_updated_by
-    }).then(newUser => {
-        res.status(200).json({
-            id: newUser.id,
-            message: 'success'
+    if (reqObj.user_type === 'User') {
+        ApplicationUsers.create({
+            application_id: reqObj.application_id,
+            client_id: reqObj.client_id,
+            user_type: reqObj.user_type,
+            user_name: reqObj.user_name,
+            user_short_name: reqObj.user_short_name,
+            country: reqObj.country,
+            city: reqObj.city,
+            zip: reqObj.zip,
+            country_iso_code: reqObj.country_iso_code,
+            device_id: reqObj.device_mac,
+            mobile: reqObj.mobile,
+            email_id: reqObj.email_id,
+            passwd: reqObj.passwd,
+            is_anonymous: reqObj.is_anonymous,
+            is_active: reqObj.is_active,
+            created_by: reqObj.created_by,
+            last_updated_by: reqObj.last_updated_by
+        }).then(newUser => {
+            res.status(200).json({
+                id: newUser.id,
+                message: 'success'
+            });
+        }).catch(function (err) {
+            res.status(500).json({
+                errMessage: err,
+                message: 'something went wrong...'
+            });
         });
-    }).catch(function (err) {
-        res.status(500).json({
-            errMessage: err,
-            message: 'something went wrong...'
+    } else {
+        ApplicationUsers.create({
+            application_id: reqObj.application_id,
+            client_id: reqObj.client_id,
+            user_type: reqObj.user_type,
+            user_name: reqObj.user_name,
+            user_short_name: reqObj.user_short_name,
+            country: reqObj.country,
+            city: reqObj.city,
+            zip: reqObj.zip,
+            country_iso_code: reqObj.country_iso_code,
+            device_id: reqObj.device_mac,
+            mobile: reqObj.mobile,
+            email_id: reqObj.email_id,
+            passwd: reqObj.passwd,
+            is_anonymous: reqObj.is_anonymous,
+            is_active: reqObj.is_active,
+            created_by: reqObj.created_by,
+            last_updated_by: reqObj.last_updated_by
+        }).then(newUser => {
+            roleId = reqObj.roleId;
+            ApplicationsRoleModules.findAll({
+                where: {
+                    role_id: roleId
+                }
+            }).then(rolesModules => {
+                console.log(rolesModules.length);
+                if (rolesModules.length > 0) {
+                    for (var i = 0; i < rolesModules.length; i++) {
+                        AssignedUserRoleModules.create({
+                            user_id: newUser.id,
+                            role_module_id: rolesModules[i].id,
+                            is_active: true,
+                            created_by: reqObj.created_by,
+                            last_updated_by: reqObj.last_updated_by
+                        }).then(assignedRole => {
+                            console.log('new role added');
+                        }).catch(function (err) {
+                            console.log(err);
+                        });
+                    }
+                    res.status(200).json({
+                        id: newUser.id,
+                        message: 'success'
+                    });
+                }
+            }).catch(function (err) {
+                res.status(500).json({
+                    errMessage: err,
+                    message: 'something went wrong...'
+                });
+            })
+        }).catch(function (err) {
+            res.status(500).json({
+                errMessage: err,
+                message: 'something went wrong...'
+            });
         });
-    });
+    }
 };
 
 var userLogin = function (req, res) {
@@ -374,9 +435,9 @@ var getUserById = function (req, res) {
                     attributes: {
                         exclude: ['created_on', 'last_updated_on']
                     }
-                }).then(user=>{
+                }).then(user => {
                     res.status(200).json(user);
-                }).catch(function(err){
+                }).catch(function (err) {
                     res.status(500).json({
                         error: err,
                         message: 'something went wrong!'
