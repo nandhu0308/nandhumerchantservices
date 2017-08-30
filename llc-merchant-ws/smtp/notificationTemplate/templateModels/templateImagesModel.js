@@ -12,7 +12,8 @@ const TemplateImages = db.define('template_images',{
         allowNull : false
     },
     destination_type : {
-        type : sequelize.STRING(45),
+        type:   sequelize.ENUM,
+        values: ['youtube','facebook','twitter','instagram'],
         allowNull : false
     },
     start_img : {
@@ -36,3 +37,5 @@ const TemplateImages = db.define('template_images',{
     freezeTableName : true
 });
 module.exports = TemplateImages;
+// TemplateImages.belongsTo(TemplateController); 
+// TemplateController.hasMany(TemplateController);

@@ -12,6 +12,8 @@ var sequelize = require('sequelize');
 
 TemplateController.hasMany(StartBroadcasting, { foreignKey: 'template_id' })
 StartBroadcasting.belongsTo(TemplateController, { foreignKey: 'template_id' })
+TemplateController.hasMany(StopBroadcasting, { foreignKey: 'template_id' })
+StopBroadcasting.belongsTo(TemplateController, { foreignKey: 'template_id' })
 
 var getTemplateController = function(req,res){
     authToken=req.headers.authorization;
@@ -161,7 +163,6 @@ var startBroadcastingTemplate = function(req, res) {
     StreamingTemplateId = req.params.id;
     return StartBroadcasting.findById(StreamingTemplateId).then(function(streamingTemplate) {
         res.json(streamingTemplate);
-        // var response = streamingTemplate.template_name.toString().toLowerCase();
     var result ="<body border: 1px solid black;outline-color: red;><header background-color='grey'><img src="+streamingTemplate.start_img+" alt='destination_img' width='600px' height='100px'></header><h3>Hi "+streamingTemplate.client_name+"!</h3><p>We are pleased to inform you that " + streamingTemplate.client_name+" newschannel streaming has been started sucessfully on "+streamingTemplate.destination_type+"</p>"+
     "<img src="+streamingTemplate.client_img+" alt='client_img' width='600px' height='500px'>"+
     "<h5>This email was sent from a notification-only address that cannot accept incoming email. Please do not reply to this message.</h5></body>";
@@ -180,7 +181,7 @@ var startBroadcastingTemplate = function(req, res) {
             });
             let mailOptions = {
             from: 'transactions@limitlesscircle.com',
-            to: 'uma.raja@limitlesscircle.com,senthil.kumar@limitlesscircle.com',
+            to: 'uma.raja@limitlesscircle.com',
             subject: 'Streaming Started',
             html:result
                     };
@@ -223,7 +224,7 @@ var startBroadcastingTemplate = function(req, res) {
                 });
                 let mailOptions = {
                 from: 'transactions@limitlesscircle.com',
-                to: 'uma.raja@limitlesscircle.com,senthil.kumar@limitlesscircle.com',
+                to: 'uma.raja@limitlesscircle.com',
                 subject: 'Streaming Stopped',
                 html:result
                         };
