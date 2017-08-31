@@ -12,7 +12,7 @@ const BroadcasterVideos = db.define('broadcaster_videos', {
     },
     language_id: {
         type: sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
     },
     video_name : {
         type : sequelize.STRING,
@@ -90,6 +90,12 @@ const BroadcasterVideos = db.define('broadcaster_videos', {
         type : sequelize.BOOLEAN,
         allowNull : false,
         defaultValue : true
+    },
+
+    is_primary:{
+        type : sequelize.BOOLEAN,
+        allowNull : false,
+        defaultValue : false
     },
 
      video_type : {
