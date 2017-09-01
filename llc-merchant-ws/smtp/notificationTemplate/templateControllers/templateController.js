@@ -161,10 +161,21 @@ var startBroadcastingTemplate = function(req, res) {
     var expireDate = new Date(userAuthObj.expire_date);
     return tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function(userSessions) {
     StreamingTemplateId = req.params.id;
-    return StartBroadcasting.findById(StreamingTemplateId).then(function(streamingTemplate) {
-        res.json(streamingTemplate);
-    var result ="<body border: 1px solid black;outline-color: red;><header background-color='grey'><img src="+streamingTemplate.start_img+" alt='destination_img' width='600px' height='100px'></header><h3>Hi "+streamingTemplate.client_name+"!</h3><p>We are pleased to inform you that " + streamingTemplate.client_name+" newschannel streaming has been started sucessfully on "+streamingTemplate.destination_type+"</p>"+
-    "<img src="+streamingTemplate.client_img+" alt='client_img' width='600px' height='500px'>"+
+    return TemplateController.findById(StreamingTemplateId).then(function(streamingTemplate) {
+        // res.json(streamingTemplate);
+        TemplateId=req.params.img_id;
+      return StartBroadcasting.findById(TemplateId).then(function(templateImages){
+            res.json(templateImages);
+            templateImages.template_id.toString().toLowerCase();
+            templateImages.img_id.toString().toLowerCase();
+            templateImages.destination_type.toString().toLowerCase();
+            templateImages.start_img.toString().toLowerCase();
+            templateImages.stop_img.toString().toLowerCase();
+            templateImages.client_name.toString().toLowerCase();
+            templateImages.client_img.toString().toLowerCase();
+            var mail=templateImages.client_mail.toString().toLowerCase();
+    var result ="<body border: 1px solid black;outline-color: red;><header background-color='grey'><img src="+templateImages.start_img+" alt='destination_img' width='600px' height='100px'></header><h3>Hi "+templateImages.client_name+"!</h3><p>We are pleased to inform you that " + templateImages.client_name+" newschannel streaming has been started sucessfully on "+templateImages.destination_type+"</p>"+
+    "<img src="+templateImages.client_img+" alt='client_img' width='600px' height='500px'>"+
     "<h5>This email was sent from a notification-only address that cannot accept incoming email. Please do not reply to this message.</h5></body>";
     
    let transporter = nodemailer.createTransport({
@@ -181,7 +192,8 @@ var startBroadcastingTemplate = function(req, res) {
             });
             let mailOptions = {
             from: 'transactions@limitlesscircle.com',
-            to: 'uma.raja@limitlesscircle.com',
+            to: mail,
+            // bcc:'senthil.kumar@limitlesscircle.com,anandh@limitlesscircle.com',
             subject: 'Streaming Started',
             html:result
                     };
@@ -192,6 +204,7 @@ var startBroadcastingTemplate = function(req, res) {
                     console.log('success');
                         });
                     
+             })
                      }) 
     })
             
@@ -202,15 +215,25 @@ var startBroadcastingTemplate = function(req, res) {
         var todayDate = new Date();
         var expireDate = new Date(userAuthObj.expire_date);
         return tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function(userSessions) {
-        StreamingTemplateId = req.params.id;
-        return StopBroadcasting.findById(StreamingTemplateId).then(function(streamingTemplate) {
-            res.json(streamingTemplate);
-            var result ="<body border: 1px solid black;outline-color: red;><header background-color='grey'><img src="+streamingTemplate.stop_img+" alt='destination_img' width='600px' height='100px'></header><h3>Hi"+streamingTemplate.client_name+"!</h3><p>We are pleased to inform you that  " + streamingTemplate.client_name +" newschannel streaming has been stopped sucessfully on "+streamingTemplate.destination_type+"</p>"+
-            "<img src="+streamingTemplate.client_img+" alt='client_img' width='600px' height='500px'>"+
+            StreamingTemplateId = req.params.id;
+            return TemplateController.findById(StreamingTemplateId).then(function(streamingTemplate) {
+                // res.json(streamingTemplate);
+                TemplateId=req.params.img_id;
+              return StopBroadcasting.findById(TemplateId).then(function(templateImages){
+                    res.json(templateImages);
+                    templateImages.template_id.toString().toLowerCase();
+                    templateImages.img_id.toString().toLowerCase();
+                    templateImages.destination_type.toString().toLowerCase();
+                    templateImages.start_img.toString().toLowerCase();
+                    templateImages.stop_img.toString().toLowerCase();
+                    templateImages.client_name.toString().toLowerCase();
+                    templateImages.client_img.toString().toLowerCase();
+            var mail= templateImages.client_mail.toString().toLowerCase();
+
+            var result ="<body border: 1px solid black;outline-color: red;><header background-color='grey'><img src="+templateImages.stop_img+" alt='destination_img' width='600px' height='100px'></header><h3>Hi"+templateImages.client_name+"!</h3><p>We are pleased to inform you that  " + templateImages.client_name +" newschannel streaming has been stopped sucessfully on "+templateImages.destination_type+"</p>"+
+            "<img src="+templateImages.client_img+" alt='client_img' width='600px' height='500px'>"+
             "<h5>This email was sent from a notification-only address that cannot accept incoming email. Please do not reply to this message.</h5></body>";
-        
-        
-       let transporter = nodemailer.createTransport({
+        let transporter = nodemailer.createTransport({
                 host: 'smtp.zoho.com',
                 port: 465,
                 auth: true,
@@ -224,7 +247,8 @@ var startBroadcastingTemplate = function(req, res) {
                 });
                 let mailOptions = {
                 from: 'transactions@limitlesscircle.com',
-                to: 'uma.raja@limitlesscircle.com',
+                to: mail,
+                // bcc:'senthil.kumar@limitlesscircle.com,anandh@limitlesscircle.com,chandra@limitlesscircle.com',
                 subject: 'Streaming Stopped',
                 html:result
                         };
@@ -237,6 +261,7 @@ var startBroadcastingTemplate = function(req, res) {
                         
                          }) 
         })
+    })
                 
         };
 module.exports = {
