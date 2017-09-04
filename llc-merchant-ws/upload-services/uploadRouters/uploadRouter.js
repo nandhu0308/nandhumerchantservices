@@ -8,6 +8,7 @@ var ImageUploadService = require('./../awsUploadServices/imageUploadService');
 //Upload routes
 uploadRouter.route('/image/:uploadApp/:uploadTo/:userId').post(ImageUploadController.imageUpload);
 uploadRouter.route('/video/:uploadApp/:uploadTo/:userId').post(VideoUploadController.videoUpload);
+uploadRouter.route('/video/move/s3').post(VideoUploadController.videoUploadToS3);
 uploadRouter.route('/sqs/:sqsParams').post(SQSBroadcasterController.sendMessage);
 
 //Delete routes
