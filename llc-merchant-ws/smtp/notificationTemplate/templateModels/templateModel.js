@@ -1,6 +1,6 @@
 const sequelize = require('sequelize');
 const db = require('./../../../db');
-// const TemplateImages = require('./../templateModels/templateImagesModel');
+const TemplateImages = require('./../templateModels/templateImagesModel');
 const TemplateController = db.define('notification_template', {
     template_name:{
         type:sequelize.STRING(50),
