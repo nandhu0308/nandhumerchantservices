@@ -1,6 +1,13 @@
 {
+<<<<<<< HEAD
   "region": "us-west-2",
   "accessKeyId": "AKIAJYJ3WCTKTNI6IHDA",
   "secretAccessKey": "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",
   "signatureVersion": "v4"
+=======
+    "region": "us-west-2",
+    "accessKeyId": "AKIAJYJ3WCTKTNI6IHDA",
+    "secretAccessKey": "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",
+    "signatureVersion": "v4"
+>>>>>>> 471efe4fee185aec1bf2a62995a1611f2897b5a6
 }

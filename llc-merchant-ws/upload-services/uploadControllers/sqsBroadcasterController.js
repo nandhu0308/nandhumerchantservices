@@ -5,8 +5,6 @@ var sendMessage = function(req, res){
     sqsBroadcaster.sendMessage(sqsParams);
 };
 
-
-
 module.exports = {
     sendMessage: sendMessage
 };
