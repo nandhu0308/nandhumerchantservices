@@ -9,8 +9,6 @@ var dateformat = require('dateformat');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
 
-var sequelize = require('sequelize');
-
 Broadcaster.hasMany(BroadcasterChannel, { foreignKey: 'broadcaster_id' })
 BroadcasterChannel.belongsTo(Broadcaster, { foreignKey: 'broadcaster_id' })
 BroadcasterChannel.hasMany(BroadcasterVideos, { foreignKey: 'broadcaster_channel_id' })
