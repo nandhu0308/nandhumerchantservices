@@ -27,7 +27,7 @@ var getTemplateController = function(req,res){
             TemplateController.findById(id).then(function (templateController) {
                 if(templateController === null){
                     res.status(404).json({
-                        message:'message not found...'
+                        message:'Notification Template  not found...'
                     })
                 } else {
                     res.status(200).json(templateController);
