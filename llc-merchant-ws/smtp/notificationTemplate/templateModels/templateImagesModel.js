@@ -11,7 +11,7 @@ const TemplateImages = db.define('template_images',{
         type : sequelize.INTEGER,
         references : {
             model : TemplateController,
-            key : "id"
+            key : "tem_id"
         },
         allowNull : false
     },
@@ -51,9 +51,6 @@ const TemplateImages = db.define('template_images',{
     updated_on : {
         type : sequelize.DATE,
         defaultValue : sequelize.NOW
-    },
-    client_mail : {
-        type : sequelize.STRING(1000)
     }
 }, {
     timestamps : false,

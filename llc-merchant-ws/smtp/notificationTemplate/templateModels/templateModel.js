@@ -2,6 +2,11 @@ const sequelize = require('sequelize');
 const db = require('./../../../db');
 const TemplateImages = require('./../templateModels/templateImagesModel');
 const TemplateController = db.define('notification_template', {
+    tem_id :{
+        type:sequelize.INTEGER,
+        primaryKey :true,
+        allowNull:false
+    },
     template_name:{
         type:sequelize.STRING(50),
         allowNull:false
@@ -17,7 +22,7 @@ const TemplateController = db.define('notification_template', {
     is_active:{
         type:sequelize.BOOLEAN,
         allowNull:true
-    }                       
+    }
 },{
     timestamps:false,
     freezeTableName:true
