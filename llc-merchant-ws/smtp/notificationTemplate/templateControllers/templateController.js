@@ -6,7 +6,6 @@ var TemplateController = require('./../../notificationTemplate/templateModels/te
 var LogController = require('./../../notificationTemplate/templateModels/logModel');
 var SendStreamingTemplate = require('./../../notificationTemplate/templateModels/templateModel');
 var Broadcasting = require('./../../notificationTemplate/templateModels/templateImagesModel');
-// var StopBroadcasting = require('./../../notificationTemplate/templateModels/templateImagesModel');
 var BccSetting = require('./../../notificationTemplate/templateModels/bccSettingModel');
 var Broadcaster = require('./../../../broadcasters/broadcasterModels/broadcastersModel');
 
@@ -17,29 +16,6 @@ TemplateController.hasMany(Broadcasting, { foreignKey: 'template_id' })
 Broadcasting.belongsTo(TemplateController, { foreignKey: 'template_id' })
 Broadcasting.hasMany(BccSetting, { foreignKey: 'template_id' })
 BccSetting.belongsTo(Broadcasting, { foreignKey: 'template_id' })
-
-var getTemplateController = function(req,res){
-    authToken=req.headers.authorization;
-    userAuthObj=JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
-    var todayDate=new Date();
-    var expireDate=new Date(userAuthObj.expire_date);
-    tokenOK=TokenValidator.validateToken(userAuthObj.user_id,authToken).then(function(userSessions){
-    if (userSessions.length === 1){
-        if(expireDate >= todayDate){
-            id = req.params.id;
-            TemplateController.findById(id).then(function (templateController) {
-                if(templateController === null){
-                    res.status(404).json({
-                        message:'Notification Template  not found...'
-                    })
-                } else {
-                    res.status(200).json(templateController);
-                }
-            }).catch(function(err){
-                res.status(500).json({
-                    message:'something went wrong'
-// TemplateController.hasMany(StopBroadcasting, { foreignKey: 'template_id' })
-// StopBroadcasting.belongsTo(TemplateController, { foreignKey: 'template_id' })
 
 var getTemplateController = function (req, res) {
     authToken = req.headers.authorization;
@@ -53,7 +29,7 @@ var getTemplateController = function (req, res) {
                 TemplateController.findById(id).then(function (templateController) {
                     if (templateController === null) {
                         res.status(404).json({
-                            message: 'message not found...'
+                            message: 'notification not found...'
                         })
                     } else {
                         res.status(200).json(templateController);
@@ -91,7 +67,7 @@ var getLogController = function (req, res) {
                 LogController.findById(LogControllerId).then(function (logController) {
                     if (logController === null) {
                         res.status(404).json({
-                            message: 'message not found...'
+                            message: 'notification not found...'
                         })
                     } else {
                         res.status(200).json(logController);
