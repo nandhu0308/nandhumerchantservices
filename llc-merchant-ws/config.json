@@ -1,6 +1,8 @@
 {
-  "region": "us-west-2",
-  "accessKeyId": "AKIAJYJ3WCTKTNI6IHDA",
-  "secretAccessKey": "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",
-  "signatureVersion": "v4"
+  
+    "region": "us-west-2",
+    "accessKeyId": "AKIAJYJ3WCTKTNI6IHDA",
+    "secretAccessKey": "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",
+    "signatureVersion": "v4"
+    
 }
