@@ -8,6 +8,8 @@ const BroadcasterChannel = db.define('broadcaster_channel' , {
         type: sequelize.INTEGER,
         allowNull: false
     },
+
+   
     broadcaster_id: {
         type: sequelize.INTEGER,
 
@@ -36,6 +38,8 @@ const BroadcasterChannel = db.define('broadcaster_channel' , {
         type : sequelize.STRING(100),
         allowNull : false
     },
+
+
 
     fb_streamtarget_name : {
         type : sequelize.STRING(100),
@@ -85,6 +89,30 @@ const BroadcasterChannel = db.define('broadcaster_channel' , {
     updated_on : {
         type : sequelize.DATE,
         defaultValue : sequelize.NOW
+    },
+     lang_id:{
+        type: sequelize.INTEGER,
+        allowNull: false
+    },
+    is_hd : {
+        type : sequelize.BOOLEAN,
+        allowNull : false,
+        defaultValue : true
+    },
+    ha_rank : {
+        type : sequelize.INTEGER,
+        allowNull : false
+       
+    },
+    ha_is_active : {
+        type : sequelize.BOOLEAN,
+        allowNull : false,
+        defaultValue : true
+    },
+    deprecated : {
+        type : sequelize.BOOLEAN,
+        allowNull : false,
+        defaultValue : true
     }
 }, {
     timestamps : false,

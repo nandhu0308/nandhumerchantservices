@@ -1,4 +1,5 @@
 var AWS = require('aws-sdk');
+var BroadcasterVideos = require('./../../broadcasters/broadcasterModels/broadcasterVideosModel');
 
 var displayBucket = function (req, res) {
     // Load the SDK for JavaScript
@@ -19,11 +20,11 @@ var displayBucket = function (req, res) {
     });
 };
 
-var uploadVideos = function(filepath, res, uploadApp, uploadTo, userId, fileName){
+var uploadVideos = function (filepath, res, uploadApp, uploadTo, userId, fileName) {
     var userFolder = "haappy-videos-asia";
     AWS.config.loadFromPath('./config.json');
     s3 = new AWS.S3();
-    var uploadParams = {Bucket: userFolder, Key: '', Body: '', ACL:'public-read'};
+    var uploadParams = { Bucket: userFolder, Key: '', Body: '', ACL: 'public-read' };
     var file = filepath;
     var fs = require('fs');
     var fileStream = fs.createReadStream(file);
@@ -39,21 +40,39 @@ var uploadVideos = function(filepath, res, uploadApp, uploadTo, userId, fileName
             console.log("Error", err);
         } if (data) {
             fs.unlinkSync(file);
-            afterVideoUpload(data.Location, fileName, "",res);
+            afterVideoUpload(data.Location, fileName, filepath, res);
         }
     });
 };
 
-var afterVideoUpload = function(videoUrl, fileName, fileFormat, res){
-    resObj = {
-        videoUrl: videoUrl,
-        fileName: fileName,
-    };
-    res.status(200).json(resObj);
+var afterVideoUpload = function (videoUrl, fileName, filepath, res) {
+    BroadcasterVideos.findOne({
+        where: {
+            url: filepath,
+        }
+    }).then(video => {
+        video.updateAttributes({
+            url: videoUrl
+        }).then(function () {
+            res.status(200).json(video);
+        }).catch(function (err) {
+            console.log('update err: '+err);
+            res.status(500).json({
+                error: err,
+                message: 'something went wrong'
+            });
+        });
+    }).catch(function (err) {
+        console.log('retrieve err: '+err);
+        res.status(500).json({
+            error: err,
+            message: 'something went wrong'
+        });
+    });
 };
 
 
-var deleteVideoInS3 = function(req, res){
+var deleteVideoInS3 = function (req, res) {
     reqObj = req.body;
     deleteApp = reqObj.deleteApp;
     deleteFrom = reqObj.deleteFrom;
@@ -66,10 +85,10 @@ var deleteVideoInS3 = function(req, res){
         Bucket: userFolder,
         Key: deleteApp + '/' + deleteFrom + '/' + userId + '/' + fileName
     };
-    s3.deleteObject(deleteParams, function(err, data){
-        if(err){
+    s3.deleteObject(deleteParams, function (err, data) {
+        if (err) {
             console.log("Error", err);
-        } else if(data){
+        } else if (data) {
             console.log('deleted');
             console.log(data);
             res.status(200).json({
@@ -83,5 +102,5 @@ module.exports = {
     displayBucket: displayBucket,
     uploadVideos: uploadVideos,
     afterVideoUpload: afterVideoUpload,
-    deleteVideoInS3:deleteVideoInS3
+    deleteVideoInS3: deleteVideoInS3
 }
