@@ -187,7 +187,8 @@ var getBroadcastersEGLByCategoryId = function (req, res) {
                             attributes: {
                                 exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
                             },
-                            model: BroadcasterVideos
+                            model: BroadcasterVideos,
+                    
                         }]
                     }]
                 }

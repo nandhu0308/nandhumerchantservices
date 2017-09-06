@@ -2,7 +2,8 @@ const sequelize = require('sequelize');
 const db = require('./../../../db');
 const TemplateController = require('./../templateModels/templateModel');
 const TemplateImages = db.define('template_images',{
-    img_id :{
+    
+    id :{
         type : sequelize.INTEGER,
         allowNull : false,
         primaryKey:true
@@ -11,7 +12,7 @@ const TemplateImages = db.define('template_images',{
         type : sequelize.INTEGER,
         references : {
             model : TemplateController,
-            key : "tem_id"
+            key : "id"
         },
         allowNull : false
     },
@@ -37,7 +38,7 @@ const TemplateImages = db.define('template_images',{
         defalutvalue : ''
     },
     created_by : {
-        type : sequelize.STRING,
+        type : sequelize.STRING(255),
         defaultValue : ''
     },
     created_on : {
@@ -45,17 +46,19 @@ const TemplateImages = db.define('template_images',{
         defaultValue : sequelize.NOW
     },
     updated_by : {
-        type : sequelize.STRING,
+        type : sequelize.STRING(255),
         defaultValue : ''
     },
     updated_on : {
         type : sequelize.DATE,
         defaultValue : sequelize.NOW
+    },
+    is_active:{
+        type:sequelize.BOOLEAN,
+        allowNull:true
     }
 }, {
     timestamps : false,
     freezeTableName : true
 });
 module.exports = TemplateImages;
-// TemplateImages.belongsTo(TemplateController); 
-// TemplateController.hasMany(TemplateController);

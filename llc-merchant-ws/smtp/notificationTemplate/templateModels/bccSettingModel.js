@@ -1,21 +1,52 @@
-const sequlize = require('sequelize');
+const sequelize = require('sequelize');
 const db = require('./../../../db');
+const TemplateController = require('./../templateModels/templateModel');
+
 const BccSetting = db.define('ha_bcc_setting',{
-    bcc_id:{
-        type:sequlize.INTEGER,
+    template_id : {
+        type :sequelize.INTEGER,
+        references : {
+            model : TemplateController,
+            key : "id"
+        },
+        allowNull : false
+    },
+    id:{
+        type:sequelize.INTEGER,
         primaryKey:true,
         allowNull:false
     },
     bcc_setting:{
-        type:sequlize.STRING(200),
+        type:sequelize.STRING(200),
         allowNull:false
 
     },
     cc_setting:{
-        type:sequlize.STRING(200),
+        type:sequelize.STRING(200),
         allowNull:false
 
+    },
+    is_active:{
+        type:sequelize.BOOLEAN,
+        allowNull:true
+    },
+    created_by : {
+        type :sequelize.STRING(255),
+        defaultValue : ''
+    },
+    created_on : {
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+    },
+    updated_by : {
+        type : sequelize.STRING(255),
+        defaultValue : ''
+    },
+    updated_on : {
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
     }
+    
 },{
     timestamps:false,
     freezeTableName:true

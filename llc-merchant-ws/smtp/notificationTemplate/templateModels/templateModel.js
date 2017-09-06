@@ -1,8 +1,8 @@
 const sequelize = require('sequelize');
 const db = require('./../../../db');
-const TemplateImages = require('./../templateModels/templateImagesModel');
+
 const TemplateController = db.define('notification_template', {
-    tem_id :{
+    id :{
         type:sequelize.INTEGER,
         primaryKey :true,
         allowNull:false
@@ -19,6 +19,22 @@ const TemplateController = db.define('notification_template', {
         type:sequelize.TEXT,
         allowNull:true
     },
+    created_by : {
+        type : sequelize.STRING,
+        defaultValue : ''
+    },
+    created_on : {
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+    },
+    updated_by : {
+        type : sequelize.STRING,
+        defaultValue : ''
+    },
+    updated_on : {
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+    },
     is_active:{
         type:sequelize.BOOLEAN,
         allowNull:true
@@ -28,4 +44,3 @@ const TemplateController = db.define('notification_template', {
     freezeTableName:true
 })
 module.exports=TemplateController;
-// TemplateController.sync();
