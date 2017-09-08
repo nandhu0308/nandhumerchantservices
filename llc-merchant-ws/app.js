@@ -33,7 +33,8 @@ app.use('/notificationtemplate',TemplateRouter);
 app.use('/document',DocumentRouter);
 app.use('/common',CommonRouter);
 app.use('/oauth2callback',UploadRouter);
-app.listen(3000, function(){
+var PORT = process.env.PORT || 3000;
+app.listen(PORT, function(){
     console.log('Running on Port 3000...');
     connection.sync({
         force : false

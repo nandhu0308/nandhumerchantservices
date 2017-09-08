@@ -13,6 +13,7 @@ broadcasterRouter.route('/all').get(broadcastersController.getBroadcastersEGLAll
 broadcasterRouter.route('/broadcasterytVideo/update').put(broadcastersController.updateBroadcasterVideoYTStreamKey);
 broadcasterRouter.route('/broadcasterfbVideo/update').put(broadcastersController.updateBroadcasterVideoFBStreamKey);
 broadcasterRouter.route('/broadcasterhaVideo/update').put(broadcastersController.updateBroadcasterVideoHAStreamKey);
+broadcasterRouter.route('/broadcasterpsVideo/update').put(broadcastersController.updateBroadcasterVideoPSStreamKey);
 broadcasterRouter.route('/broadcasterwithchannel/new').post(broadcastersController.createBroadcasterwithChannel);
 broadcasterRouter.route('/broadcasterwithchannel/create').post(broadcastersController.newBroadcasterwithChannel);
 

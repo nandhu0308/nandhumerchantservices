@@ -134,6 +134,10 @@ const BroadcasterVideos = db.define('broadcaster_videos', {
     video_updated_time : {
         type : sequelize.DATE,
         defaultValue : sequelize.NOW
+    },
+    ps_streamkey : {
+        type : sequelize.STRING(100),
+        defaultValue : ''
     }
 }, {
     timestamps : false,
