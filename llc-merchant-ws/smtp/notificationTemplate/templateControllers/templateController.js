@@ -29,7 +29,7 @@ var getTemplateController = function (req, res) {
                 TemplateController.findById(id).then(function (templateController) {
                     if (templateController === null) {
                         res.status(404).json({
-                            message: 'notification not found...'
+                            message: 'notification not found.....'
                         })
                     } else {
                         res.status(200).json(templateController);
@@ -216,7 +216,7 @@ var startBroadcasting = function (req, res) {
   BroadcasterId = req.params.b_id;
   return Broadcaster.findById(BroadcasterId).then(function (BroadcasterSetting) {
       var mail = BroadcasterSetting.broadcaster_email.toString().toLowerCase();
-    var result ="<body border: 1px solid black;outline-color: red;><header background-color='grey'><img src="+start_url+" alt='destination_img' width='600px' height='100px'></header><h3>Hi "+client_type+"!</h3><p>We are pleased to inform you that " +client_type+" news channel streaming has been started sucessfully on "+destination+"</p>"+
+    var result ="<body border: 1px solid black;outline-color: red;><header background-color='grey'><img src="+start_url+" alt='destination_img' width='600px' height='100px'></header><h3>Hi "+client_type+"!</h3><p>We are pleased to inform you that " +client_type+" news channel streaming has been started sucessfully on "+destination+".</p>"+
     "<img src="+client_url+" alt='client_img' width='600px' height='500px'>"+
     "<h5>This email was sent from a notification-only address that cannot accept incoming email. Please do not reply to this message.</h5></body>";
     let transporter = nodemailer.createTransport({
@@ -339,7 +339,7 @@ var stopBroadcasting = function (req, res) {
   BroadcasterId = req.params.b_id;
   return Broadcaster.findById(BroadcasterId).then(function (BroadcasterSetting) {
       var mail = BroadcasterSetting.broadcaster_email.toString().toLowerCase();
-    var result ="<body border: 1px solid black;outline-color: red;><header background-color='grey'><img src="+stop_url+" alt='destination_img' width='600px' height='100px'></header><h3>Hi "+client_type+"!</h3><p>We are pleased to inform you that " +client_type+" news channel streaming has been stopped sucessfully on "+destination+"</p>"+
+    var result ="<body border: 1px solid black;outline-color: red;><header background-color='grey'><img src="+stop_url+" alt='destination_img' width='600px' height='100px'></header><h3>Hi "+client_type+"!</h3><p>We are pleased to inform you that " +client_type+" news channel streaming has been stopped sucessfully on "+destination+".</p>"+
     "<img src="+client_url+" alt='client_img' width='600px' height='500px'>"+
     "<h5>This email was sent from a notification-only address that cannot accept incoming email. Please do not reply to this message.</h5></body>";
     let transporter = nodemailer.createTransport({
