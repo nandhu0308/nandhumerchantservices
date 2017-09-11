@@ -1,4 +1,5 @@
 var BroadcasterVideos = require('./../broadcasterModels/broadcasterVideosModel');
+var BroadcasterChannel = require('./../broadcasterModels/broadcasterChannelModel');
 var dateformat = require('dateformat');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
@@ -153,8 +154,100 @@ var newVideo = function (req, res) {
     });
 };
 
+var getVideosByChannel = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                broadcasterId = req.params.broadcasterId;
+                BroadcasterChannel.findAll({
+                    where: {
+                        broadcaster_id: broadcasterId
+                    },
+                    include: [
+                        {
+                            model: BroadcasterVideos,
+                            limit: 10,
+                            attributes: {
+                                exclude: ['created_by', 'video_created_time', 'updated_by', 'video_updated_time']
+                            }
+                        }
+                    ]
+                }).then(channels => {
+                    res.status(200).json(channels);
+                }).catch(err => {
+                    console.log(err);
+                    res.status(500).json({
+                        error: err,
+                        message: 'Something went wrong'
+                    })
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
+var getVideosByChannelPagination = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                channelId = req.params.channelId;
+                lastVideoId = req.params.lastVideoId;
+                BroadcasterVideos.findAll({
+                    where: {
+                        broadcaster_channel_id: channelId,
+                        id: {
+                            $gt: lastVideoId
+                        }
+                    },
+                    attributes: {
+                        exclude: ['created_by', 'video_created_time', 'updated_by', 'video_updated_time']
+                    }
+                }).then(videos => {
+                    res.status(200).json(videos);
+                }).catch(err => {
+                    console.log(err);
+                })
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+}
+
 module.exports = {
     getBroadcastersVideos: getBroadcastersVideos,
     getBroadcastersVideosById: getBroadcastersVideosById,
-    newVideo: newVideo
+    newVideo: newVideo,
+    getVideosByChannel: getVideosByChannel,
+    getVideosByChannelPagination: getVideosByChannelPagination
 }
