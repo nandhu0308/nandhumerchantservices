@@ -162,16 +162,19 @@ var getVideosByChannel = function (req, res) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
                 broadcasterId = req.params.broadcasterId;
+                console.log(broadcasterId);
                 Broadcaster.findById(broadcasterId, {
                     attributes: {
                         exclude: ['created_by', 'broadcaster_created_time', 'updated_by', 'broadcaster_updated_time']
                     }
                 }).then(broadcaster => {
+                    console.log("broadcaster : "+broadcaster.primary_channel_id);
                     BroadcasterChannel.findById(broadcaster.primary_channel_id, {
                         attributes: {
                             exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
                         }
                     }).then(channel => {
+                        console.log("channel : "+channel);
                         BroadcasterVideos.findAll({
                             where: {
                                 broadcaster_channel_id: channel.id
@@ -191,18 +194,21 @@ var getVideosByChannel = function (req, res) {
                                 videos: videos
                             });
                         }).catch(err => {
+                            console.log(err);
                             res.status(500).json({
                                 error: err,
                                 message: 'Something went wrong!'
                             });
                         });
                     }).catch(err => {
+                        console.log(err);
                         res.status(500).json({
                             error: err,
                             message: 'Something went wrong!'
                         });
                     })
                 }).catch(err => {
+                    console.log(err);
                     res.status(500).json({
                         error: err,
                         message: 'Something went wrong!'
