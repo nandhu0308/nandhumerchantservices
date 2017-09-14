@@ -18,7 +18,7 @@ const TemplateImages = db.define('template_images',{
     },
     destination_type : {
         type:   sequelize.ENUM,
-        values: ['youtube','facebook','twitter','instagram'],
+        values: ['youtube','facebook','twitter','instagram','haappyapp'],
         allowNull : false
     },
     start_img : {
