@@ -119,7 +119,6 @@ var createBroadcasterChannel = function (req, res) {
                     deprecated: false,
                     lang_id: reqObj.lang_id
                 }).then(broadcasterChannel => {
-                    console.log(broadcasterChannel);
                     res.status(200).json({
                         id: broadcasterChannel.id,
                         message: 'Success'
