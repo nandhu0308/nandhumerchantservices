@@ -34,6 +34,11 @@ const BroadcasterChannel = db.define('broadcaster_channel' , {
         type : sequelize.STRING(100),
         allowNull : false
     },
+    
+    channel_description: {
+        type: sequelize.STRING(1000)
+    },
+
     yt_streamtarget_name : {
         type : sequelize.STRING(100),
         allowNull : false
@@ -54,6 +59,11 @@ const BroadcasterChannel = db.define('broadcaster_channel' , {
    
    
     channel_image : {
+        type : sequelize.STRING(500),
+        allowNull : false,
+        defaultValue : ''
+    },
+    ha_channel_image: {
         type : sequelize.STRING(500),
         allowNull : false,
         defaultValue : ''
