@@ -6,6 +6,15 @@ const BroadcasterDestination = db.define('broadcaster_destination' , {
         primaryKey:true,
         allowNull: false
    },
+    d_id:{
+        type: sequelize.INTEGER,
+        allowNull: false
+   },
+
+    broadcaster_channel_id: {
+        type: sequelize.INTEGER,
+        allowNull: false
+    },
     destination_name:{
          type: sequelize.STRING(50),
         allowNull: false

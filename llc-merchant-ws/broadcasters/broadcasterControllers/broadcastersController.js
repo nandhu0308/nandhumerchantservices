@@ -62,10 +62,11 @@ var getBroadcasterDestination = function (req, res) {
     tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
-
+                var b_channelid=req.params.channelid;
                 BroadcasterChannelDestination.findAll({
                     where: {
-                        is_active: true
+                        is_active: true,
+                        broadcaster_channel_id:b_channelid
                     }
 
                 }
