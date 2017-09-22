@@ -50,6 +50,7 @@ var getJournals = function (req, res) {
 var getJournalSettings = function (req, res) {
     appln_name = req.params.appln_name;
     stream_name = req.params.stream_name;
+    stream_name=appln_name+'-'+stream_name;
     JournalSettings.findOne({
         where: {
             appln_name: appln_name,
