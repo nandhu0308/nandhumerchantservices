@@ -8,3 +8,4 @@ journalRouter.route('/settings/:appln_name/:stream_name').get(journalController.
 
 module.exports = journalRouter;
 
+
