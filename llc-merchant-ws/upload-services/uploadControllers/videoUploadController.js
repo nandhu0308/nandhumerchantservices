@@ -15,7 +15,17 @@ var videoUploadToS3 = function(req, res){
     AWSVideoUploadService.uploadVideos(reqBody.location, res, 'entertainment', 'content', reqBody.userId, reqBody.fileName);
 }
 
+var videoUploadQueue = function(req, res){
+    debugger;
+    console.log('video upload controller reached');
+    queueParams = req.params.queueParams;
+    
+   
+    //UploadService.videoUploadQueueDB(req, res, queueParams);
+};
+
 module.exports = {
     videoUpload: videoUpload,
-    videoUploadToS3: videoUploadToS3
+    videoUploadToS3: videoUploadToS3,
+    videoUploadQueue:videoUploadQueue
 };
