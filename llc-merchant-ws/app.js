@@ -34,7 +34,7 @@ app.use('/smtp',SmtpRouter);
 app.use('/notificationtemplate',TemplateRouter);
 
 app.use('/journal', JournalRouter);
-app.use('/journal', JournalDevicesRouter);
+//app.use('/journal', JournalDevicesRouter);
 app.use('/document',DocumentRouter);
 app.use('/common',CommonRouter);
 app.use('/oauth2callback',UploadRouter);

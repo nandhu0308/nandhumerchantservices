@@ -67,7 +67,6 @@ var getJournalSettings = function (req, res) {
 };
 
 var logJournalActivity = function (req, res) {
- 
     reqObj = req.body;
     JournalSettingLog.create({
         journal_setting_id: reqObj.journal_setting_id,
