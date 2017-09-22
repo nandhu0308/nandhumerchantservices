@@ -1,5 +1,6 @@
 var Journal = require('./../journalModels/journalModel');
 var JournalSettings = require('./../journalModels/journalSettingModel');
+var JournalSettingLog = require('./../journalModels/journalSettingLogModel');
 var dateformat = require('dateformat');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
@@ -64,7 +65,7 @@ var getJournalSettings = function (req, res) {
     });
 };
 
-var newAplication = function (req, res) {
+var logJournalActivity = function (req, res) {
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
     var todayDate = new Date();
@@ -73,16 +74,12 @@ var newAplication = function (req, res) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
                 reqObj = req.body;
-                Applications.create({
+                JournalSettingLog.create({
                     journal_setting_id: reqObj.journal_setting_id,
-                    language_id: reqObj.language_id,
-                    appln_name: reqObj.description,
-                    is_active: reqObj.is_active,
-                    created_by: reqObj.created_by,
-                    last_updated_by: reqObj.last_updated_by
-                }).then(application => {
+
+                }).then(journalLog => {
                     res.status(200).json({
-                        application_id: application.id,
+                        id: journalLog.id,
                         message: 'success'
                     });
                 }).catch(function (err) {
@@ -110,6 +107,7 @@ var newAplication = function (req, res) {
 
 module.exports = {
     getJournals: getJournals,
-    getJournalSettings: getJournalSettings
+    getJournalSettings: getJournalSettings,
+    logJournalActivity: logJournalActivity
 };
     
