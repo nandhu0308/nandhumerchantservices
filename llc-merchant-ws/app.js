@@ -16,6 +16,7 @@ var SmtpRouter = require('./smtp/smtpRouters/smtpRouter');
 var TemplateRouter =  require('./smtp/notificationTemplate/templateRouters/templateRouter');
 var DocumentRouter = require('./document/documentRouter/documentRouter');
 var CommonRouter = require('./common/commonRouter/commonRouter');
+
 var JournalRouter = require('./journal/journalRouters/journalRouter');
 var JournalDevicesRouter = require('./journal/journalRouters/journalDeviceRouter');
 
@@ -31,6 +32,7 @@ app.use('/broadcaster', BroadcasterRouter);
 app.use('/upload', UploadRouter);
 app.use('/smtp',SmtpRouter);
 app.use('/notificationtemplate',TemplateRouter);
+
 app.use('/journal', JournalRouter);
 app.use('/journalDevice', JournalDevicesRouter);
 app.use('/document',DocumentRouter);
