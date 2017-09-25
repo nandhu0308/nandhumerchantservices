@@ -58,8 +58,10 @@ var getJournalSettings = function (req, res) {
             stream_name: stream_name
         }
     }).then(jsettings => {
+        console.log(jsettings);
         res.status(200).json(jsettings);
     }).catch(err => {
+        console.log(err);
         res.status(500).json({
             error: err,
             message: 'Something went wrong'
@@ -149,9 +151,94 @@ getJournalsByChannelId = function (req, res) {
     });
 };
 
+getJournalSettingsByJournalId = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                journalId = req.params.journalId;
+                JournalSettings.findAll({
+                    where: {
+                        journal_id: journalId
+                    },
+                    attributes: {
+                        exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
+                    }
+                }).then(settings => {
+                    res.status(200).json(settings);
+                }).catch(err => {
+                    res.status(500).json({
+                        error: err,
+                        message: 'Something is wrong!'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
+getJournalDevice = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                settingId = req.params.settingId;
+                JournalDevice.findOne({
+                    where: {
+                        journal_setting_id: settingId,
+                        is_active: true
+                    },
+                    attributes: {
+                        exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
+                    }
+                }).then(device => {
+                    res.status(200).json(device);
+                }).catch(err => {
+                    res.status.json({
+                        error: err,
+                        message: 'Somethinga went wrong'
+                    })
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
 module.exports = {
     getJournals: getJournals,
     getJournalSettings: getJournalSettings,
     logJournalActivity: logJournalActivity,
-    getJournalsByChannelId: getJournalsByChannelId
+    getJournalsByChannelId: getJournalsByChannelId,
+    getJournalSettingsByJournalId: getJournalSettingsByJournalId,
+    getJournalDevice: getJournalDevice
 };

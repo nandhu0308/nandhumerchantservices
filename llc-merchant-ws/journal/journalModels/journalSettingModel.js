@@ -8,11 +8,6 @@ const JournalSetting = db.define('journal_setting', {
         allownull: false
     },
 
-    journal_setting_id: {
-        type: sequelize.INTEGER(10),
-        allowNull: false
-    },
-
     language_id: {
         type: sequelize.INTEGER(11),
         allownull: false
@@ -132,10 +127,34 @@ const JournalSetting = db.define('journal_setting', {
     ftp_path: {
         type: sequelize.STRING(200),
         allowNull: false
+    },
+
+    ha_ftp_host: {
+        type: sequelize.STRING,
+        allowNull: false
+    },
+
+    ha_ftp_port: {
+        type: sequelize.INTEGER,
+        allowNull: false,
+    },
+
+    ha_ftp_uname: {
+        type: sequelize.STRING,
+        allowNull: false
+    },
+
+    ha_ftp_passwd: {
+        type: sequelize.STRING
+    },
+
+    ha_ftp_path: {
+        type: sequelize.STRING,
+        allowNull: false
     }
 }, {
         timestamps: false,
         freezeTableName: true
-    })
+    });
 
 module.exports = JournalSetting;

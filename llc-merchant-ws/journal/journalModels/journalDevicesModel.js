@@ -3,9 +3,9 @@ const db = require('./../../db');
 
 const JournalDevices = db.define('journal_devices',{
    
-    journal_id:{
-        type:sequelize.INTEGER(10),
-        allownull:false
+    journal_setting_id: {
+        type: sequelize.INTEGER(10),
+        allowNull: false
     },
 
     mac_id:{
