@@ -62,10 +62,11 @@ var getBroadcasterDestination = function (req, res) {
     tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
-
+                //var b_channelid=req.params.channelid;
                 BroadcasterChannelDestination.findAll({
                     where: {
                         is_active: true
+                        //broadcaster_channel_id:b_channelid
                     }
 
                 }
@@ -375,6 +376,59 @@ var updateBroadcasterVideoFBStreamKey = function (req, res) {
         });
     });
 };
+
+var updateBroadcasterVideoPSStreamKey = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                reqObj = req.body;
+
+                BroadcasterVideos.findById(reqObj.id).then(function (BroadcasterVideos) {
+                    if (BroadcasterVideos) {
+                        BroadcasterVideos.updateAttributes({
+                            ps_streamkey: reqObj.ps_streamkey,
+                        }).then(function () {
+                            res.status(200).json({
+                                id: BroadcasterVideos.id,
+                                ps_streamkey: BroadcasterVideos.ps_streamkey
+                            });
+                        }).catch(function (err) {
+                            console.log(err)
+                            res.status(500).json({
+                                message: 'BroadcasterVideos update failed...'
+                            });
+                        });
+                    } else {
+                        res.status(404).json({
+                            message: 'BroadcasterVideos not found...'
+                        });
+                    }
+                }).catch(function (err) {
+                    res.status(500).json({
+                        message: 'something went wrong...'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
 var updateBroadcasterVideoHAStreamKey = function (req, res) {
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
@@ -593,7 +647,8 @@ var newBroadcasterwithChannel = function (req, res) {
                                 fb_streamkey: broadcasterVideos.fb_streamkey,
                                 ha_streamkey: broadcasterVideos.ha_streamkey,
                                 created_by: broadcasterVideos.created_by,
-                                updated_by: broadcasterVideos.updated_by
+                                updated_by: broadcasterVideos.updated_by,
+                                ps_streamkey:broadcasterVideos.ps_streamkey
                             }).then(function (broadcasterVideoResults) {
                                 
 
@@ -719,6 +774,7 @@ module.exports = {
     getBroadcasterDestination: getBroadcasterDestination,
     createBroadcasterwithChannel: createBroadcasterwithChannel,
     newBroadcasterwithChannel: newBroadcasterwithChannel,
-    getBroadcasterCategory: getBroadcasterCategory
+    getBroadcasterCategory: getBroadcasterCategory,
+    updateBroadcasterVideoPSStreamKey: updateBroadcasterVideoPSStreamKey
 
 }

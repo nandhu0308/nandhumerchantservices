@@ -21,7 +21,7 @@ var displayBucket = function (req, res) {
 };
 
 var uploadImages = function (filepath, res, uploadApp, uploadTo, userId, fileName) {
-    var userFolder = 'limitlesscircle-images';
+    var userFolder = 'haappy-images';
     //console.log(userFolder);
     // Create S3 service object
     AWS.config.loadFromPath('./config.json');
