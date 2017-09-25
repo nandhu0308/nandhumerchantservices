@@ -8,6 +8,11 @@ const JournalSetting = db.define('journal_setting', {
         allownull: false
     },
 
+    journal_setting_id: {
+        type: sequelize.INTEGER(10),
+        allowNull: false
+    },
+
     language_id: {
         type: sequelize.INTEGER(11),
         allownull: false

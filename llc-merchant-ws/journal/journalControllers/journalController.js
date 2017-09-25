@@ -1,6 +1,7 @@
 var Journal = require('./../journalModels/journalModel');
 var JournalSettings = require('./../journalModels/journalSettingModel');
 var JournalSettingLog = require('./../journalModels/journalSettingLogModel');
+var JournalDevice = require('./../journalModels/journalDevicesModel');
 var dateformat = require('dateformat');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
@@ -50,7 +51,7 @@ var getJournals = function (req, res) {
 var getJournalSettings = function (req, res) {
     appln_name = req.params.appln_name;
     stream_name = req.params.stream_name;
-    stream_name=appln_name+'-'+stream_name;
+    stream_name = appln_name + '-' + stream_name;
     JournalSettings.findOne({
         where: {
             appln_name: appln_name,
@@ -105,8 +106,52 @@ var logJournalActivity = function (req, res) {
     });
 };
 
+getJournalsByChannelId = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                channelId = req.params.channelId;
+                Journal.findAll({
+                    where: {
+                        channel_id: channelId
+                    },
+                    attributes: {
+                        exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
+                    }
+                }).then(journalList => {
+                    console.log(journalList.length);
+                    res.status(200).json(journalList);
+                }).catch(err => {
+                    console.log(err);
+                    res.status(500).json({
+                        error: err,
+                        message: 'Something went wrong!'
+                    })
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
 module.exports = {
     getJournals: getJournals,
     getJournalSettings: getJournalSettings,
-    logJournalActivity: logJournalActivity
+    logJournalActivity: logJournalActivity,
+    getJournalsByChannelId: getJournalsByChannelId
 };
