@@ -12,6 +12,7 @@
             "processId": "${command:PickProcess}",
             "port": 5858
         },
+        
         {
             "type": "node",
             "request": "launch",
