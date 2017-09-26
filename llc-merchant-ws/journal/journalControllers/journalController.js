@@ -106,7 +106,7 @@ var logJournalActivity = function (req, res) {
     });
 };
 
-getJournalsByChannelId = function (req, res) {
+var getJournalsByChannelId = function (req, res) {
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
     var todayDate = new Date();
@@ -154,4 +154,5 @@ module.exports = {
     getJournalSettings: getJournalSettings,
     logJournalActivity: logJournalActivity,
     getJournalsByChannelId: getJournalsByChannelId
+
 };
