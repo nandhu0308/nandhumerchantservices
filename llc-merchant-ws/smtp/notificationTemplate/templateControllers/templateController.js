@@ -241,9 +241,19 @@ var startBroadcasting = function (req, res) {
     };
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            return console.log("mail not sent" + error.message);
+            
+
+             res.status(401).json({
+                message: 'mail not sent' + error.message
+            });
         }
-        console.log('success');
+        else
+            {
+               res.status(200).json({
+                            message: 'Notification has been sent sucessfully!'
+                });     
+            }
+        
     });
 });
 }).catch(err => {
@@ -364,9 +374,17 @@ var stopBroadcasting = function (req, res) {
     };
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            return console.log("mail not sent" + error.message);
+            res.status(401).json({
+                message: 'mail not sent' + error.message
+            });
         }
-        console.log('success');
+        else
+            {
+               res.status(200).json({
+                            message: 'Notification has been sent sucessfully!'
+                });
+            }
+        
     });
 });
 }).catch(err => {
