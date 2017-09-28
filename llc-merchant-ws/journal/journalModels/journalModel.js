@@ -1,9 +1,15 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
+const BroadcasterChannel = require('./../../broadcasters/broadcasterModels/broadcasterChannelModel');
 
 const Journals = db.define('journal',{
+    
     channel_id:{
         type:sequelize.INTEGER(11),
+        references : {
+            model : BroadcasterChannel,
+            key : "id"
+        },
         allownull:false
     },
 

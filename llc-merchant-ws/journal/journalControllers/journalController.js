@@ -108,7 +108,7 @@ var logJournalActivity = function (req, res) {
     });
 };
 
-getJournalsByChannelId = function (req, res) {
+var getJournalsByChannelId = function (req, res) {
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
     var todayDate = new Date();
@@ -188,9 +188,11 @@ getJournalSettingsByJournalId = function (req, res) {
     }).catch(function (err) {
         res.status(401).json({
             message: 'Token Expired...'
+
         });
     });
 };
+
 
 getJournalDevice = function (req, res) {
     authToken = req.headers.authorization;
@@ -234,11 +236,45 @@ getJournalDevice = function (req, res) {
     });
 };
 
+
+
+var createJournal = function (req, res) {
+    reqObj = req.body;
+    Journal.create({
+        id: reqObj.id,
+        email: reqObj.email,
+        password:reqObj.password,
+        emp_id: reqObj.emp_id,
+        first_name: reqObj.first_name,
+        last_name: reqObj.last_name,
+        mobile: reqObj.mobile,
+        is_active: reqObj.is_active,
+        created_by: reqObj.created_by,
+        updated_by: reqObj.updated_by,
+        created_time: reqObj.created_time,
+        updated_time: reqObj.updated_time
+    }).then(journal => {
+        res.status(200).json({
+            id: journal.id,
+            message: 'success'
+        });
+    }).catch(function (err) {
+        res.status(500).json({
+            message: 'Couldnot create journal. Something went wrong...',
+            err_description: err
+
+
+        });
+    });
+};
+
 module.exports = {
     getJournals: getJournals,
     getJournalSettings: getJournalSettings,
     logJournalActivity: logJournalActivity,
     getJournalsByChannelId: getJournalsByChannelId,
     getJournalSettingsByJournalId: getJournalSettingsByJournalId,
-    getJournalDevice: getJournalDevice
+    getJournalDevice: getJournalDevice,
+    createJournal : createJournal,
+    
 };

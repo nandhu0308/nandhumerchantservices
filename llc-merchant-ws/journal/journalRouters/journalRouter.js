@@ -9,6 +9,7 @@ journalRouter.route('/log/activity').post(journalController.logJournalActivity);
 journalRouter.route('/list/channel/:channelId').get(journalController.getJournalsByChannelId);
 journalRouter.route('/get/settings/:journalId').get(journalController.getJournalSettingsByJournalId);
 journalRouter.route('/get/device/:settingId').get(journalController.getJournalDevice);
+journalRouter.route('/new').post(journalController.createJournal);
 
 module.exports = journalRouter;
 
