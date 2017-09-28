@@ -1,10 +1,15 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
+const JournalSettings = require('./../journalModels/journalSettingModel');
 
 const JournalDevices = db.define('journal_devices',{
    
-    journal_id:{
+    journal_setting_id:{
         type:sequelize.INTEGER(10),
+        references : {
+            model :JournalSettings,
+            key : "id"
+        },
         allownull:false
     },
 

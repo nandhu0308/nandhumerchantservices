@@ -23,7 +23,6 @@ var getJournalDevices = function (req, res) {
                     }
                     ).then(function (journalDevice) {
                         res.status(200).json(journalDevice);
-                        console.log('sucess',journalDevice);
                     }).catch(function (err) {
                         res.status(404).json({
                             message: 'NO Devices found..'
