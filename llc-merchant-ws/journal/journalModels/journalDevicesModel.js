@@ -4,6 +4,9 @@ const JournalSettings = require('./../journalModels/journalSettingModel');
 
 const JournalDevices = db.define('journal_devices',{
    
+    journal_setting_id: {
+        type: sequelize.INTEGER(10),
+        allowNull: false
     journal_setting_id:{
         type:sequelize.INTEGER(10),
         references : {
