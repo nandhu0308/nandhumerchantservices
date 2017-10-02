@@ -125,10 +125,8 @@ getJournalsByChannelId = function (req, res) {
                         exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
                     }
                 }).then(journalList => {
-                    console.log(journalList.length);
                     res.status(200).json(journalList);
                 }).catch(err => {
-                    console.log(err);
                     res.status(500).json({
                         error: err,
                         message: 'Something went wrong!'
