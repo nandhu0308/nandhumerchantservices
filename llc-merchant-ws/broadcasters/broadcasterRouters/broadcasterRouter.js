@@ -19,7 +19,7 @@ broadcasterRouter.route('/broadcasterwithchannel/create').post(broadcastersContr
 
 //Broadcaster Destination
 broadcasterRouter.route('/destination/all').get(broadcastersController.getBroadcasterDestination);
-//broadcasterRouter.route('/destination/all/:channelid').get(broadcastersController.getBroadcasterDestination);
+broadcasterRouter.route('/destination/all/:channelid').get(broadcastersController.getBroadcasterChannelDestination);
 //Broadcaster Channel
 broadcasterRouter.route('/broadcasterchannel/new').post(broadcasterChannelController.createBroadcasterChannel);
 broadcasterRouter.route('/broadcasterchannel/all').get(broadcasterChannelController.getChannelCategory);
