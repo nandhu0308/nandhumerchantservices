@@ -234,14 +234,54 @@ getJournalDevice = function (req, res) {
     });
 };
 
-
+var getJournalSettingBySettingId = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                var settingId = req.params.settingId;
+                JournalSettings.findById(settingId, {
+                    include: [{
+                        model: JournalDevice,
+                        attributes: {
+                            exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
+                        }
+                    }]
+                }).then( journalSetting => {
+                    res.status(200).json(journalSetting);
+                }).catch(err=> {
+                    console.log(err);
+                    res.status(500).json({
+                        error: err,
+                        message: 'Something went wrong!'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
 
 var createJournal = function (req, res) {
     reqObj = req.body;
     Journal.create({
         id: reqObj.id,
         email: reqObj.email,
-        password:reqObj.password,
+        password: reqObj.password,
         emp_id: reqObj.emp_id,
         first_name: reqObj.first_name,
         last_name: reqObj.last_name,
@@ -273,6 +313,6 @@ module.exports = {
     getJournalsByChannelId: getJournalsByChannelId,
     getJournalSettingsByJournalId: getJournalSettingsByJournalId,
     getJournalDevice: getJournalDevice,
-    createJournal : createJournal,
-    
+    createJournal: createJournal,
+    getJournalSettingBySettingId: getJournalSettingBySettingId
 };

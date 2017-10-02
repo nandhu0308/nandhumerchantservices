@@ -10,6 +10,7 @@ journalRouter.route('/list/channel/:channelId').get(journalController.getJournal
 journalRouter.route('/get/settings/:journalId').get(journalController.getJournalSettingsByJournalId);
 journalRouter.route('/get/device/:settingId').get(journalController.getJournalDevice);
 journalRouter.route('/new').post(journalController.createJournal);
+journalRouter.route('/get/setting-device/:settingId').get(journalController.getJournalSettingBySettingId);
 
 module.exports = journalRouter;
 
