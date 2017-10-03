@@ -279,7 +279,7 @@ var getJournalSettingBySettingId = function (req, res) {
 var createJournal = function (req, res) {
     reqObj = req.body;
     Journal.create({
-        id: reqObj.id,
+        channel_id:reqObj.channel_id,
         email: reqObj.email,
         password: reqObj.password,
         emp_id: reqObj.emp_id,
@@ -306,6 +306,62 @@ var createJournal = function (req, res) {
     });
 };
 
+var updateJournal = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                reqObj = req.body;
+                Journal.findById(reqObj.id).then(function (journal) {
+                    if (journal === null) {
+                        res.status(404).json({
+                            message: 'journal not found...'
+                        });
+                    } else {
+                        journal.updateAttributes({
+                            emp_id: reqObj.emp_id,
+                            channel_id:reqObj.channel_id,
+                            first_name: reqObj.first_name,
+                            last_name: reqObj.last_name,
+                            mobile: reqObj.mobile,
+                            email:reqObj.email,
+                            is_active: reqObj.is_active
+                        }).then(function () {
+                            res.status(200).json(journal);
+                        }).catch(function (err) {
+                            res.status(500).json({
+                                error: err,
+                                message: 'something went wrong...'
+                            });
+                        });
+                    }
+                }).catch(function (err) {
+                    res.status(500).json({
+                        error: err,
+                        message: 'something went wrong...'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
+
 module.exports = {
     getJournals: getJournals,
     getJournalSettings: getJournalSettings,
@@ -314,5 +370,6 @@ module.exports = {
     getJournalSettingsByJournalId: getJournalSettingsByJournalId,
     getJournalDevice: getJournalDevice,
     createJournal: createJournal,
-    getJournalSettingBySettingId: getJournalSettingBySettingId
+    getJournalSettingBySettingId: getJournalSettingBySettingId,
+    updateJournal : updateJournal
 };

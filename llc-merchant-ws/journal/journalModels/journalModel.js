@@ -4,6 +4,11 @@ const BroadcasterChannel = require('./../../broadcasters/broadcasterModels/broad
 
 const Journals = db.define('journal',{
     
+    id: {
+        type: sequelize.INTEGER(10),
+        autoIncrement: true,
+        primaryKey: true
+    },
     channel_id:{
         type:sequelize.INTEGER(11),
         references : {
