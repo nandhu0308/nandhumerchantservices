@@ -396,6 +396,83 @@ var updateJournal = function (req, res) {
     });
 };
 
+var newJournalSettingAndDevice = function(req, res){
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                reqObj = req.body;
+                JournalSettings.create({
+                    journal_id: reqObj.journal_id,
+                    language_id: reqObj.language_id,
+                    appln_name: reqObj.appln_name,
+                    host_url: reqObj.host_url,
+                    host_port: reqObj.host_port,
+                    stream_name: reqObj.stream_name,
+                    spwd: reqObj.spwd,
+                    rep_mac_addr: reqObj.rep_mac_addr,
+                    output_url_hls: reqObj.output_url_hls,
+                    output_url_rtsp: reqObj.output_url_rtsp,
+                    is_record: reqObj.is_record,
+                    is_upload: reqObj.is_upload,
+                    is_active: reqObj.is_active,
+                    created_by: reqObj.created_by,
+                    updated_by: reqObj.updated_by,
+                    ftp_host: reqObj.ftp_host,
+                    ftp_port: reqObj.ftp_port,
+                    ftp_uname: reqObj.ftp_uname,
+                    ftp_passwd: reqObj.ftp_passwd,
+                    ftp_path: reqObj.ftp_path,
+                    ha_ftp_host: reqObj.ha_ftp_host,
+                    ha_ftp_port: reqObj.ha_ftp_port,
+                    ha_ftp_uname: reqObj.ha_ftp_uname,
+                    ha_ftp_passwd: reqObj.ha_ftp_passwd,
+                    ha_ftp_path: reqObj.ha_ftp_path
+                }).then(journalSetting => {
+                    console.log(journalSetting);
+                    JournalDevice.create({
+                        journal_setting_id: journalSetting.id,
+                        mac_id: reqObj.mac_id,
+                        is_active: true,
+                        created_by: "SA",
+                        updated_by: "SA"
+                    }).then(journalDevice=> {
+                        console.log(journalDevice);
+                        res.status(200).json({
+                            id: journalSetting.id,
+                            message: 'Success'
+                        });
+                    }).catch(error=> {
+                        res.status(500).json({
+                            error: error,
+                            message: 'Something went wrong'
+                        });
+                    });
+                }).catch(error => {
+                    res.status(500).json({
+                        error: error,
+                        message: 'Something went wrong'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
 
 module.exports = {
     getJournals: getJournals,
@@ -406,5 +483,6 @@ module.exports = {
     getJournalDevice: getJournalDevice,
     createJournal: createJournal,
     getJournalSettingBySettingId: getJournalSettingBySettingId,
-    updateJournal : updateJournal
+    updateJournal : updateJournal,
+    newJournalSettingAndDevice: newJournalSettingAndDevice
 };
