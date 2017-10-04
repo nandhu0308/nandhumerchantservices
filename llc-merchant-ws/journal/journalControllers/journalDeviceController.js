@@ -45,8 +45,35 @@ var getJournalDevices = function (req, res) {
         });
     };
 
+
+    var createJournalDevice = function (req, res) {
+        reqObj = req.body;
+        JournalDevices.create({
+            journal_setting_id:reqObj.journal_setting_id,
+            mac_id: reqObj.mac_id,
+            is_active: reqObj.is_active,
+            created_by: reqObj.created_by,
+            updated_by: reqObj.updated_by,
+            created_time: reqObj.created_time,
+            updated_time: reqObj.updated_time
+        }).then(journalDevice => {
+            res.status(200).json({
+                id: journalDevice.id,
+                message: 'success'
+            });
+        }).catch(function (err) {
+            res.status(500).json({
+                message: 'Couldnot create journal device. Something went wrong...',
+                err_description: err
+    
+    
+            });
+        });
+    };
+
     module.exports = {
-        getJournalDevices : getJournalDevices
+        getJournalDevices : getJournalDevices,
+        createJournalDevice : createJournalDevice
        
     };
     
