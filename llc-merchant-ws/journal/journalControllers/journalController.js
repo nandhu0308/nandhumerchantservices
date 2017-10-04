@@ -244,14 +244,49 @@ var getJournalSettingBySettingId = function (req, res) {
             if (expireDate >= todayDate) {
                 var settingId = req.params.settingId;
                 JournalSettings.findById(settingId, {
-                    include: [{
-                        model: JournalDevice,
+                    attributes: {
+                        exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
+                    }
+                }).then( journalSetting => {
+                    JournalDevice.findOne({
+                        where: {
+                            journal_setting_id: journalSetting.id,
+                            is_active: true
+                        },
                         attributes: {
                             exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
                         }
-                    }]
-                }).then( journalSetting => {
-                    res.status(200).json(journalSetting);
+                    }).then(journalDevice=> {
+                        res.status(200).json({
+                            id: journalSetting.id,
+                            journal_id: journalSetting.journal_id,
+                            language_id: journalSetting.language_id,
+                            appln_name: journalSetting.appln_name,
+                            host_url: journalSetting.host_url,
+                            host_port: journalSetting.host_port,
+                            stream_name: journalSetting.stream_name,
+                            suname: journalSetting.suname,
+                            spwd: journalSetting.spwd,
+                            rep_mac_addr: journalSetting.rep_mac_addr,
+                            output_url_hls: journalSetting.output_url_hls,
+                            output_url_rtsp: journalSetting.output_url_hls,
+                            is_record: journalSetting.is_record,
+                            is_active: journalSetting.is_active,
+                            is_upload: journalSetting.is_upload,
+                            ftp_host: journalSetting.ftp_host,
+                            ftp_port: journalSetting.ftp_port,
+                            ftp_uname: journalSetting.ftp_uname,
+                            ftp_path: journalSetting.ftp_path,
+                            ha_ftp_path: journalSetting.ha_ftp_path,
+                            device: journalDevice
+                        });
+                    }).catch(err=> {
+                        console.log(err);
+                        res.status(500).json({
+                            error: err,
+                            message: 'something went wrong!'
+                        });
+                    });
                 }).catch(err=> {
                     console.log(err);
                     res.status(500).json({
