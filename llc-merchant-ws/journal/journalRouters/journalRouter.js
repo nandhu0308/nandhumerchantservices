@@ -12,6 +12,7 @@ journalRouter.route('/get/device/:settingId').get(journalController.getJournalDe
 journalRouter.route('/new').post(journalController.createJournal);
 journalRouter.route('/get/setting-device/:settingId').get(journalController.getJournalSettingBySettingId);
 journalRouter.route('/update').patch(journalController.updateJournal);
+journalRouter.route('/setting/new').post(journalController.newJournalSettingAndDevice);
 
 module.exports = journalRouter;
 

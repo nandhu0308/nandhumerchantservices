@@ -84,7 +84,7 @@ const JournalSetting = db.define('journal_setting', {
     },
 
     is_active: {
-        type: sequelize.INTEGER(11),
+        type: sequelize.BOOLEAN,
         allownull: false,
         defaultValue: true
     },
