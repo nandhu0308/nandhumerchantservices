@@ -6,7 +6,7 @@ var newOauth2Generate = function (req, res) {
     var oauth2Client = new OAuth2(
         '541496688190-jhr9qihabs0c6p816n8sci1ome3pifmk.apps.googleusercontent.com',
         'IiXqcIBdNuPA_KbxKIyMX4rp',
-        'http://localhost:3000/oauth2/oauthcallback'
+        'http://seller.haappyapp.com:8081/oauth2/oauthcallback'
     );
 
     var scopes = [
