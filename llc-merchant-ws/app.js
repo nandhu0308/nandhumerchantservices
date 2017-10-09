@@ -16,8 +16,8 @@ var SmtpRouter = require('./smtp/smtpRouters/smtpRouter');
 var TemplateRouter =  require('./smtp/notificationTemplate/templateRouters/templateRouter');
 var DocumentRouter = require('./document/documentRouter/documentRouter');
 var CommonRouter = require('./common/commonRouter/commonRouter');
-
 var JournalRouter = require('./journal/journalRouters/journalRouter');
+var Oauth2Router = require('./google-auth-services/oauth2-routers/oauth2-router');
 
 app.use(cors({origin:true, credentials:true}));
 app.use(bodyParser.json());
@@ -31,11 +31,12 @@ app.use('/broadcaster', BroadcasterRouter);
 app.use('/upload', UploadRouter);
 app.use('/smtp',SmtpRouter);
 app.use('/notificationtemplate',TemplateRouter);
-
 app.use('/journal', JournalRouter);
 app.use('/document',DocumentRouter);
 app.use('/common',CommonRouter);
-app.use('/oauth2callback',UploadRouter);
+//app.use('/oauth2callback',UploadRouter);
+app.use('/oauth2', Oauth2Router);
+
 var PORT = process.env.PORT || 3000;
 app.listen(PORT, function(){
     console.log('Running on Port 3000...');
