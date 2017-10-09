@@ -2,6 +2,8 @@ var express = require('express');
 var journalRouter = express.Router();
 
 var journalController=require('./../journalControllers/journalController');
+var journalDeviceController=require('./../journalControllers/journalDeviceController');
+
 
 journalRouter.route('/journallist/all').get(journalController.getJournals);
 journalRouter.route('/settings/:appln_name/:stream_name').get(journalController.getJournalSettings);
@@ -13,6 +15,11 @@ journalRouter.route('/new').post(journalController.createJournal);
 journalRouter.route('/get/setting-device/:settingId').get(journalController.getJournalSettingBySettingId);
 journalRouter.route('/update').patch(journalController.updateJournal);
 journalRouter.route('/setting/new').post(journalController.newJournalSettingAndDevice);
+
+
+// journal Devices
+journalRouter.route('/device/all').get(journalDeviceController.getAllJournalDevices);
+journalRouter.route('/update').put(journalDeviceController.updateJournalDevice);
 
 module.exports = journalRouter;
 
