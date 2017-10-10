@@ -244,7 +244,7 @@ var startBroadcasting = function (req, res) {
         if (error) {
             return console.log("mail not sent" + error.message);
         }
-        console.log('success');
+        console.log('mail has been sent sucessfully'+info);
     });
 });
 }).catch(err => {
