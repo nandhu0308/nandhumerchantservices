@@ -191,8 +191,8 @@ var startBroadcasting = function (req, res) {
                     },
                 ]
             }).then(function (templatefindByid) {
-                 client_url=templatefindByid?templatefindByid.template_images.length > 0 ? templatefindByid.template_images[0].client_img :'':'';
-                 client_type=templatefindByid?templatefindByid.template_images.length > 0 ? templatefindByid.template_images[0].client_name :'':'';
+                //  client_url=templatefindByid?templatefindByid.template_images.length > 0 ? templatefindByid.template_images[0].client_img :'':'';
+                //  client_type=templatefindByid?templatefindByid.template_images.length > 0 ? templatefindByid.template_images[0].client_name :'':'';
                  start_url=templatefindByid?templatefindByid.template_images.length > 0 ? templatefindByid.template_images[0].start_img :'':'';
                  stop_url=templatefindByid?templatefindByid.template_images.length > 0 ? templatefindByid.template_images[0].stop_img:'':'';
                  destination=templatefindByid?templatefindByid.template_images.length > 0 ? templatefindByid.template_images[0].destination_type:'':'';
