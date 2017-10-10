@@ -157,11 +157,11 @@ var sendStreamingTemplate = function (req, res) {
 };
 
 var startBroadcasting = function (req, res) {
-    var client_url;
+    // var client_url;
     var stop_url;
     var start_url;
     var destination;
-    var client_type;
+    // var client_type;
     var bcc_type;
     var cc_type;
     // authToken = req.headers.authorization;
@@ -171,7 +171,7 @@ var startBroadcasting = function (req, res) {
     // tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
         // if (userSessions.length === 1) {
             // if (expireDate >= todayDate) {
-                
+
                 template_id = req.params.id;
                  image_id = req.params.img_id;
                 TemplateController.findById(template_id, {
@@ -217,8 +217,8 @@ var startBroadcasting = function (req, res) {
   BroadcasterId = req.params.b_id;
   return Broadcaster.findById(BroadcasterId).then(function (BroadcasterSetting) {
       var mail = BroadcasterSetting.broadcaster_email.toString().toLowerCase();
-    var result ="<body border: 1px solid black;outline-color: red;><header background-color='grey'><img src="+start_url+" alt='destination_img' width='600px' height='100px'></header><h3>Hi "+client_type+"!</h3><p>We are pleased to inform you that " +client_type+" news channel streaming has been started sucessfully on "+destination+".</p>"+
-    "<img src="+client_url+" alt='client_img' width='600px' height='500px'>"+
+    var result ="<body border: 1px solid black;outline-color: red;><header background-color='grey'><img src="+start_url+" alt='destination_img' width='600px' height='100px'></header><h3>Hi Client!</h3><p>We are pleased to inform you that your channel streaming has been started sucessfully on "+destination+".</p>"+
+    // "<img src="+client_url+" alt='client_img' width='600px' height='500px'>"+
     "<h5>This email was sent from a notification-only address that cannot accept incoming email. Please do not reply to this message.</h5></body>";
     let transporter = nodemailer.createTransport({
         host: 'smtp.zoho.com',
@@ -285,20 +285,20 @@ var startBroadcasting = function (req, res) {
 
 
 var stopBroadcasting = function (req, res) {
-    var client_url;
+    // var client_url;
     var stop_url;
     var start_url;
     var destination;
-    var client_type;
+    // var client_type;
     var bcc_type;
     var cc_type;
-    authToken = req.headers.authorization;
-    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
-    var todayDate = new Date();
-    var expireDate = new Date(userAuthObj.expire_date);
-    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
-        if (userSessions.length === 1) {
-            if (expireDate >= todayDate) {
+    // authToken = req.headers.authorization;
+    // userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    // var todayDate = new Date();
+    // var expireDate = new Date(userAuthObj.expire_date);
+    // tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+    //     if (userSessions.length === 1) {
+    //         if (expireDate >= todayDate) {
                 template_id = req.params.id;
                  image_id = req.params.img_id;
                 TemplateController.findById(template_id, {
@@ -318,8 +318,8 @@ var stopBroadcasting = function (req, res) {
                     },
                 ]
             }).then(function (templatefindByid) {
-                 client_url=templatefindByid?templatefindByid.template_images.length > 0 ? templatefindByid.template_images[0].client_img :'':'';
-                 client_type=templatefindByid?templatefindByid.template_images.length > 0 ? templatefindByid.template_images[0].client_name :'':'';
+                //  client_url=templatefindByid?templatefindByid.template_images.length > 0 ? templatefindByid.template_images[0].client_img :'':'';
+                //  client_type=templatefindByid?templatefindByid.template_images.length > 0 ? templatefindByid.template_images[0].client_name :'':'';
                  start_url=templatefindByid?templatefindByid.template_images.length > 0 ? templatefindByid.template_images[0].start_img :'':'';
                  stop_url=templatefindByid?templatefindByid.template_images.length > 0 ? templatefindByid.template_images[0].stop_img:'':'';
                  destination=templatefindByid?templatefindByid.template_images.length > 0 ? templatefindByid.template_images[0].destination_type:'':'';
@@ -344,8 +344,8 @@ var stopBroadcasting = function (req, res) {
   BroadcasterId = req.params.b_id;
   return Broadcaster.findById(BroadcasterId).then(function (BroadcasterSetting) {
       var mail = BroadcasterSetting.broadcaster_email.toString().toLowerCase();
-    var result ="<body border: 1px solid black;outline-color: red;><header background-color='grey'><img src="+stop_url+" alt='destination_img' width='600px' height='100px'></header><h3>Hi "+client_type+"!</h3><p>We are pleased to inform you that " +client_type+" news channel streaming has been stopped sucessfully on "+destination+".</p>"+
-    "<img src="+client_url+" alt='client_img' width='600px' height='500px'>"+
+    var result ="<body border: 1px solid black;outline-color: red;><header background-color='grey'><img src="+stop_url+" alt='destination_img' width='600px' height='100px'></header><h3>Hi Client!</h3><p>We are pleased to inform you that your channel streaming has been stopped sucessfully on "+destination+".</p>"+
+    // "<img src="+client_url+" alt='client_img' width='600px' height='500px'>"+
     "<h5>This email was sent from a notification-only address that cannot accept incoming email. Please do not reply to this message.</h5></body>";
     let transporter = nodemailer.createTransport({
         host: 'smtp.zoho.com',
@@ -387,22 +387,23 @@ var stopBroadcasting = function (req, res) {
                         message: 'broadcasting  not  found...'
                     });
                 });
-            } else {
-                res.status(401).json({
-                    message: 'Not Authorized...'
-                });
-            }
-        } else {
-            res.status(401).json({
-                message: 'Token Expired...'
-            });
-        }
-    }).catch(function (err) {
-        res.status(401).json({
-            message: 'Token Expired...'
+    //         }
+    //          else {
+    //             res.status(401).json({
+    //                 message: 'Not Authorized...'
+    //             });
+    //         }
+    //     } else {
+    //         res.status(401).json({
+    //             message: 'Token Expired...'
+    //         });
+    //     }
+    // }).catch(function (err) {
+    //     res.status(401).json({
+    //         message: 'Token Expired...'
 
-        });
-    });
+    //     });
+    // });
    
 };
 
