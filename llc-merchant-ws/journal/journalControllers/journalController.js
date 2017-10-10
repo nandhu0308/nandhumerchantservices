@@ -5,7 +5,6 @@ var JournalDevice = require('./../journalModels/journalDevicesModel');
 var dateformat = require('dateformat');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
-// var BroadcasterChannel = require('./../broadcasterModels/broadcasterChannelModel');
 
 var getJournals = function (req, res) {
 
@@ -192,7 +191,7 @@ getJournalSettingsByJournalId = function (req, res) {
 };
 
 
-getJournalDevice = function (req, res) {
+var getJournalDevice = function (req, res) {
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
     var todayDate = new Date();

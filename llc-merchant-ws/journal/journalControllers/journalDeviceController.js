@@ -1,10 +1,11 @@
 var JournalDevices = require('./../journalModels/journalDevicesModel');
-
+var JournalSettings = require('./../journalModels/journalSettingModel');
 var dateformat = require('dateformat');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
 
-var getJournalDevices = function (req, res) {
+
+var getAllJournalDevices = function (req, res) {
     
         authToken = req.headers.authorization;
         userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
@@ -45,35 +46,57 @@ var getJournalDevices = function (req, res) {
         });
     };
 
+var updateJournalDevice = function (req, res) {
+    reqObj = req.body;
+        JournalDevices.findOne({
+            where: 
+            {
+                 journal_setting_id: reqObj.journal_setting_id,
+                 is_active: true
+                   
+            },
+             attributes:
+              {
+                exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
+                   
+               }
+            }).then(function (journalDevices) {
+                if (journalDevices) {
+                    journalDevices.updateAttributes({
+                            mac_id: reqObj.mac_id
+                        }).then(function () {
+                            res.status(200).json(
+                                {
+                                    id:journalDevices.id
+                                });
+                        }).catch(function (err) {
+                            res.status(500).json({
+                                error: err,
+                                message: 'device update failed...'
+                            });
+                        });
+                    }
+                    else {
+                        res.status(404).json({
+                            message: 'device not found...'
+                        });
+                    }
+                }).catch(function (err) {
+                    res.status(500).json({
+                        error: err,
+                        message: 'something went wrong...'
+                    });
+               });
+     
+};
 
-    var createJournalDevice = function (req, res) {
-        reqObj = req.body;
-        JournalDevices.create({
-            journal_setting_id:reqObj.journal_setting_id,
-            mac_id: reqObj.mac_id,
-            is_active: reqObj.is_active,
-            created_by: reqObj.created_by,
-            updated_by: reqObj.updated_by,
-            created_time: reqObj.created_time,
-            updated_time: reqObj.updated_time
-        }).then(journalDevice => {
-            res.status(200).json({
-                id: journalDevice.id,
-                message: 'success'
-            });
-        }).catch(function (err) {
-            res.status(500).json({
-                message: 'Couldnot create journal device. Something went wrong...',
-                err_description: err
-    
-    
-            });
-        });
-    };
 
-    module.exports = {
-        getJournalDevices : getJournalDevices,
-        createJournalDevice : createJournalDevice
+
+
+
+module.exports = {
+    getAllJournalDevices : getAllJournalDevices,
+    updateJournalDevice : updateJournalDevice
        
-    };
+};
     
