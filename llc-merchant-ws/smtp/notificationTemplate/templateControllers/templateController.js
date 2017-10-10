@@ -164,13 +164,14 @@ var startBroadcasting = function (req, res) {
     var client_type;
     var bcc_type;
     var cc_type;
-    authToken = req.headers.authorization;
-    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
-    var todayDate = new Date();
-    var expireDate = new Date(userAuthObj.expire_date);
-    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
-        if (userSessions.length === 1) {
-            if (expireDate >= todayDate) {
+    // authToken = req.headers.authorization;
+    // userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    // var todayDate = new Date();
+    // var expireDate = new Date(userAuthObj.expire_date);
+    // tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        // if (userSessions.length === 1) {
+            // if (expireDate >= todayDate) {
+                
                 template_id = req.params.id;
                  image_id = req.params.img_id;
                 TemplateController.findById(template_id, {
@@ -253,28 +254,32 @@ var startBroadcasting = function (req, res) {
                         });
                     });
 
-                }).catch(function (err) {
+                })
+                .catch(function (err) {
                     console.log(err);
                     res.status(404).json({
                         message: 'broadcasting  not  found...'
                     });
                 });
-            } else {
-                res.status(401).json({
-                    message: 'Not Authorized...'
-                });
-            }
-        } else {
-            res.status(401).json({
-                message: 'Token Expired...'
-            });
-        }
-    }).catch(function (err) {
-        res.status(401).json({
-            message: 'Token Expired...'
+            // }
+            //  else {
+            //     res.status(401).json({
+            //         message: 'Not Authorized...'
+            //     });
+            // }
+        // } 
+        // else {
+        //     res.status(401).json({
+        //         message: 'Token Expired...'
+        //     });
+        // }
+    // })
+    // .catch(function (err) {
+    //     res.status(401).json({
+    //         message: 'Token Expired...'
 
-        });
-    });
+    //     });
+    // });
    
 };
 
