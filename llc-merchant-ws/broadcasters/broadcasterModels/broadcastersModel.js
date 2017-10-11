@@ -130,7 +130,12 @@ const Broadcasters = db.define('broadcasters',  {
     city_code:{
         type:sequelize.STRING(3),
         defaultValue:'BLR'
-    }
+    },
+    w_j_appl_name:{
+        type:sequelize.STRING(45),
+        defaultValue:''
+    },
+
 }, {
     timestamps : false,
     freezeTableName : true

@@ -29,14 +29,6 @@ const TemplateImages = db.define('template_images',{
         type : sequelize.STRING(100),
         defalutvalue : ''
     },
-    client_name:{
-        type : sequelize.STRING(45),
-        allowNull: false
-    },
-    client_img: {
-        type : sequelize.STRING(100),
-        defalutvalue : ''
-    },
     created_by : {
         type : sequelize.STRING(255),
         defaultValue : ''
