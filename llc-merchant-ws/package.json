@@ -34,8 +34,10 @@
     "pretty-bytes": "^4.0.2",
     "r-json": "^1.2.7",
     "sequelize": "^3.30.4",
+    "unirest": "^0.5.1",
     "utf8": "^2.1.2",
-    "youtube-api": "^2.0.8"
+    "xmlhttprequest": "^1.8.0",
+    "youtube-api": "^2.0.9"
   },
   "devDependencies": {
     "@types/js-base64": "^2.1.5"
