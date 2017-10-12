@@ -248,7 +248,6 @@ var startBroadcasting = function (req, res) {
                 message: 'mail not sent' + error.message
             });
         }
-<<<<<<< HEAD
         else
             {
                res.status(200).json({
@@ -256,9 +255,7 @@ var startBroadcasting = function (req, res) {
                 });     
             }
         
-=======
         console.log('mail has been sent sucessfully'+info);
->>>>>>> a69c2af0310439f7b3e70a69a4c779f0204f9d31
     });
 });
 }).catch(err => {
