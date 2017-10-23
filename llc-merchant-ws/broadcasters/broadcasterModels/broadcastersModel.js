@@ -135,6 +135,11 @@ const Broadcasters = db.define('broadcasters',  {
         type:sequelize.STRING(45),
         defaultValue:''
     },
+    is_loop_until : {
+        type : sequelize.BOOLEAN,
+        allowNull : false,
+        defaultValue : false
+    },
 
 }, {
     timestamps : false,
