@@ -1,18 +1,14 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 const BroadcasterDestination = db.define('broadcaster_destination' , {
-     id:{
-        type: sequelize.INTEGER,
-        primaryKey:true,
-        allowNull: false
-   },
+
     d_id:{
-        type: sequelize.INTEGER,
+        type: sequelize.INTEGER(11),
         allowNull: false
    },
 
     broadcaster_channel_id: {
-        type: sequelize.INTEGER,
+        type: sequelize.INTEGER(11),
         allowNull: false
     },
     destination_name:{
@@ -21,13 +17,13 @@ const BroadcasterDestination = db.define('broadcaster_destination' , {
 
     },
     description:{
-        type:sequelize.STRING(100),
+        type:sequelize.STRING(1000),
          allowNull: false
     },
     is_active:{
          type : sequelize.BOOLEAN,
         allowNull : false,
-        defaultValue : true
+        defaultValue : '1'
     }
 },{
     timestamps : false,
