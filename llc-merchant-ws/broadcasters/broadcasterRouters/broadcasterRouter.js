@@ -21,7 +21,6 @@ broadcasterRouter.route('/broadcasterwithchannel/create').post(broadcastersContr
 //Broadcaster Destination
 broadcasterRouter.route('/destination/all').get(broadcastersController.getBroadcasterDestination);
 broadcasterRouter.route('/destination/all/:channelid').get(broadcastersController.getBroadcasterChannelDestination);
-broadcasterRouter.route('/new').post(broadcasterDestinationController.createBroadcasterDestination);
 
 //Broadcaster Channel
 broadcasterRouter.route('/broadcasterchannel/new').post(broadcasterChannelController.createBroadcasterChannel);
@@ -34,5 +33,9 @@ broadcasterRouter.route('/broadcasterVideo/new').post(broadcasterVideoController
 broadcasterRouter.route('/videos/list/pcv/:broadcasterId').get(broadcasterVideoController.getPrimaryChannelVideosByBroadcasterId);
 broadcasterRouter.route('/videos/list/pgn/:channelId/:lastVideoId').get(broadcasterVideoController.getVideosByChannelPagination);
 broadcasterRouter.route('/videos/list/channel/:channelId').get(broadcasterVideoController.getVideosByChannel);
+
+// broadcasterdestinstion
+
+broadcasterRouter.route('/destination/new').post(broadcasterDestinationController.createBroadcasterDestination);
 
 module.exports=broadcasterRouter;
