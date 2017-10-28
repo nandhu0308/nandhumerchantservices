@@ -52,9 +52,8 @@ var createBroadcasterDestination = function (req, res) {
         })
 
     };
-        
-        
 
+    
 
 module.exports = {
     createBroadcasterDestination:createBroadcasterDestination
