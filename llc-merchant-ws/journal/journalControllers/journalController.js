@@ -436,6 +436,7 @@ var newJournalSettingAndDevice = function(req, res){
                 }).then(journalSetting => {
                     console.log(journalSetting);
                     JournalDevice.create({
+                        journal_id: reqObj.journal_id,
                         journal_setting_id: journalSetting.id,
                         mac_id: reqObj.mac_id,
                         is_active: true,
@@ -448,12 +449,14 @@ var newJournalSettingAndDevice = function(req, res){
                             message: 'Success'
                         });
                     }).catch(error=> {
+                        console.log(error);
                         res.status(500).json({
                             error: error,
                             message: 'Something went wrong'
                         });
                     });
                 }).catch(error => {
+                    console.log(error);
                     res.status(500).json({
                         error: error,
                         message: 'Something went wrong'
