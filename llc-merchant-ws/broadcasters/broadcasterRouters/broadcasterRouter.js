@@ -4,6 +4,7 @@ var broadcasterRouter = express.Router();
 var broadcastersController = require('./../broadcasterControllers/broadcastersController');
 var broadcasterChannelController = require('./../broadcasterControllers/broadcasterChannelController');
 var broadcasterVideoController = require('./../broadcasterControllers/broadcasterVideosController');
+var broadcasterDestinationController= require('./../broadcasterControllers/broadcasterDestinationController');
 
 //Broadcaster Routes
 
@@ -20,6 +21,7 @@ broadcasterRouter.route('/broadcasterwithchannel/create').post(broadcastersContr
 //Broadcaster Destination
 broadcasterRouter.route('/destination/all').get(broadcastersController.getBroadcasterDestination);
 broadcasterRouter.route('/destination/all/:channelid').get(broadcastersController.getBroadcasterChannelDestination);
+
 //Broadcaster Channel
 broadcasterRouter.route('/broadcasterchannel/new').post(broadcasterChannelController.createBroadcasterChannel);
 broadcasterRouter.route('/broadcasterchannel/all').get(broadcasterChannelController.getChannelCategory);
@@ -31,5 +33,9 @@ broadcasterRouter.route('/broadcasterVideo/new').post(broadcasterVideoController
 broadcasterRouter.route('/videos/list/pcv/:broadcasterId').get(broadcasterVideoController.getPrimaryChannelVideosByBroadcasterId);
 broadcasterRouter.route('/videos/list/pgn/:channelId/:lastVideoId').get(broadcasterVideoController.getVideosByChannelPagination);
 broadcasterRouter.route('/videos/list/channel/:channelId').get(broadcasterVideoController.getVideosByChannel);
+
+// broadcasterdestinstion
+
+broadcasterRouter.route('/destination/new').post(broadcasterDestinationController.createBroadcasterDestination);
 
 module.exports=broadcasterRouter;
