@@ -4,19 +4,12 @@ var s3 = new AWS.S3({ region: 'ap-south-1' });
 var multer = require('multer');
 var fs = require('fs');
 var path = require('path');
-var Youtube = require('youtube-video-api');
-var google_auth = require('google-cli-auth');
-
-var youtube = Youtube({
-    video: {
-        part: 'status,snippet'
-    },
-    email: 'developer.limitlesscircle@gmail.com',
-    password: 'H@appy$99'
-});
+var google = require('googleapis');
 
 var uploadVideo = function (req, res) {
     console.log('API works');
+    var access_token = req.params.access_token;
+    console.log(access_token);
     var s3_bucket = 'haappy-videos';
     var uploadParams = {
         Bucket: s3_bucket,
@@ -59,45 +52,35 @@ var uploadVideo = function (req, res) {
         s3.upload(uploadParams, function (err, data) {
             if (err) {
                 console.log("Error", err);
-            } if (data) {
+            }
+            if (data) {
                 console.log(data.Location);
                 console.log(req.file.size);
-
-                var params = {
+                var Youtube = google.youtube({
+                    version: 'v3',
+                    auth: access_token
+                });
+                //console.log(Youtube);
+                Youtube.videos.insert({
                     resource: {
                         snippet: {
-                            title: 'test video',
-                            description: 'This is a test video uploaded via the YouTube API'
+                            title: 'Testing Video 1',
+                            description: 'Testing Video 1 Description'
                         },
                         status: {
                             privacyStatus: 'private'
                         }
+                    },
+                    part: 'snippet,status',
+                    media: {
+                        body: fileStream
                     }
-                };
-
-                require('google-cli-auth')({
-                    name: 'yt-upload-client',
-                    client_id: '541496688190-3047k21qs4r9t266jvpca9rf5sssos91.apps.googleusercontent.com',
-                    client_secret: 'NdXsmSIxaBjSDDjCIr2AD_8I',
-                    scope: [
-                        'https://www.googleapis.com/auth/youtube.upload'
-                    ]
-                }, function (gaerr, token) {
-                    console.log(token);
-                    youtube.authenticate('541496688190-3047k21qs4r9t266jvpca9rf5sssos91.apps.googleusercontent.com', 'NdXsmSIxaBjSDDjCIr2AD_8I', token, function (aerr, token) {
-                        if (aerr) {
-                            console.log(aerr);
-                        } else {
-                            console.log(token);
-                            youtube.insert(file, params, function (yterr, video) {
-                                if (yterr) {
-                                    console.log(yterr);
-                                } else {
-                                    console.log(video);
-                                }
-                            });
-                        }
-                    });
+                }, (yterr, ytdata) => {
+                    if(yterr){
+                        console.log(yterr);
+                    } else {
+                        console.log(ytdata);
+                    }
                 });
             }
         });
