@@ -11,6 +11,7 @@ userRouter.route('/login').post(userController.userLogin);
 userRouter.route('/logout').patch(userController.userLogout);
 userRouter.route('/roles/:userId').get(userController.getUserAssignedModules);
 userRouter.route('/get/:userId').get(userController.getUserById);
+userRouter.route('/get/client_keys/:userId').get(userController.getGoogleClientKeysByUserId);
 
 //shop routes
 userRouter.route('/shop/new').post(shopController.newShop);
