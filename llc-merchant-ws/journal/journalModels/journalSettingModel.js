@@ -12,6 +12,11 @@ const JournalSetting = db.define('journal_setting', {
         },
         allownull: false
     },
+   suname:{
+       type:sequelize.STRING(50),
+       allownull:false
+
+   },
 
     language_id: {
         type: sequelize.INTEGER(11),
@@ -40,13 +45,6 @@ const JournalSetting = db.define('journal_setting', {
         allownull: false,
         defaultValue: ''
     },
-
-    suname: {
-        type: sequelize.STRING(50),
-        allownull: false,
-        defaultValue: ''
-    },
-
     spwd: {
         type: sequelize.STRING(50),
         allownull: false,

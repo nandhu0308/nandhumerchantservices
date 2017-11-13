@@ -10,6 +10,7 @@ var Broadcaster = require('./../../broadcasters/broadcasterModels/broadcastersMo
 var Shop = require('./../userModels/shopsModel');
 var TokenValidator = require('./../services/tokenValidator');
 var sequelize = require('sequelize');
+var GoogleClientKeysModel = require('./../userModels/ClientKeysModel');
 
 var newUserRegistration = function (req, res) {
     reqObj = req.body;
@@ -462,11 +463,53 @@ var getUserById = function (req, res) {
     });
 };
 
+var getGoogleClientKeysByUserId = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                userId = req.params.userId;
+                GoogleClientKeysModel.findOne({
+                    where: {
+                        user_id: userId,
+                        is_active: true
+                    }
+                }).then(googleKeys => {
+                    res.status(200).json(googleKeys);
+                }).catch(err => {
+                    console.log(err);
+                    res.status(500).json({
+                        error: err,
+                        message: 'Something went wrong'
+                    })
+                })
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        console.log(err);
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
 module.exports = {
     newUserRegistration: newUserRegistration,
     userLogin: userLogin,
     userLogout: userLogout,
     getVersion: getVersion,
     getUserAssignedModules: getUserAssignedModules,
-    getUserById: getUserById
+    getUserById: getUserById,
+    getGoogleClientKeysByUserId: getGoogleClientKeysByUserId
 }

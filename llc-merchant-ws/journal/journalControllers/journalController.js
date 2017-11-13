@@ -408,6 +408,7 @@ var newJournalSettingAndDevice = function(req, res){
             if (expireDate >= todayDate) {
                 reqObj = req.body;
                 JournalSettings.create({
+                    suname: reqObj.suname,
                     journal_id: reqObj.journal_id,
                     language_id: reqObj.language_id,
                     appln_name: reqObj.appln_name,
