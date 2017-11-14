@@ -12,7 +12,7 @@ uploadRouter.route('/video/:uploadApp/:uploadTo/:userId').post(VideoUploadContro
 uploadRouter.route('/video/queue/:queueParams').post(VideoUploadController.videoUploadQueue);
 uploadRouter.route('/video/move/s3').post(VideoUploadController.videoUploadToS3);
 uploadRouter.route('/sqs/:sqsParams').post(SQSBroadcasterController.sendMessage);
-uploadRouter.route('/tester/:access_token').post(MultiplatformUploaderService.uploadVideo);
+uploadRouter.route('/video/fb/:broadcasterId').post(MultiplatformUploaderService.uploadVideoS3);
 
 //Delete routes
 uploadRouter.route('/image/delete').put(ImageUploadService.deleteImage);
