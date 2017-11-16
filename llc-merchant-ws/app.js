@@ -18,6 +18,7 @@ var DocumentRouter = require('./document/documentRouter/documentRouter');
 var CommonRouter = require('./common/commonRouter/commonRouter');
 var JournalRouter = require('./journal/journalRouters/journalRouter');
 var Oauth2Router = require('./google-auth-services/oauth2-routers/oauth2-router');
+var AdRouter = require('./ads-services/ads-routers/ad-router');
 
 app.use(cors({origin:true, credentials:true}));
 app.use(bodyParser.json());
@@ -36,6 +37,7 @@ app.use('/document',DocumentRouter);
 app.use('/common',CommonRouter);
 //app.use('/oauth2callback',UploadRouter);
 app.use('/oauth2', Oauth2Router);
+app.use('/ads', AdRouter);
 
 var PORT = process.env.PORT || 3000;
 app.listen(PORT, function(){

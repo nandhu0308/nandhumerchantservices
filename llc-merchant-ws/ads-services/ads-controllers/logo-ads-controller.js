@@ -3,7 +3,8 @@ var dateformat = require('dateformat');
 var multer = require('multer');
 var fs = require('fs');
 var path = require('path');
-var JSFTP = require('jsftp');
+//var JSFTP = require('jsftp');
+var Client = require('ftp');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
 
@@ -15,7 +16,26 @@ var newLogoAd = function (req, res) {
     tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
-
+                var reqObj = req.body;
+                LogoAds.create({
+                    broadcaster_id: reqObj.broadcaster_id,
+                    channel_id: reqObj.channel_id,
+                    ad_title: reqObj.ad_title,
+                    image_url: reqObj.image_url,
+                    is_active: reqObj.is_active,
+                    created_by: reqObj.created_by,
+                    updated_by: reqObj.updated_by
+                }).then(logoAd => {
+                    res.status(200).json({
+                        id: logoAd.id,
+                        message: 'success'
+                    });
+                }).catch(error => {
+                    res.status(500).json({
+                        message: 'something went wrong',
+                        error: error
+                    });
+                });
             } else {
                 res.status(401).json({
                     message: 'Not Authorized...'
@@ -33,8 +53,9 @@ var newLogoAd = function (req, res) {
     });
 };
 
-var uploadLogoAdImage = function(req, res){
+var uploadLogoAdImage = function (req, res) {
     var appName = req.params.appName;
+    var ftpEndPointPath = '${com.wowza.wms.context.VHostConfigHome}/content/';
     var storage = multer.diskStorage({
         destination: function (req, file, cb) {
             cb(null, './uploadTemp/');
@@ -62,18 +83,28 @@ var uploadLogoAdImage = function(req, res){
         fileStream.on('error', function (err) {
             console.log('File Error', err);
         });
-        var ftpClient = new JSFTP({
-            host: '',
-            port: 0,
-            user: '',
-            pass: ''
-        });
-        ftpClient.put(fileStream, './'+appName, function(ftpErr){
-            if(ftpErr){
-                console.log(ftpErr);
-            } else {
-                console.log('file saved');
-            }
+        var client = new Client();
+        var ftpConfig = {
+            host: '52.77.123.79',
+            port: 21,
+            user: 'happyj-ftp',
+            password: 'HappyApp'
+        }
+        client.connect(ftpConfig);
+        client.on('ready', function () {
+            client.put(filePathStr, './' + fileName, function (ftpErr) {
+                if (ftpErr) {
+                    console.log(ftpErr);
+                } else {
+                    client.end();
+                    res.status(200).json({
+                        message: 'success',
+                        videoUrl: ftpEndPointPath + appName + '/' + fileName,
+                        fileSize: req.file.size,
+                        fileName: fileName
+                    });
+                }
+            });
         });
     });
 }
