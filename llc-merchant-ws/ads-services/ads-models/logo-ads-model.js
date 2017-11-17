@@ -10,20 +10,12 @@ const LogoAds = db.define('logo_ads', {
         type: sequelize.INTEGER,
         allowNull: false
     },
+    ad_title: {
+        type: sequelize.STRING,
+        allowNull: false
+    },
     image_url: {
         type: sequelize.STRING(1000),
-        allowNull: false
-    },
-    image_dimensions: {
-        type: sequelize.STRING,
-        allowNull: false
-    },
-    ad_time_slots: {
-        type: sequelize.STRING(1000),
-        allowNull: false
-    },
-    target_platforms: {
-        type: sequelize.STRING,
         allowNull: false
     },
     is_active: {
