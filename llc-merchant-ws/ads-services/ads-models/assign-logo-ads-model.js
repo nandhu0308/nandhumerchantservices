@@ -42,6 +42,10 @@ const AssignAdEvents = db.define('assign_logo_ads', {
         type: sequelize.STRING(1000),
         allowNull: false
     },
+    img_name:{
+        type: sequelize.STRING(100),
+        allowNull: false
+    },
     created_by: {
         type: sequelize.STRING,
         allowNull: false

@@ -22,7 +22,11 @@ const LogoAds = db.define('logo_ads', {
     ftp_path: {
         type: sequelize.STRING(1000),
         allowNull: false
-    },    
+    }, 
+    img_name:{
+        type: sequelize.STRING(100),
+        allowNull: false
+    },   
     is_active: {
         type: sequelize.BOOLEAN,
         allowNull: false,
