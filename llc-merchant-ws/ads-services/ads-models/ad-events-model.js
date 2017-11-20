@@ -1,32 +1,49 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 
-const LogoAds = db.define('logo_ads', {
-    broadcaster_id: {
-        type: sequelize.INTEGER,
-        allowNull: false
-    },
+const AdEvents = db.define('ad_events', {
+  
     channel_id: {
         type: sequelize.INTEGER,
         allowNull: false
     },
-    ad_title: {
-        type: sequelize.STRING,
-        allowNull: false
-    },
-    image_url: {
-        type: sequelize.STRING(1000),
-        allowNull: false
-    },
-
-    ftp_path: {
-        type: sequelize.STRING(1000),
-        allowNull: false
-    }, 
-    img_name:{
+    
+    event_name: {
         type: sequelize.STRING(100),
         allowNull: false
     },   
+
+    event_type: {
+        type: sequelize.ENUM('Short Event','24x7','VoD'),
+        allowNull: false
+    },
+
+    duration: {
+        type: sequelize.INTEGER,
+        allowNull: false
+    },
+
+    date: {
+        type: sequelize.STRING(10),
+        allowNull: false
+    },
+
+    start_time: {
+        type: sequelize.STRING(20),
+        allowNull: false
+    },
+
+    end_time: {
+        type: sequelize.STRING(20),
+        allowNull: false
+    },
+
+    ad_window_time_pa: {
+        type: sequelize.INTEGER,
+        allowNull: false
+    },
+
+    
     is_active: {
         type: sequelize.BOOLEAN,
         allowNull: false,
@@ -53,4 +70,4 @@ const LogoAds = db.define('logo_ads', {
     freezeTableName: true
 });
 
-module.exports = LogoAds;
+module.exports = AdEvents;
