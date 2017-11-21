@@ -692,7 +692,14 @@ var newBroadcasterwithChannel = function (req, res) {
                                 ha_streamkey: broadcasterVideos.ha_streamkey,
                                 created_by: broadcasterVideos.created_by,
                                 updated_by: broadcasterVideos.updated_by,
-                                ps_streamkey:broadcasterVideos.ps_streamkey
+                                ps_streamkey:broadcasterVideos.ps_streamkey,
+                                fp_start_time:broadcasterVideos.fb_start_time,
+                                ps_start_time:broadcasterVideos.ps_start_time,
+                                yt_start_time:broadcasterVideos.yt_start_time,
+                                ps_stop_time:broadcasterVideos.ps_stop_time,
+                                fb_stop_time:broadcasterVideos.fb_stop_time,
+                                yt_stop_time:broadcasterVideos.fb_stop_time,
+                                
                             }).then(function (broadcasterVideoResults) {
                                 
 
