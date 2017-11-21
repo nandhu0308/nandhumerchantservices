@@ -560,6 +560,7 @@ var createBroadcasterwithChannel = function (req, res) {
                             mapped_domain_name: reqBroadcasterObj.mapped_domain_name,
                             w_application_name: reqBroadcasterObj.w_application_name,
                             primary_channel_id: reqBroadcasterObj.primary_channel_id,
+                            w_get_target_url:reqBroadcasterObj.w_get_target_url,
                             is_active: reqBroadcasterObj.is_active,
                             created_by: reqBroadcasterObj.created_by,
                             updated_by: reqBroadcasterObj.updated_by
