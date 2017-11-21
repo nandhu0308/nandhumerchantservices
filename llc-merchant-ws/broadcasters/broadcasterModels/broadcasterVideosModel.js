@@ -138,7 +138,35 @@ const BroadcasterVideos = db.define('broadcaster_videos', {
     ps_streamkey : {
         type : sequelize.STRING(100),
         defaultValue : ''
+    },
+    yt_start_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+
+    },
+    fp_start_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+    },
+    ps_start_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+
+    },
+    yt_stop_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+    },
+    fb_stop_time:
+    {
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+    },
+    ps_stop_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
     }
+
 }, {
     timestamps : false,
     freezeTableName : true

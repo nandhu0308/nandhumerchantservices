@@ -140,7 +140,16 @@ const Broadcasters = db.define('broadcasters',  {
         allowNull : false,
         defaultValue : false
     },
-
+    w_get_target_url:{
+        type:sequelize.STRING(4000),
+        allowNull:false,
+        defaultValue:''
+    },
+    w_get_target_url_journal2:{
+        type:sequelize.STRING(4000),
+        allowNull:false,
+        defaultValue:''
+    }
 }, {
     timestamps : false,
     freezeTableName : true
