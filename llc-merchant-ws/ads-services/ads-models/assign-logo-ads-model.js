@@ -13,10 +13,15 @@ const AssignAdEvents = db.define('assign_logo_ads', {
         allowNull: false
     },
     
-    time_slot: {
+    time_slot_start: {
         type: sequelize.STRING(20),
         allowNull: false
-    },   
+    },  
+    
+    time_slot_end: {
+        type: sequelize.STRING(20),
+        allowNull: false
+    },
 
     ad_placement: {
         type: sequelize.ENUM('TOP_LEFT', 'TOP_CENTER', 'TOP_RIGHT', 'MIDDLE_LEFT', 'MIDDLE_CENTER', 'MIDDLE_RIGHT', 'BOTTOM_LEFT', 'BOTTOM_CENTER', 'BOTTOM_RIGHT'),
@@ -45,6 +50,9 @@ const AssignAdEvents = db.define('assign_logo_ads', {
     img_name:{
         type: sequelize.STRING(100),
         allowNull: false
+    },
+    lower_text: {
+        type: sequelize.STRING(500)
     },
     created_by: {
         type: sequelize.STRING,
