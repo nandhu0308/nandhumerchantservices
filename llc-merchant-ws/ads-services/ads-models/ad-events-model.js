@@ -19,12 +19,12 @@ const AdEvents = db.define('ad_events', {
     },
 
     duration: {
-        type: sequelize.INTEGER,
+        type: sequelize.STRING,
         allowNull: false
     },
 
     date: {
-        type: sequelize.STRING(10),
+        type: sequelize.DATE,
         allowNull: false
     },
 
