@@ -331,6 +331,8 @@ var updateBroadcasterVideoYTStreamKey = function (req, res) {
                     if (BroadcasterVideos) {
                         BroadcasterVideos.updateAttributes({
                             yt_streamkey: reqObj.yt_streamkey,
+                            yt_start_time:todayDate,
+                            yt_start_count:BroadcasterVideos.yt_start_count+1,
                         }).then(function () {
                             res.status(200).json({
                                 id: BroadcasterVideos.id,
@@ -382,6 +384,8 @@ var updateBroadcasterVideoFBStreamKey = function (req, res) {
                     if (BroadcasterVideos) {
                         BroadcasterVideos.updateAttributes({
                             fb_streamkey: reqObj.fb_streamkey,
+                            fb_start_time:todayDate,
+                            fb_start_count:BroadcasterVideos.fb_start_count+1,
                         }).then(function () {
                             res.status(200).json({
                                 id: BroadcasterVideos.id,
@@ -434,6 +438,8 @@ var updateBroadcasterVideoPSStreamKey = function (req, res) {
                     if (BroadcasterVideos) {
                         BroadcasterVideos.updateAttributes({
                             ps_streamkey: reqObj.ps_streamkey,
+                            ps_start_time:todayDate,
+                            ps_start_count:BroadcasterVideos.ps_start_count+1,
                         }).then(function () {
                             res.status(200).json({
                                 id: BroadcasterVideos.id,
