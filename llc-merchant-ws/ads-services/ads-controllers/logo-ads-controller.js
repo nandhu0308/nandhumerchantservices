@@ -26,7 +26,7 @@ var newLogoAd = function (req, res) {
                     ad_title: reqObj.ad_title,
                     image_url: reqObj.image_url,
                     ftp_path: reqObj.ftp_path,
-                    img_name:reqObj.img_name,
+                    img_name: reqObj.img_name,
                     is_active: reqObj.is_active,
                     created_by: reqObj.created_by,
                     updated_by: reqObj.updated_by
