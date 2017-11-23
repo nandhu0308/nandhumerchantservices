@@ -40,6 +40,7 @@ var assignLogoAdEvents = function (req, res) {
                             time_slot_end: i.time_slot_end,
                             ad_placement: i.ad_placement,
                             ad_target: i.ad_target,
+                            stream_source:i.ad_target=="YouTube"?"Source":"720p",
                             logo_ftp_path: i.logo_ftp_path,
                             img_name: i.img_name,
                             lower_text: i.lower_text,

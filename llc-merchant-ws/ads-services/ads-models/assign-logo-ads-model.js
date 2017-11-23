@@ -54,6 +54,10 @@ const AssignAdEvents = db.define('assign_logo_ads', {
     lower_text: {
         type: sequelize.STRING(500)
     },
+    stream_source: {
+        type: sequelize.ENUM('Source', '720p'),
+        allowNull: false
+    },
     created_by: {
         type: sequelize.STRING,
         allowNull: false
