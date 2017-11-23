@@ -15,6 +15,7 @@ var assignLogoAdEvents = function (req, res) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
                 reqObj = req.body;
+                console.log(reqObj);
                 var timestamp = Date.now();
                 var eventName = reqObj.channel_id + '_event_' + timestamp;
                 AdEvents.create({
@@ -30,12 +31,11 @@ var assignLogoAdEvents = function (req, res) {
                     created_by: reqObj.created_by,
                     updated_by: reqObj.updated_by
                 }).then(adEvent => {
-                    console.log(adEvent);
-                    assignlogoAds = reqObj.logoAds;
+                    assignlogoAds = reqObj.assignLogoAds;
                     assignlogoAds.forEach(function (i){
                         AssignLogoAds.create({
                             logo_ad_id: i.logo_ad_id,
-                            ad_event_id: i.ad_event_id,
+                            ad_event_id: adEvent.id,
                             time_slot_start: i.time_slot_start,
                             time_slot_end: i.time_slot_end,
                             ad_placement: i.ad_placement,
@@ -44,9 +44,11 @@ var assignLogoAdEvents = function (req, res) {
                             img_name: i.img_name,
                             lower_text: i.lower_text,
                             created_by: i.created_by,
-                            updated_by: i.updated_by
-                        }).then(assings => {
-                            console.log(assings);
+                            updated_by: i.updated_by,
+                            geo_x_coordinate: i.geo_x_coordinate,
+                            geo_y_coordinate: i.geo_y_coordinate
+                        }).then(assigns => {
+                            console.log(assigns.id);
                         }).catch(err => {
                             console.log(err);
                         })
