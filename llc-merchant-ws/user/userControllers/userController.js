@@ -15,7 +15,7 @@ var GoogleClientKeysModel = require('./../userModels/ClientKeysModel');
 var newUserRegistration = function (req, res) {
     reqObj = req.body;
     if (reqObj.user_type === 'User') {
-        debugger;
+      
         ApplicationUsers.create({
             application_id: reqObj.application_id,
             client_id: reqObj.client_id,
