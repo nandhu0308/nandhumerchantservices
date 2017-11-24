@@ -112,7 +112,7 @@ var uploadLogoAdImage = function (req, res) {
             if (data) {
                 console.log(data);
                 client.on('ready', function () {
-                    client.put(filePathStr, './' + fileName, function (ftpErr) {
+                    client.put(filePathStr, './'+ appName +'/' + fileName, function (ftpErr) {
                         if (ftpErr) {
                             console.log(ftpErr);
                         } else {

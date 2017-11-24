@@ -337,6 +337,7 @@ var updateBroadcasterVideoYTStreamKey = function (req, res) {
                             res.status(200).json({
                                 id: BroadcasterVideos.id,
                                 yt_streamkey: BroadcasterVideos.yt_streamkey
+                                
                             });
                         }).catch(function (err) {
                             console.log(err)
