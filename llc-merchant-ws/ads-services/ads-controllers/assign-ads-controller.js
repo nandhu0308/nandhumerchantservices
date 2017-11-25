@@ -20,8 +20,9 @@ var assignLogoAdEvents = function (req, res) {
                 var eventName = reqObj.channel_id + '_event_' + timestamp;
                 AdEvents.create({
                     channel_id: reqObj.channel_id,
-                    event_name: eventName,
+                    event_name: reqObj.event_name,
                     event_type: reqObj.event_type,
+                    ad_type: reqObj.ad_type,
                     duration: reqObj.duration,
                     date: reqObj.date,
                     start_time: reqObj.start_time,
