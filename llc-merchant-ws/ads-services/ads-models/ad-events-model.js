@@ -34,7 +34,7 @@ const AdEvents = db.define('ad_events', {
     },
 
     ad_type: {
-        type: sequelize.ENUM('LOGO', 'VIDEO', 'L-BAND', 'SLIDE', 'BOTTOM-BAR'),
+        type: sequelize.ENUM('LOGO', 'VIDEO', 'L_BAND', 'SLIDE', 'BOTTOM_BAR'),
         allowNull: false,
         defaultValue: 'LOGO'
     },
