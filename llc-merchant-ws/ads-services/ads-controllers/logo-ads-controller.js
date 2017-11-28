@@ -24,6 +24,7 @@ var newLogoAd = function (req, res) {
                     broadcaster_id: reqObj.broadcaster_id,
                     channel_id: reqObj.channel_id,
                     ad_title: reqObj.ad_title,
+                    ad_type: reqObj.ad_type,
                     image_url: reqObj.image_url,
                     ftp_path: reqObj.ftp_path,
                     img_name: reqObj.img_name,

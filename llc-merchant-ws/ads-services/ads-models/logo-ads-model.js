@@ -14,6 +14,11 @@ const LogoAds = db.define('logo_ads', {
         type: sequelize.STRING,
         allowNull: false
     },
+    ad_type: {
+        type: sequelize.ENUM('LOGO', 'BOTTOM_BAR', 'L_BAND', 'VIDEO', 'SLIDE'),
+        allowNull: false,
+        defaultValue: 'LOGO'
+    },
     image_url: {
         type: sequelize.STRING(1000),
         allowNull: false
