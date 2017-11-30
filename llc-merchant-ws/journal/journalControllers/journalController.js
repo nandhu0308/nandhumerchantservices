@@ -6,6 +6,10 @@ var dateformat = require('dateformat');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
 
+
+Journal.hasMany(JournalSettings, { foreignKey: 'journal_id' })
+JournalSettings.belongsTo(Journal, { foreignKey: 'journal_id' })
+
 var getJournals = function (req, res) {
 
     authToken = req.headers.authorization;
@@ -480,6 +484,99 @@ var newJournalSettingAndDevice = function(req, res){
     });
 };
 
+function JournalObject() {
+    this.first_name = '';
+    this.last_name = '';
+    this.id = '';
+    this.settings = {};
+}
+
+
+
+var getJournalandSettingsByJournalId = function (req, res) {
+    //journalList = [];
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                channelId = req.params.channelId;
+                Journal.findAll({
+                    where: {
+                        channel_id: channelId
+                    },
+                    attributes: {
+                        exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
+                    },
+                }
+                ).then(journals => {
+                    
+                    for (var i = 0; i < journals.length; i++) {
+                        
+                        
+                        JournalSettings.findOne({
+                            where: {
+                                journal_id: journals[i].id,
+                                is_active: true
+                            },
+                            attributes: {
+                                exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
+                            }
+
+                        }).then(journalSetting => {
+                            var journalObj = new JournalObject();
+                            // journalObj.id = journals[i].id;
+                            // journalObj.first_name = journals[i].first_name;
+                            // journalObj.last_name = journals[i].last_name;
+                            journalObj.settings = journalSetting;
+                            returnFunction(res, journals.length, journalObj);
+                        }).catch(err => {
+                            console.log(err);
+                            res.status(500).json({
+                                error: err,
+                                message: 'Something is wrong!',
+                            });
+                        });
+                        journalObj = {};
+                    }
+                }).catch(err => {
+                    console.log(err);
+                    res.status(500).json({
+                        error: err,
+                        message: 'Something went wrong!'
+                    });
+                });
+            }
+            else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+
+        });
+    });
+};
+
+var returnFunction = function(res, length, journalObj) {
+    //console.log(journalObj);
+    journalList.push(journalObj);
+    if(length === journalList.length) {
+        res.status(200).json(journalList);
+    }
+};
+
+
+
 module.exports = {
     getJournals: getJournals,
     getJournalSettings: getJournalSettings,
@@ -490,5 +587,6 @@ module.exports = {
     createJournal: createJournal,
     getJournalSettingBySettingId: getJournalSettingBySettingId,
     updateJournal : updateJournal,
-    newJournalSettingAndDevice: newJournalSettingAndDevice
+    newJournalSettingAndDevice: newJournalSettingAndDevice,
+    getJournalandSettingsByJournalId : getJournalandSettingsByJournalId
 };
