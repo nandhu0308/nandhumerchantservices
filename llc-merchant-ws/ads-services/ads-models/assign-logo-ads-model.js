@@ -2,7 +2,7 @@ const sequelize = require('sequelize');
 const db = require('./../../db');
 
 const AssignAdEvents = db.define('assign_logo_ads', {
-  
+
     logo_ad_id: {
         type: sequelize.INTEGER,
         allowNull: false
@@ -12,12 +12,12 @@ const AssignAdEvents = db.define('assign_logo_ads', {
         type: sequelize.INTEGER,
         allowNull: false
     },
-    
+
     time_slot_start: {
         type: sequelize.STRING(20),
         allowNull: false
-    },  
-    
+    },
+
     time_slot_end: {
         type: sequelize.STRING(20),
         allowNull: false
@@ -43,11 +43,17 @@ const AssignAdEvents = db.define('assign_logo_ads', {
         allowNull: false
     },
 
+    ad_type: {
+        type: sequelize.ENUM('LOGO', 'L_BAND', 'BOTTOM_BAR', 'SLIDE', 'VIDEO'),
+        allowNull: false,
+        defaultValue: 'LOGO'
+    },
+
     logo_ftp_path: {
         type: sequelize.STRING(1000),
         allowNull: false
     },
-    img_name:{
+    img_name: {
         type: sequelize.STRING(100),
         allowNull: false
     },
@@ -67,16 +73,16 @@ const AssignAdEvents = db.define('assign_logo_ads', {
         allowNull: false
     },
     created_on: {
-        type : sequelize.DATE,
-        defaultValue : sequelize.NOW
+        type: sequelize.DATE,
+        defaultValue: sequelize.NOW
     },
     updated_on: {
-        type : sequelize.DATE,
-        defaultValue : sequelize.NOW
+        type: sequelize.DATE,
+        defaultValue: sequelize.NOW
     }
 }, {
-    timestamps: false,
-    freezeTableName: true
-});
+        timestamps: false,
+        freezeTableName: true
+    });
 
 module.exports = AssignAdEvents;

@@ -1,7 +1,7 @@
 const sequelize = require('sequelize');
 const db = require('./../../db');
 
-const LogoAds = db.define('logo_ads', {
+const VideoAds = db.define("ha_video_ads", {
     broadcaster_id: {
         type: sequelize.INTEGER,
         allowNull: false
@@ -14,24 +14,18 @@ const LogoAds = db.define('logo_ads', {
         type: sequelize.STRING,
         allowNull: false
     },
-    ad_type: {
-        type: sequelize.ENUM('LOGO', 'BOTTOM_BAR', 'L_BAND', 'VIDEO', 'SLIDE'),
-        allowNull: false,
-        defaultValue: 'LOGO'
+    ad_length: {
+        type: sequelize.INTEGER,
+        allowNull: false
     },
-    image_url: {
+    video_url: {
         type: sequelize.STRING(1000),
         allowNull: false
     },
-
     ftp_path: {
         type: sequelize.STRING(1000),
         allowNull: false
-    }, 
-    img_name:{
-        type: sequelize.STRING(100),
-        allowNull: false
-    },   
+    },
     is_active: {
         type: sequelize.BOOLEAN,
         allowNull: false,
@@ -58,4 +52,4 @@ const LogoAds = db.define('logo_ads', {
     freezeTableName: true
 });
 
-module.exports = LogoAds;
+module.exports = VideoAds;
