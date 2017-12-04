@@ -16,7 +16,7 @@ journalRouter.route('/get/setting-device/:settingId').get(journalController.getJ
 journalRouter.route('/update').patch(journalController.updateJournal);
 journalRouter.route('/setting/new').post(journalController.newJournalSettingAndDevice);
 
-journalRouter.route('/journalandsetting/:channelId').get(journalController.getJournalandSettingsByJournalId);
+journalRouter.route('/journalandsetting/:channelId').get(journalController.getJournalandSettingsBychannelId);
 
 
 // journal Devices
