@@ -121,7 +121,7 @@ var uploadLogoAdImage = function (req, res) {
                             res.status(200).json({
                                 message: 'success',
                                 videoUrl: data.Location,
-                                ftpPath: ftpEndPointPath + fileName,
+                                ftpPath: ftpEndPointPath + '/' + appName + '/' + fileName,
                                 fileSize: req.file.size,
                                 fileName: fileName
                             });
