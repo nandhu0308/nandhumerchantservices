@@ -6,6 +6,10 @@ var dateformat = require('dateformat');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
 
+
+Journal.hasMany(JournalSettings, { foreignKey: 'journal_id' })
+JournalSettings.belongsTo(Journal, { foreignKey: 'journal_id' })
+
 var getJournals = function (req, res) {
 
     authToken = req.headers.authorization;
@@ -116,23 +120,23 @@ var getJournalsByChannelId = function (req, res) {
     //     if (userSessions.length === 1) {
     //         if (expireDate >= todayDate) {
 
-                channelId = req.params.channelId;
-                Journal.findAll({
-                    where: {
-                        channel_id: channelId
-                    },
-                    attributes: {
-                        exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
-                    }
-                }).then(journalList => {
-                    res.status(200).json(journalList);
-                }).catch(err => {
-                    res.status(500).json({
-                        error: err,
-                        message: 'Something went wrong!'
-                    })
-                });
-                
+    channelId = req.params.channelId;
+    Journal.findAll({
+        where: {
+            channel_id: channelId
+        },
+        attributes: {
+            exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
+        }
+    }).then(journalList => {
+        res.status(200).json(journalList);
+    }).catch(err => {
+        res.status(500).json({
+            error: err,
+            message: 'Something went wrong!'
+        })
+    });
+
     //         } 
     //         else {
     //             res.status(401).json({
@@ -249,7 +253,7 @@ var getJournalSettingBySettingId = function (req, res) {
                     attributes: {
                         exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
                     }
-                }).then( journalSetting => {
+                }).then(journalSetting => {
                     JournalDevice.findOne({
                         where: {
                             journal_setting_id: journalSetting.id,
@@ -258,7 +262,7 @@ var getJournalSettingBySettingId = function (req, res) {
                         attributes: {
                             exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
                         }
-                    }).then(journalDevice=> {
+                    }).then(journalDevice => {
                         res.status(200).json({
                             id: journalSetting.id,
                             journal_id: journalSetting.journal_id,
@@ -282,14 +286,14 @@ var getJournalSettingBySettingId = function (req, res) {
                             ha_ftp_path: journalSetting.ha_ftp_path,
                             device: journalDevice
                         });
-                    }).catch(err=> {
+                    }).catch(err => {
                         console.log(err);
                         res.status(500).json({
                             error: err,
                             message: 'something went wrong!'
                         });
                     });
-                }).catch(err=> {
+                }).catch(err => {
                     console.log(err);
                     res.status(500).json({
                         error: err,
@@ -316,7 +320,7 @@ var getJournalSettingBySettingId = function (req, res) {
 var createJournal = function (req, res) {
     reqObj = req.body;
     Journal.create({
-        channel_id:reqObj.channel_id,
+        channel_id: reqObj.channel_id,
         email: reqObj.email,
         password: reqObj.password,
         emp_id: reqObj.emp_id,
@@ -360,11 +364,11 @@ var updateJournal = function (req, res) {
                     } else {
                         journal.updateAttributes({
                             emp_id: reqObj.emp_id,
-                            channel_id:reqObj.channel_id,
+                            channel_id: reqObj.channel_id,
                             first_name: reqObj.first_name,
                             last_name: reqObj.last_name,
                             mobile: reqObj.mobile,
-                            email:reqObj.email,
+                            email: reqObj.email,
                             is_active: reqObj.is_active
                         }).then(function () {
                             res.status(200).json(journal);
@@ -398,7 +402,7 @@ var updateJournal = function (req, res) {
     });
 };
 
-var newJournalSettingAndDevice = function(req, res){
+var newJournalSettingAndDevice = function (req, res) {
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
     var todayDate = new Date();
@@ -443,13 +447,13 @@ var newJournalSettingAndDevice = function(req, res){
                         is_active: true,
                         created_by: "SA",
                         updated_by: "SA"
-                    }).then(journalDevice=> {
+                    }).then(journalDevice => {
                         console.log(journalDevice);
                         res.status(200).json({
                             id: journalSetting.id,
                             message: 'Success'
                         });
-                    }).catch(error=> {
+                    }).catch(error => {
                         console.log(error);
                         res.status(500).json({
                             error: error,
@@ -480,6 +484,53 @@ var newJournalSettingAndDevice = function(req, res){
     });
 };
 
+var getJournalandSettingsBychannelId = function (req, res) {
+    journalList = [];
+    channelId = req.params.channelId;
+
+    Journal.findAll({
+        where: {
+            channel_id: channelId,
+            is_active: true
+        },
+        attributes: {
+            exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
+        },
+    }
+    ).then(journal => {
+            for (var i = 0; i < journal.length; i++) {
+                Journal.findById(journal[i].id, {
+                    include: {
+                        model: JournalSettings
+                    }
+                }).then(journalWithSetting => {
+                    returnFunction(res, journal.length, journalWithSetting);
+                }).catch(err => {
+                    console.log(err);
+                    res.status(500).json({
+                        error: err,
+                        message: 'Something is wrong!',
+                    });
+                });
+            }
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err,
+                message: 'Something went wrong!'
+            });
+        });
+};
+
+var returnFunction = function (res, length, journalObj) {
+    journalList.push(journalObj);
+    if (length === journalList.length) {
+        res.status(200).json(journalList);
+    }
+};
+
+
+
 module.exports = {
     getJournals: getJournals,
     getJournalSettings: getJournalSettings,
@@ -489,6 +540,7 @@ module.exports = {
     getJournalDevice: getJournalDevice,
     createJournal: createJournal,
     getJournalSettingBySettingId: getJournalSettingBySettingId,
-    updateJournal : updateJournal,
-    newJournalSettingAndDevice: newJournalSettingAndDevice
+    updateJournal: updateJournal,
+    newJournalSettingAndDevice: newJournalSettingAndDevice,
+    getJournalandSettingsBychannelId: getJournalandSettingsBychannelId
 };

@@ -16,7 +16,7 @@ var videoUploadToS3 = function(req, res){
 }
 
 var videoUploadQueue = function(req, res){
-    debugger;
+    
     console.log('video upload controller reached');
     queueParams = req.params.queueParams;
     
