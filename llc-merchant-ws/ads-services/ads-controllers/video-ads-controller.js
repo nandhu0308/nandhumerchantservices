@@ -11,11 +11,52 @@ AWS.config.loadFromPath('./config.json');
 var s3 = new AWS.S3({ region: 'ap-south-1' });
 var VideoAds = require('./../ads-models/video_ads_model');
 
-var newVideoAd = function(req, res){
-
+var newVideoAd = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                reqObj = req.body;
+                VideoAds.create({
+                    broadcaster_id: reqObj.broadcaster_id,
+                    channel_id: reqObj.channel_id,
+                    ad_title: reqObj.ad_title,
+                    ad_length: reqObj.ad_length,
+                    video_url: reqObj.video_url,
+                    ftp_path: reqObj.ftp_path,
+                    is_active: reqObj.is_active,
+                    created_by: reqObj.created_by,
+                    updated_by: reqObj.updated_by
+                }).then(videoAd => {
+                    console.log(videoAd);
+                    res.status(200).json(videoAd);
+                }).catch(err => {
+                    res.status(500).json({
+                        message: 'Something went wrong',
+                        error: err
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
 };
 
-var uploadVideoAd = function(req, res){
+var uploadVideoAd = function (req, res) {
     var appName = req.params.appName;
     var ftpEndPointPath = '${com.wowza.wms.context.VHostConfigHome}/content/';
     var s3_bucket = 'haappy-images';
@@ -69,7 +110,8 @@ var uploadVideoAd = function(req, res){
             if (data) {
                 console.log(data);
                 client.on('ready', function () {
-                    client.put(filePathStr, '.\\'+ appName + '\\' + fileName, function (ftpErr) {
+                    console.log("reached here...");
+                    client.put(fileStream, './' + appName + '/' + fileName, function (ftpErr) {
                         if (ftpErr) {
                             console.log(ftpErr);
                         } else {
@@ -77,7 +119,7 @@ var uploadVideoAd = function(req, res){
                             res.status(200).json({
                                 message: 'success',
                                 videoUrl: data.Location,
-                                ftpPath: ftpEndPointPath + '\\' + appName + '\\' + fileName,
+                                ftpPath: ftpEndPointPath + '/' + appName + '/' + fileName,
                                 fileSize: req.file.size,
                                 fileName: fileName
                             });
@@ -90,5 +132,6 @@ var uploadVideoAd = function(req, res){
 };
 
 module.exports = {
-    uploadVideoAd: uploadVideoAd
+    uploadVideoAd: uploadVideoAd,
+    newVideoAd: newVideoAd
 }
