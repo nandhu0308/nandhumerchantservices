@@ -58,6 +58,7 @@ var newVideoAd = function (req, res) {
 
 var uploadVideoAd = function (req, res) {
     var appName = req.params.appName;
+    //appName="ka-mob-prajaa";
     var ftpEndPointPath = '${com.wowza.wms.context.VHostConfigHome}/content/';
     var s3_bucket = 'haappy-images';
     var uploadParams = {
@@ -103,31 +104,35 @@ var uploadVideoAd = function (req, res) {
         client.connect(ftpConfig);
         uploadParams.Body = fileStream;
         uploadParams.Key = 'video_ads/' + path.basename(file);
-        s3.upload(uploadParams, function (err, data) {
-            if (err) {
-                console.log("Error", err);
-            }
-            if (data) {
-                console.log(data);
-                client.on('ready', function () {
-                    console.log("reached here...");
-                    client.put(fileStream, './' + appName + '/' + fileName, function (ftpErr) {
-                        if (ftpErr) {
-                            console.log(ftpErr);
-                        } else {
-                            client.end();
-                            res.status(200).json({
-                                message: 'success',
-                                videoUrl: data.Location,
-                                ftpPath: ftpEndPointPath + '/' + appName + '/' + fileName,
-                                fileSize: req.file.size,
-                                fileName: fileName
-                            });
-                        }
-                    });
+
+        client.put(fileStream, './' + appName + '/' + fileName, function (ftpErr) {
+            if (ftpErr) {
+                console.log(ftpErr);
+            } else {
+                client.end();
+                res.status(200).json({
+                    message: 'success',
+                    videoUrl: ftpEndPointPath + '/' + appName + '/' + fileName,
+                    ftpPath: ftpEndPointPath + '/' + appName + '/' + fileName,
+                    fileSize: req.file.size,
+                    fileName: fileName
                 });
             }
         });
+
+
+        // s3.upload(uploadParams, function (err, data) {
+        //     if (err) {
+        //         console.log("Error", err);
+        //     }
+        //     if (data) {
+        //         console.log(data);
+        //         client.on('ready', function () {
+        //             console.log("reached here...");
+                    
+        //         });
+        //     }
+        // });
     });
 };
 
