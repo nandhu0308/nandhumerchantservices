@@ -24,6 +24,11 @@ const BroadcasterDestination = db.define('broadcaster_destination' , {
          type : sequelize.BOOLEAN,
         allowNull : false,
         defaultValue : '1'
+    },
+    destination_image:{
+        type:sequelize.STRING(1000),
+        allowNull:true,
+        defaultValue:''   
     }
 },{
     timestamps : false,
