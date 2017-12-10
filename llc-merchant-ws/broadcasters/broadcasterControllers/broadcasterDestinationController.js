@@ -53,9 +53,31 @@ var createBroadcasterDestination = function (req, res) {
 
     };
 
+
+    var getDestinationImages =function(req,res){
+
+        channelId = req.params.channelId;
+        destinationId = req.params.destinationId;
+        BroadcasterDestination.findAll({
+            where: {
+                broadcaster_channel_id: channelId,
+                // d_id:destinationId
+            },
+        }).then(destination => {
+            res.status(200).json(destination);
+        }).catch(err => {
+            res.status(500).json({
+                error: err,
+                message: 'Something went wrong!'
+            })
+        });
+
+    }
+
     
 
 module.exports = {
-    createBroadcasterDestination:createBroadcasterDestination
+    createBroadcasterDestination:createBroadcasterDestination,
+    getDestinationImages : getDestinationImages
 
 }

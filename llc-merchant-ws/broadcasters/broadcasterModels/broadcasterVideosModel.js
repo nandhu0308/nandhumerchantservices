@@ -165,7 +165,61 @@ const BroadcasterVideos = db.define('broadcaster_videos', {
     ps_stop_time:{
         type : sequelize.DATE,
         defaultValue : sequelize.NOW
-    }
+    },
+    ha_start_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+
+    },
+    ha_stop_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+    },
+    fb1_start_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+
+    },
+    fb1_stop_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+    },
+    fb2_start_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+
+    },
+    fb2_stop_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+    },
+    fb3_start_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+
+    },
+    fb3_stop_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+    },
+    fb4_start_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+
+    },
+    fb4_stop_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+    },
+    fb5_start_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+
+    },
+    fb5_stop_time:{
+        type : sequelize.DATE,
+        defaultValue : sequelize.NOW
+    },
 
 }, {
     timestamps : false,
