@@ -12,5 +12,7 @@ adRouter.route('/logo/assign').post(AssignAdsController.assignLogoAdEvents);
 
 adRouter.route('/videoad/video/:appName').post(VideoAdController.uploadVideoAd);
 adRouter.route('/videoad/new').post(VideoAdController.newVideoAd);
+adRouter.route('/videoads/get/channel/:channelId').get(VideoAdController.getVideoAdsByChannel);
+adRouter.route('/videoads/assign').post(AssignAdsController.assignVideoAdsEvents);
 
 module.exports = adRouter;

@@ -5,6 +5,9 @@ var dateformat = require('dateformat');
 var Client = require('ftp');
 var UserAuthServices = require('./../../util-services/sessions-services/userAuthServices');
 var TokenValidator = require('./../../user/services/tokenValidator');
+var VideoAds = require('./../ads-models/video-ad-event');
+var AssignVideoAds = require('./../ads-models/assign-video-ads');
+var VideoAdEvent = require('./../ads-models/video-ad-event');
 
 var assignLogoAdEvents = function (req, res) {
     authToken = req.headers.authorization;
@@ -33,7 +36,7 @@ var assignLogoAdEvents = function (req, res) {
                     updated_by: reqObj.updated_by
                 }).then(adEvent => {
                     assignlogoAds = reqObj.assignLogoAds;
-                    assignlogoAds.forEach(function (i){
+                    assignlogoAds.forEach(function (i) {
                         AssignLogoAds.create({
                             logo_ad_id: i.logo_ad_id,
                             ad_event_id: adEvent.id,
@@ -41,7 +44,7 @@ var assignLogoAdEvents = function (req, res) {
                             time_slot_end: i.time_slot_end,
                             ad_placement: i.ad_placement,
                             ad_target: i.ad_target,
-                            stream_source:i.ad_target=="Youtube"?"Source":"720p",
+                            stream_source: i.ad_target == "Youtube" ? "Source" : "720p",
                             logo_ftp_path: i.logo_ftp_path,
                             img_name: i.img_name,
                             lower_text: i.lower_text,
@@ -83,6 +86,76 @@ var assignLogoAdEvents = function (req, res) {
     });
 };
 
+var assignVideoAdsEvents = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                reqObj = req.body;
+                VideoAdEvent.create({
+                    channel_id: reqObj.channel_id,
+                    event_name: reqObj.event_name,
+                    date: reqObj.date,
+                    no_of_ads: reqObj.no_of_ads,
+                    start_time: reqObj.start_time,
+                    is_active: reqObj.is_active,
+                    created_by: reqObj.created_by,
+                    updated_by: reqObj.updated_by
+                }).then(videoAdEvent => {
+                    assignVideoAds = reqObj.assignVideoAds;
+                    console.log(assignVideoAds);
+                    assignVideoAds.forEach(function (i) {
+                        AssignVideoAds.create({
+                            video_ad_event_id: videoAdEvent.id,
+                            video_ad_id: i.video_ad_id,
+                            ad_length: i.ad_length,
+                            ad_target: i.ad_target,
+                            video_ftp_path: i.video_ftp_path,
+                            video_name: i.video_name,
+                            created_by: i.created_by,
+                            updated_by: i.updated_by
+                        }).then(assign => {
+                            console.log(assign.id);
+                        }).catch(err => {
+                            console.log(err);
+                            res.status(500).json({
+                                message: 'Something went wrong',
+                                error: err
+                            });
+                        });
+                    });
+                    res.status(200).json({
+                        id: videoAdEvent.id,
+                        message: 'Success'
+                    });
+                }).catch(err => {
+                    console.log(err);
+                    res.status(500).json({
+                        message: 'Something went wrong',
+                        error: err
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
 module.exports = {
-    assignLogoAdEvents: assignLogoAdEvents
+    assignLogoAdEvents: assignLogoAdEvents,
+    assignVideoAdsEvents: assignVideoAdsEvents
 }

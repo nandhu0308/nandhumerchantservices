@@ -14,7 +14,7 @@ const VideoAdEvent = db.define("video_ad_event", {
         type: sequelize.DATE,
         allowNull: false
     },
-    duration: {
+    no_of_ads: {
         type: sequelize.INTEGER,
         allowNull: false
     },

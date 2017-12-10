@@ -31,8 +31,11 @@ var newVideoAd = function (req, res) {
                     created_by: reqObj.created_by,
                     updated_by: reqObj.updated_by
                 }).then(videoAd => {
-                    console.log(videoAd);
-                    res.status(200).json(videoAd);
+                    //console.log(videoAd);
+                    res.status(200).json({
+                        id: videoAd.id,
+                        message: 'Success'
+                    });
                 }).catch(err => {
                     res.status(500).json({
                         message: 'Something went wrong',
@@ -57,8 +60,8 @@ var newVideoAd = function (req, res) {
 };
 
 var uploadVideoAd = function (req, res) {
-    var appName = req.params.appName;
-    //appName="ka-mob-prajaa";
+    //var appName = req.params.appName;
+    appName = "ka-mob-prajaa";
     var ftpEndPointPath = '${com.wowza.wms.context.VHostConfigHome}/content/';
     var s3_bucket = 'haappy-images';
     var uploadParams = {
@@ -112,31 +115,58 @@ var uploadVideoAd = function (req, res) {
                 client.end();
                 res.status(200).json({
                     message: 'success',
-                    videoUrl: ftpEndPointPath + '/' + appName + '/' + fileName,
-                    ftpPath: ftpEndPointPath + '/' + appName + '/' + fileName,
+                    videoUrl: ftpEndPointPath + appName + '/' + fileName,
+                    ftpPath: ftpEndPointPath + appName + '/' + fileName,
                     fileSize: req.file.size,
                     fileName: fileName
                 });
             }
         });
+    });
+};
 
-
-        // s3.upload(uploadParams, function (err, data) {
-        //     if (err) {
-        //         console.log("Error", err);
-        //     }
-        //     if (data) {
-        //         console.log(data);
-        //         client.on('ready', function () {
-        //             console.log("reached here...");
-                    
-        //         });
-        //     }
-        // });
+var getVideoAdsByChannel = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                channelId = req.params.channelId;
+                console.log(channelId);
+                VideoAds.findAll({
+                    where: {
+                        channel_id: channelId,
+                        is_active: true
+                    }
+                }).then(videoAds => {
+                    res.status(200).json(videoAds);
+                }).catch(err => {
+                    res.status(500).json({
+                        message: 'Something went wrong',
+                        error: err
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
     });
 };
 
 module.exports = {
     uploadVideoAd: uploadVideoAd,
-    newVideoAd: newVideoAd
+    newVideoAd: newVideoAd,
+    getVideoAdsByChannel: getVideoAdsByChannel
 }
