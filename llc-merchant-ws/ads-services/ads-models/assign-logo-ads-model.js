@@ -79,7 +79,28 @@ const AssignAdEvents = db.define('assign_logo_ads', {
     updated_on: {
         type: sequelize.DATE,
         defaultValue: sequelize.NOW
+    },
+    txt_pos_top:    {
+        type:sequelize.INTEGER,
+        allowNull: false,
+        defaultValue:0
+    },
+    txt_pos_bottom:    {
+        type:sequelize.INTEGER,
+        allowNull: false,
+        defaultValue:0
+    },
+    txt_pos_left:    {
+        type:sequelize.INTEGER,
+        allowNull: false,
+        defaultValue:0
+    },
+    txt_pos_right:    {
+        type:sequelize.INTEGER,
+        allowNull: false,
+        defaultValue:0
     }
+
 }, {
         timestamps: false,
         freezeTableName: true

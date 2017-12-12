@@ -52,7 +52,11 @@ var assignLogoAdEvents = function (req, res) {
                             updated_by: i.updated_by,
                             geo_x_coordinate: i.geo_x_coordinate,
                             geo_y_coordinate: i.geo_y_coordinate,
-                            ad_type: i.ad_type
+                            ad_type: i.ad_type,
+                            txt_pos_top:i.txt_pos_top,
+                            txt_pos_bottom:i.txt_pos_bottom,
+                            txt_pos_left:i.txt_pos_left,
+                            txt_pos_right:i.txt_pos_right
                         }).then(assigns => {
                             console.log(assigns.id);
                         }).catch(err => {
