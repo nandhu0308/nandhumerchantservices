@@ -123,7 +123,24 @@ const BroadcasterChannel = db.define('broadcaster_channel' , {
         type : sequelize.BOOLEAN,
         allowNull : false,
         defaultValue : true
-    }
+    },
+    w_application_name:{
+        type : sequelize.STRING(100),
+        allowNull : true,
+    },
+    ch_stream_name:{
+        type : sequelize.STRING(100),
+        allowNull : true,
+    },
+    w_get_target_api:{
+        type : sequelize.STRING(250),
+        allowNull : true,
+    },
+    recorded_video_api:{
+        type : sequelize.STRING(250),
+        allowNull : true,
+    },
+
 }, {
     timestamps : false,
     freezeTableName : true
