@@ -160,7 +160,54 @@ var assignVideoAdsEvents = function (req, res) {
     });
 };
 
+var getAdEventsByDate = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                channelId = req.params.channelId;
+                eventDate = req.params.eventDate;
+                AdEvents.findAll({
+                    where: {
+                        channel_id: channelId,
+                        date: eventDate
+                    },
+                    attributes: {
+                        exclude: ['created_on', 'updated_on']
+                    }
+                }).then(adEvents => {
+                    res.status(200).json(adEvents);
+                }).catch(err => {
+                    console.log(err);
+                    res.status(500).json({
+                        error: err,
+                        message: 'Something went wrong'
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        console.log(err);
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
+
 module.exports = {
     assignLogoAdEvents: assignLogoAdEvents,
-    assignVideoAdsEvents: assignVideoAdsEvents
+    assignVideoAdsEvents: assignVideoAdsEvents,
+    getAdEventsByDate: getAdEventsByDate
 }
