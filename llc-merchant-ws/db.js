@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const timezone = 'UTC'
+const timezone = 'IST'
 process.env.TZ = timezone
 const connection = new Sequelize('llcdbstagging', 'root', 'pmt11cd3', {
     host: '139.59.15.249',

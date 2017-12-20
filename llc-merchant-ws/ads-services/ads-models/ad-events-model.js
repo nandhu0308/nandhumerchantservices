@@ -24,7 +24,7 @@ const AdEvents = db.define('ad_events', {
     },
 
     date: {
-        type: sequelize.DATE,
+        type: sequelize.STRING,
         allowNull: false
     },
 
