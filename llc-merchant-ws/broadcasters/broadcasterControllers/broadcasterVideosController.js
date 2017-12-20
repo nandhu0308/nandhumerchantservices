@@ -228,31 +228,17 @@ var getVideosByChannelLive = function (req, res) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
                 channelId = req.params.channelId;
-                console.log(channelId);
-                BroadcasterChannel.findById(channelId, {
-                    attributes: {
-                        exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
-                    }
-                }).then(channel => {
                     BroadcasterVideos.findAll({
                         where: {
-                            broadcaster_channel_id: channel.id,
+                            broadcaster_channel_id:channelId,
                             is_live: true
                         },
                         attributes: {
                             exclude: ['created_by', 'video_created_time', 'updated_by', 'video_updated_time']
                         },
-                        limit: 10
+                        // limit: 10
                     }).then(videos => {
-                        res.status(200).json({
-                            id: channel.id,
-                            application_id: channel.application_id,
-                            broadcaster_id: channel.broadcaster_id,
-                            lang_id: channel.lang_id,
-                            channel_name: channel.channel_name,
-                            channel_image: channel.channel_image,
-                            videos: videos
-                        });
+                        res.status(200).json(videos);
                     }).catch(err => {
                         console.log(err);
                         res.status(500).json({
@@ -260,19 +246,14 @@ var getVideosByChannelLive = function (req, res) {
                             message: 'Something went wrong'
                         });
                     });
-                }).catch(err => {
-                    console.log(err);
-                    res.status(500).json({
-                        error: err,
-                        message: 'Something went wrong'
-                    });
-                });
-            } else {
+            }
+             else {
                 res.status(401).json({
                     message: 'Not Authorized...'
                 });
             }
-        } else {
+        } 
+        else {
             res.status(401).json({
                 message: 'Token Expired...'
             });
