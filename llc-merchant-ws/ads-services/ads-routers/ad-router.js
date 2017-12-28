@@ -8,10 +8,8 @@ var VideoAdController = require('./../ads-controllers/video-ads-controller');
 adRouter.route('/logo/image/:appName').post(LogoAdsController.uploadLogoAdImage);
 adRouter.route('/logo/new').post(LogoAdsController.newLogoAd);
 adRouter.route('/logo/get/channel/:channelId').get(LogoAdsController.getLogoAdsByChannelId);
-//adRouter.route('/logo/assign').post(AssignAdsController.assignLogoAdEventsWithTrans);
-adRouter.route('/logo/assign').post(AssignAdsController.assignLogoAdEvents);
-adRouter.route('/logo/assign').post(AssignAdsController.assignLogoAdEvents);
-adRouter.route('/get/event/:channelId/date/:eventDate').get(AssignAdsController.getAdEventsByDate);
+adRouter.route('/logo/assign').post(AssignAdsController.assignLogoAdEventsWithTrans);
+//adRouter.route('/logo/assign').post(AssignAdsController.assignLogoAdEvents);
 
 adRouter.route('/videoad/video/:appName').post(VideoAdController.uploadVideoAd);
 adRouter.route('/videoad/new').post(VideoAdController.newVideoAd);
