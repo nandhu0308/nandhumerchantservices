@@ -145,5 +145,5 @@ var getAllRoles = function (req, res) {
 module.exports = {
     newApplicationsRoleModule: newApplicationsRoleModule,
     assigningUserRoleModules: assigningUserRoleModules,
-    getAllRoles: getAllRoles
+    getAllRoles: getAllRoles,
 }
