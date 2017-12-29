@@ -159,11 +159,7 @@ var assignVideoAdsEvents = function (req, res) {
     });
 };
 
-<<<<<<< HEAD
-var assignLogoAdEventsWithTrans = function (req, res) {
-=======
 var getAdEventsByDate = function (req, res) {
->>>>>>> 925f500bb413e947146ac098290f96211420ca1c
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
     var todayDate = new Date();
@@ -171,58 +167,6 @@ var getAdEventsByDate = function (req, res) {
     tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
-<<<<<<< HEAD
-                reqObj = req.body;
-                console.log(reqObj);
-                var timestamp = Date.now();
-                var eventName = reqObj.channel_id + '_event_' + timestamp;
-                return sequelize.transaction().then(function (t) {
-                    return AdEvents.create({
-                        channel_id: reqObj.channel_id,
-                        event_name: reqObj.event_name,
-                        event_type: reqObj.event_type,
-                        ad_type: reqObj.ad_type,
-                        duration: reqObj.duration,
-                        date: reqObj.date,
-                        start_time: reqObj.start_time,
-                        end_time: reqObj.end_time,
-                        ad_window_time_pa: reqObj.ad_window_time_pa,
-                        is_active: reqObj.is_active,
-                        created_by: reqObj.created_by,
-                        updated_by: reqObj.updated_by
-                    }, {transaction: t}).then(function (adEvent) {
-                        assignlogoAds = reqObj.assignLogoAds;
-                        assignlogoAds.forEach(function (i) {
-                            return AssignLogoAds.create({
-                                logo_ad_id: i.logo_ad_id,
-                                ad_event_id: adEvent.id,
-                                time_slot_start: i.time_slot_start,
-                                time_slot_end: i.time_slot_end,
-                                ad_placement: i.ad_placement,
-                                ad_target: i.ad_target,
-                                stream_source: i.ad_target == "Youtube" ? "Source" : "720p",
-                                logo_ftp_path: i.logo_ftp_path,
-                                img_name: i.img_name,
-                                lower_text: i.lower_text,
-                                created_by: i.created_by,
-                                updated_by: i.updated_by,
-                                geo_x_coordinate: i.geo_x_coordinate,
-                                geo_y_coordinate: i.geo_y_coordinate,
-                                ad_type: i.ad_type,
-                                txt_pos_top:i.txt_pos_top,
-                                txt_pos_bottom:i.txt_pos_bottom,
-                                txt_pos_left:i.txt_pos_left,
-                                txt_pos_right:i.txt_pos_right
-                               }, {transaction: t});
-                             }).then(function () {
-                               return t.commit();
-                             }).catch(function (err) {
-                               return t.rollback();
-                             });
-                        });
-                      
-                  });
-=======
                 channelId = req.params.channelId;
                 eventDate = req.params.eventDate;
                 AdEvents.findAll({
@@ -242,7 +186,6 @@ var getAdEventsByDate = function (req, res) {
                         message: 'Something went wrong'
                     });
                 });
->>>>>>> 925f500bb413e947146ac098290f96211420ca1c
             } else {
                 res.status(401).json({
                     message: 'Not Authorized...'
@@ -254,26 +197,16 @@ var getAdEventsByDate = function (req, res) {
             });
         }
     }).catch(function (err) {
-<<<<<<< HEAD
-=======
         console.log(err);
->>>>>>> 925f500bb413e947146ac098290f96211420ca1c
         res.status(401).json({
             message: 'Token Expired...'
         });
     });
 };
 
-<<<<<<< HEAD
-module.exports = {
-    assignLogoAdEvents: assignLogoAdEvents,
-    assignVideoAdsEvents: assignVideoAdsEvents,
-    assignLogoAdEventsWithTrans:assignLogoAdEventsWithTrans
-=======
 
 module.exports = {
     assignLogoAdEvents: assignLogoAdEvents,
     assignVideoAdsEvents: assignVideoAdsEvents,
     getAdEventsByDate: getAdEventsByDate
->>>>>>> 925f500bb413e947146ac098290f96211420ca1c
 }
