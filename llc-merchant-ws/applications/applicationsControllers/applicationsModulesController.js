@@ -62,6 +62,46 @@ var newApplicationsModule = function (req, res) {
     });
 };
 
+var getAllModules = function (req, res) {
+    authToken = req.headers.authorization;
+    userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
+    var todayDate = new Date();
+    var expireDate = new Date(userAuthObj.expire_date);
+    tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
+        if (userSessions.length === 1) {
+            if (expireDate >= todayDate) {
+                ApplicaionsModules.findAll({
+                    where: {
+                        is_active: true
+                    }
+                }).then( applicationModules => {
+                    res.status(200).json(applicationModules);
+                }).catch(function(err){
+                    console.log(err);
+                    res.status(500).json({
+                        error: err,
+                        message: 'something went wrong...'
+                    })
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Not Authorized...'
+                });
+            }
+        } else {
+            res.status(401).json({
+                message: 'Token Expired...'
+            });
+        }
+    }).catch(function (err) {
+        res.status(401).json({
+            message: 'Token Expired...'
+        });
+    });
+};
+
+
 module.exports = {
-    newApplicationsModule: newApplicationsModule
+    newApplicationsModule: newApplicationsModule,
+    getAllModules : getAllModules
 }

@@ -130,7 +130,7 @@ var userLogin = function (req, res) {
                 user_id: user.id,
                 user_mail: user.email_id,
                 created_date: todayDate,
-                expire_date: expireDate
+                expire_date: expireDate,
             }
             var authToken = UserAuthServices.userAuthTokenGenerator(JSON.stringify(userAuthParamObj));
             if (user.user_type === 'User') {
@@ -163,7 +163,7 @@ var userLogin = function (req, res) {
                         message: 'something went wrong...'
                     })
                 });
-            } else if (user.user_type === 'eCommerce' || user.user_type === 'Entertainment') {
+            } else if (user.user_type === 'eCommerce' || user.user_type === 'Entertainment' || user.user_type === 'eUser') {
                 UserSessions.create({
                     user_id: user.id,
                     user_type: 'Seller',
@@ -230,6 +230,42 @@ var userLogin = function (req, res) {
                                 client_id: user.client_id,
                                 shop_name: shop.seller_shop_name,
                                 shop_code: shop.shop_code,
+                                user_session_id: usession.id,
+                                user_auth_token: authToken,
+                                auth_token_expire: expireDate
+                            });
+                        }).catch(function (err) {
+                            res.status(404).json({
+                                errMessage: err,
+                                message: 'user not found...'
+                            });
+                        });
+                    }
+                    else if (user.user_type === 'eUser') {
+                        Broadcaster.findOne({
+                            where: {
+                                id: user.client_id,
+                                is_active: true
+                            },
+                            attributes: {
+                                exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
+                            }
+                        }).then(function (broadcaster) {
+                            res.status(200).json({
+                                user_id: user.id,
+                                user_app_id: user.application_id,
+                                user_type: user.user_type,
+                                user_name: user.user_name,
+                                user_short_name: user.user_short_name,
+                                user_emialid: user.email_id,
+                                user_mobile: user.mobile,
+                                user_country_code: user.country_iso_code,
+                                user_country: user.country,
+                                user_city: user.city,
+                                client_id: user.client_id,
+                                broadcaster_name: broadcaster.braodcaster_name,
+                                w_appname: broadcaster.w_application_name,
+                                primary_channel_id: broadcaster.primary_channel_id,
                                 user_session_id: usession.id,
                                 user_auth_token: authToken,
                                 auth_token_expire: expireDate
@@ -511,5 +547,5 @@ module.exports = {
     getVersion: getVersion,
     getUserAssignedModules: getUserAssignedModules,
     getUserById: getUserById,
-    getGoogleClientKeysByUserId: getGoogleClientKeysByUserId
+    getGoogleClientKeysByUserId: getGoogleClientKeysByUserId,
 }

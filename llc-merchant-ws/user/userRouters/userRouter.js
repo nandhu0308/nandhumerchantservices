@@ -3,6 +3,7 @@ var userRouter = express.Router();
 
 var userController = require('./../userControllers/userController');
 var shopController = require('./../userControllers/shopController');
+var superUserController = require('./../userControllers/superUserController');
 
 //user routes
 userRouter.route('/').get(userController.getVersion);
@@ -18,4 +19,7 @@ userRouter.route('/shop/new').post(shopController.newShop);
 userRouter.route('/shop/get/:shopId').get(shopController.getShopById);
 userRouter.route('/shop/all').get(shopController.getAllShops);
 
+//SuperUser routes
+userRouter.route('/update').put(superUserController.superUserRolesUpdate);
+userRouter.route('/applicationUser/users/:clientId').get(superUserController.getApplicationUserByClientId);
 module.exports = userRouter;

@@ -8,7 +8,7 @@ const ApplicationUsers = db.define('application_users', {
     },
     user_type: {
         type: sequelize.ENUM,
-        values: ['eCommerce', 'Restaurant', 'Entertainment', 'User', 'Super Admin'],
+        values: ['eCommerce', 'Restaurant', 'Entertainment', 'User', 'Super Admin','eUser'],
         allowNull: false
     },
     user_name: {

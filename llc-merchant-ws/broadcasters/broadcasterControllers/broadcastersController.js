@@ -705,7 +705,22 @@ var newBroadcasterwithChannel = function (req, res) {
                                 yt_start_time:broadcasterVideos.yt_start_time,
                                 ps_stop_time:broadcasterVideos.ps_stop_time,
                                 fb_stop_time:broadcasterVideos.fb_stop_time,
-                                yt_stop_time:broadcasterVideos.fb_stop_time,
+                                yt_stop_time:broadcasterVideos.yt_stop_time,
+                                fb1_start_time:broadcasterVideos.fb1_start_time,
+                                fb1_stop_time:broadcasterVideos.fb1_stop_time,
+                                fb2_start_time:broadcasterVideos.fb2_start_time,
+                                fb2_stop_time:broadcasterVideos.fb2_stop_time,
+                                fb3_start_time:broadcasterVideos.fb3_start_time,
+                                fb3_stop_time:broadcasterVideos.fb3_stop_time,
+                                fb4_start_time:broadcasterVideos.fb4_start_time,
+                                fb4_stop_time:broadcasterVideos.fb4_stop_time,
+                                fb5_start_time:broadcasterVideos.fb5_start_time,
+                                fb5_stop_time:broadcasterVideos.fb5_stop_time,
+                                fb1_streamkey: broadcasterVideos.fb1_streamkey,
+                                fb2_streamkey: broadcasterVideos.fb2_streamkey,
+                                fb3_streamkey: broadcasterVideos.fb3_streamkey,
+                                fb4_streamkey: broadcasterVideos.fb4_streamkey,
+                                fb5_streamkey: broadcasterVideos.fb5_streamkey,
                                 
                             }).then(function (broadcasterVideoResults) {
                                 

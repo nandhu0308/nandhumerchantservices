@@ -220,6 +220,26 @@ const BroadcasterVideos = db.define('broadcaster_videos', {
         type : sequelize.DATE,
         defaultValue : sequelize.NOW
     },
+    fb1_streamkey : {
+        type : sequelize.STRING(100),
+        defaultValue : ''
+    },
+    fb2_streamkey : {
+        type : sequelize.STRING(100),
+        defaultValue : ''
+    },
+    fb3_streamkey : {
+        type : sequelize.STRING(100),
+        defaultValue : ''
+    },
+    fb4_streamkey : {
+        type : sequelize.STRING(100),
+        defaultValue : ''
+    },
+    fb5_streamkey : {
+        type : sequelize.STRING(100),
+        defaultValue : ''
+    },
 
 }, {
     timestamps : false,

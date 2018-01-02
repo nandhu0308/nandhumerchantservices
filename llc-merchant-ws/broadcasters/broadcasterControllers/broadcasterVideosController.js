@@ -124,7 +124,12 @@ var newVideo = function (req, res) {
                     ha_streamkey: reqObj.ha_streamkey,
                     created_by: reqObj.created_by,
                     updated_by: reqObj.updated_by,
-                    ps_streamkey: reqObj.ps_streamkey
+                    ps_streamkey: reqObj.ps_streamkey,
+                    fb1_streamkey: reqObj.fb1_streamKey,
+                    fb2_streamkey: reqObj.fb2_streamKey,
+                    fb3_streamkey:reqObj.fb3_streamKey,
+                    fb4_streamkey:reqObj.fb4_streamkey,
+                    fb5_streamkey:reqObj.fb5_streamkey
                 }).then(video => {
                     res.status(200).json({
                         id: video.id,

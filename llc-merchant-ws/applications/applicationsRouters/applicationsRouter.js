@@ -11,10 +11,12 @@ applicationRouter.route('/app/all').get(applicationsController.getApplicationsLi
 
 //Applications Modules Routes
 applicationRouter.route('/app/module/new').post(applicationsModulesController.newApplicationsModule);
+applicationRouter.route('/modules/all').get(applicationsModulesController.getAllModules);
 
 //Applications Role Modules Routes
 applicationRouter.route('/app/role/new').post(applicationsRoleModulesController.newApplicationsRoleModule);
 applicationRouter.route('/app/role/assign').post(applicationsRoleModulesController.assigningUserRoleModules);
 applicationRouter.route('/app/role/all').get(applicationsRoleModulesController.getAllRoles);
+
 
 module.exports = applicationRouter;
