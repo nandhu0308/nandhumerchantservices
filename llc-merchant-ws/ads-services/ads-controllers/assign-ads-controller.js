@@ -159,7 +159,11 @@ var assignVideoAdsEvents = function (req, res) {
     });
 };
 
+<<<<<<< HEAD
+var getAdEventsByDate = function (req, res) {
+=======
 var assignLogoAdEventsWithTrans = function (req, res) {
+>>>>>>> 58225ff60e772834b2ba42b2092cad92016e0764
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
     var todayDate = new Date();
@@ -167,6 +171,27 @@ var assignLogoAdEventsWithTrans = function (req, res) {
     tokenOK = TokenValidator.validateToken(userAuthObj.user_id, authToken).then(function (userSessions) {
         if (userSessions.length === 1) {
             if (expireDate >= todayDate) {
+<<<<<<< HEAD
+                channelId = req.params.channelId;
+                eventDate = req.params.eventDate;
+                AdEvents.findAll({
+                    where: {
+                        channel_id: channelId,
+                        date: eventDate
+                    },
+                    attributes: {
+                        exclude: ['created_on', 'updated_on']
+                    }
+                }).then(adEvents => {
+                    res.status(200).json(adEvents);
+                }).catch(err => {
+                    console.log(err);
+                    res.status(500).json({
+                        error: err,
+                        message: 'Something went wrong'
+                    });
+                });
+=======
                 reqObj = req.body;
                 console.log(reqObj);
                 var timestamp = Date.now();
@@ -217,6 +242,7 @@ var assignLogoAdEventsWithTrans = function (req, res) {
                         });
                       
                   });
+>>>>>>> 58225ff60e772834b2ba42b2092cad92016e0764
             } else {
                 res.status(401).json({
                     message: 'Not Authorized...'
@@ -228,14 +254,26 @@ var assignLogoAdEventsWithTrans = function (req, res) {
             });
         }
     }).catch(function (err) {
+<<<<<<< HEAD
+        console.log(err);
+=======
+>>>>>>> 58225ff60e772834b2ba42b2092cad92016e0764
         res.status(401).json({
             message: 'Token Expired...'
         });
     });
 };
 
+<<<<<<< HEAD
+
+module.exports = {
+    assignLogoAdEvents: assignLogoAdEvents,
+    assignVideoAdsEvents: assignVideoAdsEvents,
+    getAdEventsByDate: getAdEventsByDate
+=======
 module.exports = {
     assignLogoAdEvents: assignLogoAdEvents,
     assignVideoAdsEvents: assignVideoAdsEvents,
     assignLogoAdEventsWithTrans:assignLogoAdEventsWithTrans
+>>>>>>> 58225ff60e772834b2ba42b2092cad92016e0764
 }

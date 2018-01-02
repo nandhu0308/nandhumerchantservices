@@ -63,7 +63,7 @@ var getChannelCategoryById = function (req, res) {
                             message: 'No channel Category found...'
                         });
                     } else {
-                        res.status(200).json(channelCategory);
+                        res.status(200).json(channelCategory);                       
                     }
                 }).catch(function (err) {
                     res.status(500).json({
@@ -146,6 +146,7 @@ var createBroadcasterChannel = function (req, res) {
     });
 };
 
+
 var getBroadcasterChannelByBroadcasterId = function (req, res) {
     authToken = req.headers.authorization;
     userAuthObj = JSON.parse(UserAuthServices.userAuthTokenValidator(authToken));
@@ -189,9 +190,62 @@ var getBroadcasterChannelByBroadcasterId = function (req, res) {
     });
 };
 
+var updateChannelManager = function (req, res) {
+    reqObj = req.body;
+    BroadcasterChannel.findOne({
+            where: 
+            {
+                 id: reqObj.id,
+                 is_active: true                   
+            },
+             attributes:
+              {
+                exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
+                   
+               }
+            }).then(function (broadcasterChannel) {
+                if (broadcasterChannel) {
+                    broadcasterChannel.updateAttributes({
+                        broadcaster_id: reqObj.broadcaster_id,
+                        category_id:reqObj.category_id,
+                        lang_id:reqObj.lang_id,
+                        channel_name:reqObj.channel_name,
+                        channel_description:reqObj.channel_description,
+                        is_hd:reqObj.is_hd,
+                        is_active:reqObj.is_active
+                        }).then(function () {
+                            res.status(200).json(
+                                {
+                                    id:broadcasterChannel.id,
+                                    message:'sucess'
+                                });
+                        }).catch(function (err) {
+                            console.log(err);
+                            res.status(500).json({
+                                error: err,
+                                message: 'channel manager update failed...'
+                            });
+                        });
+                    }
+                    else {
+                        res.status(404).json({
+                            message: 'channel manager not found...'
+                        });
+                    }
+                }).catch(function (err) {
+                    console.log(err);
+                    res.status(500).json({
+                        error: err,
+                        message: 'something went wrong...'
+                    });
+               });
+     
+};
+
 module.exports = {
     getChannelCategory: getChannelCategory,
     getChannelCategoryById: getChannelCategoryById,
     createBroadcasterChannel: createBroadcasterChannel,
-    getBroadcasterChannelByBroadcasterId: getBroadcasterChannelByBroadcasterId
+    getBroadcasterChannelByBroadcasterId: getBroadcasterChannelByBroadcasterId,
+    updateChannelManager : updateChannelManager
 }

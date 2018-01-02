@@ -40,5 +40,7 @@ broadcasterRouter.route('/videos/live/:channelId').get(broadcasterVideoControlle
 broadcasterRouter.route('/destination/new').post(broadcasterDestinationController.createBroadcasterDestination);
 broadcasterRouter.route('/destination/getImg/:channelId').get(broadcasterDestinationController.getDestinationImages);
 
+//Update ChannelManager
+broadcasterRouter.route('/channelManager/Update').put(broadcasterChannelController.updateChannelManager);
 
 module.exports=broadcasterRouter;
