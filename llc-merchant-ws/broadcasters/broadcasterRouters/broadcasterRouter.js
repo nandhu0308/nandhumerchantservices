@@ -4,7 +4,7 @@ var broadcasterRouter = express.Router();
 var broadcastersController = require('./../broadcasterControllers/broadcastersController');
 var broadcasterChannelController = require('./../broadcasterControllers/broadcasterChannelController');
 var broadcasterVideoController = require('./../broadcasterControllers/broadcasterVideosController');
-var broadcasterDestinationController= require('./../broadcasterControllers/broadcasterDestinationController');
+var broadcasterDestinationController = require('./../broadcasterControllers/broadcasterDestinationController');
 
 //Broadcaster Routes
 
@@ -39,8 +39,12 @@ broadcasterRouter.route('/videos/live/:channelId').get(broadcasterVideoControlle
 
 broadcasterRouter.route('/destination/new').post(broadcasterDestinationController.createBroadcasterDestination);
 broadcasterRouter.route('/destination/getImg/:channelId').get(broadcasterDestinationController.getDestinationImages);
+broadcasterRouter.route('/destination/destall').get(broadcasterDestinationController.getAllDestination);
+broadcasterRouter.route('/destination/Update').put(broadcasterDestinationController.updateDestination);
+
+
 
 //Update ChannelManager
 broadcasterRouter.route('/channelManager/Update').put(broadcasterChannelController.updateChannelManager);
 
-module.exports=broadcasterRouter;
+module.exports = broadcasterRouter;

@@ -22,4 +22,8 @@ userRouter.route('/shop/all').get(shopController.getAllShops);
 //SuperUser routes
 userRouter.route('/update').put(superUserController.superUserRolesUpdate);
 userRouter.route('/applicationUser/users/:clientId').get(superUserController.getApplicationUserByClientId);
+
+// application User
+userRouter.route('/applicationUser/all').get(superUserController.getApplicationUsersAll);
+
 module.exports = userRouter;
