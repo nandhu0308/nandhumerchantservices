@@ -20,6 +20,7 @@ var createBroadcasterDestination = function (req, res) {
                 console.log(broadcasterDestination);
                 BroadcasterDestination.create({
                     d_id: reqObj.d_id,
+                    broadcaster_id:reqObj.broadcaster_id,
                     destination_name: reqObj.destination_name,
                     description: reqObj.description,
                     broadcaster_channel_id: reqObj.broadcaster_channel_id,
@@ -86,9 +87,9 @@ var getAllDestination = function (req, res) {
                     attributes: {
                         exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
                     },
-                    where: {
-                        is_active: true
-                    }
+                    // where: {
+                    //     is_active: true
+                    // }
                 }).then(function (destinationAll) {
                     res.status(200).json(destinationAll);
                 }).catch(function (err) {
@@ -132,6 +133,7 @@ var updateDestination = function (req, res) {
     }).then(function (destinationUpdate) {
         if (destinationUpdate!=null) {
             destinationUpdate.updateAttributes({
+                broadcaster_id:reqObj.broadcaster_id,
                 d_id: reqObj.d_id,
                 destination_name: reqObj.destination_name,
                 description: reqObj.description,
@@ -166,6 +168,24 @@ var updateDestination = function (req, res) {
 
 };
 
+var getDestByBroadcasterDestinationId=function(req,res){
+    Id = req.params.Id;
+    BroadcasterDestination.findAll({
+        attributes: {
+            exclude: ['created_by', 'created_on', 'updated_by', 'updated_on']
+        },
+        where: {
+            id: Id
+        }
+    }).then(function (destination) {
+        res.status(200).json(destination);
+    }).catch(function (err) {
+        res.status(404).json({
+            message: 'No destination found...'
+        });
+    });
+}
+
 
 
 
@@ -173,6 +193,7 @@ module.exports = {
     createBroadcasterDestination: createBroadcasterDestination,
     getDestinationImages: getDestinationImages,
     getAllDestination: getAllDestination,
-    updateDestination: updateDestination
+    updateDestination: updateDestination,
+    getDestByBroadcasterDestinationId : getDestByBroadcasterDestinationId
 
 }

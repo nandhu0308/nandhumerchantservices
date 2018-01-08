@@ -25,5 +25,6 @@ userRouter.route('/applicationUser/users/:clientId').get(superUserController.get
 
 // application User
 userRouter.route('/applicationUser/all').get(superUserController.getApplicationUsersAll);
+userRouter.route('/appuser/update').put(userController.updateUserDetails);
 
 module.exports = userRouter;

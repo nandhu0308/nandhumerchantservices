@@ -27,6 +27,9 @@ broadcasterRouter.route('/broadcasterchannel/new').post(broadcasterChannelContro
 broadcasterRouter.route('/broadcasterchannel/all').get(broadcasterChannelController.getChannelCategory);
 broadcasterRouter.route('/broadcastercategory/all').get(broadcastersController.getBroadcasterCategory);
 broadcasterRouter.route('/broadcasterchannel/broadcaster/:broadcasterId').get(broadcasterChannelController.getBroadcasterChannelByBroadcasterId);
+broadcasterRouter.route('/channelById/:channelId').get(broadcasterChannelController.getChannelByChannelId);
+
+
 
 //Broadcaster videos routes
 broadcasterRouter.route('/broadcasterVideo/new').post(broadcasterVideoController.newVideo);
@@ -41,6 +44,7 @@ broadcasterRouter.route('/destination/new').post(broadcasterDestinationControlle
 broadcasterRouter.route('/destination/getImg/:channelId').get(broadcasterDestinationController.getDestinationImages);
 broadcasterRouter.route('/destination/destall').get(broadcasterDestinationController.getAllDestination);
 broadcasterRouter.route('/destination/Update').put(broadcasterDestinationController.updateDestination);
+broadcasterRouter.route('/destById/:Id').get(broadcasterDestinationController.getDestByBroadcasterDestinationId);
 
 
 

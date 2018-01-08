@@ -15,7 +15,7 @@ var GoogleClientKeysModel = require('./../userModels/ClientKeysModel');
 var newUserRegistration = function (req, res) {
     reqObj = req.body;
     if (reqObj.user_type === 'User') {
-      
+
         ApplicationUsers.create({
             application_id: reqObj.application_id,
             client_id: reqObj.client_id,
@@ -540,6 +540,41 @@ var getGoogleClientKeysByUserId = function (req, res) {
     });
 };
 
+var updateUserDetails = function (req, res) {
+    reqObj = req.body;
+    ApplicationUsers.findOne({
+        where:
+            {
+                id:reqObj.id,
+                is_active: true
+            },
+        attributes:
+            {
+                exclude: ['created_by', 'updated_by', 'created_time', 'updated_time']
+
+            }
+    }).then(function (upDateUser) {
+            upDateUser.updateAttributes({
+                mobile: reqObj.mobile,
+                email_id: reqObj.email_id,
+                passwd: reqObj.passwd,
+            }).then(function () {
+                res.status(200).json({
+                    user_id: upDateUser.id,
+                    message: 'update success in application User.....'
+                });
+            }).catch(function (err) {
+                res.status(500).json({
+                    errMessage: err,
+                    message: 'something went wrong...'
+                });
+            });
+    });
+}
+
+
+
+
 module.exports = {
     newUserRegistration: newUserRegistration,
     userLogin: userLogin,
@@ -548,4 +583,5 @@ module.exports = {
     getUserAssignedModules: getUserAssignedModules,
     getUserById: getUserById,
     getGoogleClientKeysByUserId: getGoogleClientKeysByUserId,
+    updateUserDetails: updateUserDetails
 }
